@@ -18,6 +18,7 @@ Thumbs.db
 .od-skills/
 .file-versions/
 *.artifact.json
+plugin-source/
 
 # Logs
 *.log
