@@ -14,5 +14,8 @@ services:
         value: nosniff
     routes:
       - type: rewrite
-        source: /*
+        source: /dashboard
+        destination: /dashboard.html
+      - type: rewrite
+        source: /
         destination: /index.html
