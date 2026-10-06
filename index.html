@@ -1,0 +1,2029 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UrbanMed · Hospital Operations Platform</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="UrbanMed · Hospital Operations Platform">
+<meta property="og:description" content="Clear operations, calm leadership. Live bed occupancy, ER wait times, OR utilization and more at a glance.">
+<meta property="og:image" content="urbanmed-og.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="UrbanMed · Hospital Operations Platform">
+<meta name="twitter:description" content="Clear operations, calm leadership. Live bed occupancy, ER wait times, OR utilization and more at a glance.">
+<meta name="twitter:image" content="urbanmed-og.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf7f1;
+  --surface:#ffffff;
+  --inset:color-mix(in oklab,var(--fg) 4%,var(--surface));
+  --fg:#191a1f;
+  --muted:#5e5a52;
+  --border:#e9e2d5;
+  --accent:#33409c;
+  --accent-strong:color-mix(in oklab,var(--accent) 84%,#06061a);
+  --accent-dark:color-mix(in oklab,var(--accent) 78%,#000000);
+  --accent-tint:color-mix(in oklab,var(--accent) 8%,var(--bg));
+  --accent-border:color-mix(in oklab,var(--accent) 30%,var(--border));
+  --success:#3ecf9e;
+  --success-strong:color-mix(in oklab,var(--success) 44%,#073126);
+  --success-tint:color-mix(in oklab,var(--success) 12%,var(--bg));
+  --warn:#c27612;
+  --warn-strong:color-mix(in oklab,var(--warn) 66%,#3a2400);
+  --warn-tint:color-mix(in oklab,var(--warn) 10%,var(--bg));
+  --danger:#d33a2b;
+  --danger-strong:color-mix(in oklab,var(--danger) 84%,#380a05);
+  --danger-tint:color-mix(in oklab,var(--danger) 9%,var(--bg));
+  --info:#0e9d8c;
+  --info-strong:color-mix(in oklab,var(--info) 62%,#052f2a);
+  --info-tint:color-mix(in oklab,var(--info) 9%,var(--bg));
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",Helvetica Neue,Arial,sans-serif;
+  --font-display:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --topbar-h:64px;
+  --nav-w:244px;
+  --nav-w-collapsed:64px;
+  --radius:12px;
+  --shadow-1:0 1px 2px rgba(25,26,31,.05);
+  --shadow-2:0 10px 30px -12px rgba(25,26,31,.18);
+  --shadow-3:0 30px 70px -20px rgba(25,26,31,.28);
+}
+[data-theme="dark"]{
+  --bg:#15161c;
+  --surface:#1d1f27;
+  --inset:color-mix(in oklab,var(--fg) 7%,var(--surface));
+  --fg:#f5f3ec;
+  --muted:#b5b0a3;
+  --border:rgba(255,255,255,.1);
+  --accent:#aab4f0;
+  --accent-strong:#c3cbf5;
+  --accent-dark:#8f9ae8;
+  --accent-tint:color-mix(in oklab,var(--accent) 16%,var(--surface));
+  --accent-border:color-mix(in oklab,var(--accent) 34%,rgba(255,255,255,.1));
+  --success:#4dd6a5;
+  --success-strong:#7fe6c0;
+  --success-tint:color-mix(in oklab,var(--success) 18%,var(--surface));
+  --warn:#e5a64f;
+  --warn-strong:#eebc74;
+  --warn-tint:color-mix(in oklab,var(--warn) 18%,var(--surface));
+  --danger:#ff6b5e;
+  --danger-strong:#ff8a80;
+  --danger-tint:color-mix(in oklab,var(--danger) 18%,var(--surface));
+  --info:#38c4b2;
+  --info-strong:#63d4c5;
+  --info-tint:color-mix(in oklab,var(--info) 18%,var(--surface));
+  --shadow-1:0 1px 2px rgba(0,0,0,.4);
+  --shadow-2:0 10px 30px -12px rgba(0,0,0,.5);
+  --shadow-3:0 30px 70px -20px rgba(0,0,0,.6);
+}
+[data-theme="dark"] .btn--primary{background:color-mix(in oklab,var(--accent) 58%,#06061a);color:#ffffff}
+[data-theme="dark"] .btn--primary:hover{background:color-mix(in oklab,var(--accent) 72%,#06061a)}
+[data-theme="dark"] .btn--danger{background:color-mix(in oklab,var(--danger) 58%,#2a0505);color:#ffffff}
+[data-theme="dark"] .btn--danger:hover{background:color-mix(in oklab,var(--danger) 75%,#2a0505)}
+[data-theme="dark"] .iconbtn__badge{background:color-mix(in oklab,var(--danger) 58%,#2a0505);color:#ffffff}
+[data-theme="dark"] .navitem__badge.is-hot{background:color-mix(in oklab,var(--danger) 58%,#2a0505);color:#ffffff}
+[data-theme="dark"] .brand__mark{background:color-mix(in oklab,var(--accent) 72%,#06061a);color:#ffffff}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  font-size:14px;line-height:1.55;
+  color:var(--fg);background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.ic{width:18px;height:18px;flex:none;display:block}
+.ic--sm{width:15px;height:15px}
+
+.app{min-height:100vh;display:flex;flex-direction:column}
+
+.topbar{
+  height:var(--topbar-h);
+  background:color-mix(in oklab,var(--bg) 86%,transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:16px;
+  padding:0 22px;
+  position:sticky;top:0;z-index:30;
+}
+.brand{display:flex;align-items:center;gap:11px;flex:none;width:calc(var(--nav-w) - 40px)}
+.brand__mark{
+  width:32px;height:32px;border-radius:9px;
+  background:var(--accent);color:#ffffff;
+  display:grid;place-items:center;
+  box-shadow:0 1px 2px color-mix(in oklab,var(--accent) 30%,transparent);
+}
+.brand__name{display:block;font-size:15px;font-weight:700;letter-spacing:-0.01em;line-height:1.1;white-space:nowrap}
+.brand__name em{font-style:normal;color:var(--accent)}
+.brand__tag{display:block;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.02em;line-height:1.2;white-space:nowrap;margin-top:1px}
+.topbar__search{
+  flex:1;max-width:520px;height:40px;
+  display:flex;align-items:center;gap:10px;
+  padding:0 14px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:999px;
+  color:var(--muted);font-size:13.5px;
+  transition:border-color .15s,box-shadow .15s,background .15s;
+}
+.topbar__search:hover{border-color:color-mix(in oklab,var(--border) 55%,var(--fg))}
+.topbar__search:focus-visible{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-tint);color:var(--fg)}
+.kbd{
+  margin-left:auto;font-size:11px;font-weight:600;
+  color:var(--muted);background:var(--bg);
+  border:1px solid var(--border);border-radius:6px;
+  padding:2px 7px;letter-spacing:.02em;white-space:nowrap;
+}
+.topbar__right{margin-left:auto;display:flex;align-items:center;gap:6px}
+
+.live{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:12px;font-weight:600;color:var(--info-strong);
+  background:var(--info-tint);
+  padding:6px 13px;border-radius:999px;
+  margin-right:6px;white-space:nowrap;
+}
+.live__dot{width:7px;height:7px;border-radius:50%;background:var(--info);position:relative}
+.live__dot::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--info);opacity:0;animation:ping 2.4s ease-out infinite;will-change:transform}
+@keyframes ping{0%{transform:scale(.5);opacity:.7}80%,100%{transform:scale(1.4);opacity:0}}
+.live.is-off{color:var(--danger-strong);background:var(--danger-tint)}
+.live.is-off .live__dot{background:var(--danger)}
+.live.is-off .live__dot::after{border-color:var(--danger);animation:none}
+
+.iconbtn{
+  position:relative;width:40px;height:40px;border-radius:10px;
+  display:grid;place-items:center;color:var(--muted);
+  transition:background .15s,color .15s;
+}
+.iconbtn:hover{background:var(--inset);color:var(--fg)}
+.iconbtn:active{transform:translateY(1px)}
+.iconbtn__badge{
+  position:absolute;top:5px;right:5px;
+  min-width:17px;height:17px;padding:0 5px;
+  border-radius:999px;background:var(--danger);color:#ffffff;
+  font-size:10px;font-weight:700;display:grid;place-items:center;
+  border:2px solid var(--bg);transition:transform .2s;
+}
+.iconbtn__badge.bump{animation:bump .4s}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+.theme-toggle{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:var(--muted);transition:background .15s,color .15s}
+.theme-toggle:hover{background:var(--inset);color:var(--fg)}
+.theme-toggle .ic.swap{animation:iconSwap .22s cubic-bezier(.2,0,0,1)}
+@keyframes iconSwap{0%{transform:rotate(-90deg) scale(.6);opacity:0}100%{transform:rotate(0) scale(1);opacity:1}}
+
+.shell{display:flex;flex:1;min-height:0}
+
+.sidebar{
+  width:var(--nav-w);background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  transition:width .22s cubic-bezier(.2,0,0,1);overflow:hidden;
+}
+.sidebar.collapsed{width:var(--nav-w-collapsed)}
+.sidebar__nav{flex:1;overflow-y:auto;padding:14px 14px 8px}
+.sidebar__group{margin-bottom:18px}
+.sidebar__label{
+  font-size:10.5px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.09em;color:var(--muted);
+  padding:0 12px;margin-bottom:7px;white-space:nowrap;
+}
+.sidebar.collapsed .sidebar__label{opacity:0;height:0;margin:0}
+.navitem{
+  width:100%;display:flex;align-items:center;gap:12px;
+  height:40px;padding:0 12px;border-radius:10px;
+  color:var(--fg);font-size:13.5px;font-weight:500;
+  margin-bottom:2px;position:relative;white-space:nowrap;
+  transition:background .13s,color .13s;
+}
+.navitem:hover{background:var(--inset)}
+.navitem.is-active{background:var(--accent-tint);color:var(--accent);font-weight:600}
+.navitem__label{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis}
+.sidebar.collapsed .navitem__label,.sidebar.collapsed .navitem__badge{display:none}
+.sidebar.collapsed .navitem{justify-content:center;padding:0}
+.navitem__badge{
+  font-size:11px;font-weight:600;min-width:22px;height:20px;padding:0 7px;
+  border-radius:999px;background:var(--inset);color:var(--muted);
+  display:grid;place-items:center;transition:background .2s;
+}
+.navitem.is-active .navitem__badge{background:var(--surface);color:var(--accent)}
+.navitem__badge.is-hot{background:var(--danger);color:#ffffff}
+.navitem__badge.bump{animation:bump .4s}
+.sidebar__foot{border-top:1px solid var(--border);padding:10px 12px;display:flex;align-items:center;gap:10px}
+.sidebar__collapse{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;color:var(--muted);flex:none;transition:background .15s,color .15s}
+.sidebar__collapse:hover{background:var(--inset);color:var(--fg)}
+.sidebar__hint{font-size:11px;color:var(--muted);white-space:nowrap}
+.sidebar.collapsed .sidebar__hint{display:none}
+.sidebar.collapsed .sidebar__foot{justify-content:center}
+
+.main{flex:1;min-width:0;overflow-y:auto}
+.page{padding:34px 36px 56px;max-width:1280px;margin:0 auto}
+.page.enter>*{animation:pageIn .2s cubic-bezier(.2,0,0,1) both}
+.page.enter>*:nth-child(2){animation-delay:.05s}
+.page.enter>*:nth-child(3){animation-delay:.1s}
+.page.enter>*:nth-child(4){animation-delay:.15s}
+@keyframes pageIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.pagehead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+.pagehead__title{font-family:var(--font-display);font-weight:400;font-size:clamp(30px,3.1vw,40px);letter-spacing:-0.01em;line-height:1.08;color:var(--fg)}
+.pagehead__sub{font-size:13.5px;color:var(--muted);margin-top:8px;max-width:60ch}
+.pagehead__meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;align-self:center}
+.kicker{
+  font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);display:inline-flex;align-items:center;gap:8px;margin-bottom:12px;
+}
+.kicker::before{content:"";width:20px;height:1px;background:var(--accent);opacity:.5}
+.datechip{
+  font-size:12px;font-weight:600;color:var(--muted);
+  background:var(--surface);border:1px solid var(--border);
+  padding:8px 13px;border-radius:999px;
+  display:flex;align-items:center;gap:8px;white-space:nowrap;
+}
+
+.btn{
+  height:42px;padding:0 18px;border-radius:999px;
+  font-size:14px;font-weight:600;letter-spacing:.01em;
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid transparent;
+  transition:background .15s,transform .1s,box-shadow .15s,border-color .15s;
+  white-space:nowrap;
+}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn--primary{background:var(--accent);color:#ffffff}
+.btn--primary:hover{background:var(--accent-strong)}
+.btn--ghost{background:var(--surface);border-color:var(--border);color:var(--fg)}
+.btn--ghost:hover{background:var(--inset)}
+.btn--danger{background:var(--danger);color:#ffffff}
+.btn--danger:hover{background:var(--danger-strong)}
+.btn:disabled,.btn[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none}
+.btn:focus-visible{box-shadow:0 0 0 3px var(--accent-tint)}
+.rowact:active{transform:translateY(1px)}
+.panel__link:active,.alertrow__act:active,.dropdown__act:active{opacity:.65}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:20px 22px;position:relative;
+  transition:transform .15s,box-shadow .15s;
+}
+.stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-2)}
+.stat__label{font-size:12px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:8px;letter-spacing:.01em}
+.stat__icon{color:var(--muted)}
+.stat__value{font-family:var(--font-display);font-weight:400;font-size:34px;letter-spacing:-0.01em;line-height:1.05;margin-top:10px;font-variant-numeric:tabular-nums}
+.stat__sub{font-size:12.5px;color:var(--muted);margin-top:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.trend{font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.trend--up{color:var(--success-strong)}
+.trend--down{color:var(--danger-strong)}
+.stat__urgent{color:var(--danger-strong);font-weight:600}
+
+.grid2{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:16px}
+.deptgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.deptmeta{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;border-top:1px solid var(--border);padding-top:16px;margin-top:6px}
+.deptmeta__cell{display:flex;flex-direction:column;gap:3px}
+.dm__label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.dm__value{font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+.panel{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:22px;
+}
+.panel__head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.panel__title{font-size:15.5px;font-weight:600;letter-spacing:-0.01em;display:flex;align-items:center;gap:9px}
+.panel__title .ic{color:var(--muted)}
+.panel__link{font-size:13px;font-weight:600;color:var(--accent);display:inline-flex;align-items:center;gap:5px}
+.panel__link:hover{text-decoration:underline}
+
+.deptrow{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid var(--border)}
+.deptrow:last-child{border-bottom:0}
+.deptrow__name{flex:1;font-size:14px;font-weight:500;display:flex;align-items:center;gap:9px}
+.deptrow__wait{font-size:13px;color:var(--muted);white-space:nowrap}
+.deptrow__bar{width:120px;height:7px;border-radius:4px;background:var(--inset);overflow:hidden;flex:none}
+.deptrow__fill{height:100%;border-radius:4px;transform-origin:left center;animation:fillIn .5s cubic-bezier(.2,0,0,1) both}
+.tone-danger{--tone:var(--danger-strong);--fill:var(--danger)}
+.tone-warn{--tone:var(--warn-strong);--fill:var(--warn)}
+.tone-ok{--tone:var(--success-strong);--fill:var(--success)}
+.tone-accent{--tone:var(--accent);--fill:var(--accent)}
+.tone-info{--tone:var(--info-strong);--fill:var(--info)}
+.deptrow__fill{background:var(--fill)}
+.badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11.5px;font-weight:600;letter-spacing:.01em;
+  padding:4px 10px;border-radius:999px;white-space:nowrap;
+}
+.badge--danger{background:var(--danger-tint);color:var(--danger-strong)}
+.badge--warn{background:var(--warn-tint);color:var(--warn-strong)}
+.badge--ok{background:var(--success-tint);color:var(--success-strong)}
+.badge--info{background:var(--info-tint);color:var(--info-strong)}
+.badge--neutral{background:var(--inset);color:var(--muted)}
+.badge--accent{background:var(--accent-tint);color:var(--accent)}
+
+.alertrow{display:flex;gap:12px;padding:13px 4px;border-bottom:1px solid var(--border);align-items:flex-start}
+.alertrow:last-child{border-bottom:0}
+.alertrow__icon{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;flex:none;margin-top:1px}
+.alertrow--danger .alertrow__icon{background:var(--danger-tint);color:var(--danger-strong)}
+.alertrow--warn .alertrow__icon{background:var(--warn-tint);color:var(--warn-strong)}
+.alertrow--ok .alertrow__icon{background:var(--success-tint);color:var(--success-strong)}
+.alertrow__body{flex:1;min-width:0}
+.alertrow__text{font-size:13.5px;line-height:1.5}
+.alertrow__text b{font-weight:600}
+.alertrow__meta{font-size:11.5px;color:var(--muted);margin-top:2px}
+.alertrow__act{font-size:12.5px;font-weight:600;color:var(--accent);margin-top:4px;display:inline-flex;align-items:center;gap:4px}
+.alertrow__act:hover{text-decoration:underline}
+
+.bedsgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.reportgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:1120px){.reportgrid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:720px){.reportgrid{grid-template-columns:1fr}}
+.report{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:6px;transition:transform .15s,box-shadow .15s}
+.report:hover{transform:translateY(-2px);box-shadow:var(--shadow-2)}
+.report__top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.report__icon{width:34px;height:34px;border-radius:10px;background:var(--accent-tint);color:var(--accent);display:grid;place-items:center}
+.report__title{font-size:15.5px;font-weight:600;letter-spacing:-0.01em;margin-top:6px}
+.report__desc{font-size:12.5px;color:var(--muted);line-height:1.55}
+.report__stat{font-family:var(--font-display);font-weight:400;font-size:30px;letter-spacing:-0.01em;line-height:1.05;margin-top:6px;display:flex;flex-direction:column;gap:3px}
+.report__sub{font-family:var(--font);font-size:12px;color:var(--muted);font-weight:400}
+.report__act{margin-top:10px;border-top:1px solid var(--border);padding-top:12px}
+.btn--sm{height:34px;padding:0 12px;font-size:12.5px}
+.bedprog{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.bedprog__name{font-size:13px;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.bedprog__val{color:var(--muted);font-weight:500}
+.bedprog__track{height:8px;border-radius:4px;background:var(--inset);margin-top:11px;overflow:hidden}
+.bedprog__fill{height:100%;border-radius:4px;background:var(--fill);transform-origin:left center;animation:fillIn .55s cubic-bezier(.2,0,0,1) both}
+@keyframes fillIn{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.bedprog__sub{font-size:11.5px;color:var(--muted);margin-top:7px}
+.bedprog.tone-danger{--fill:var(--danger)}
+.bedprog.tone-warn{--fill:var(--warn)}
+.bedprog.tone-ok{--fill:var(--success)}
+
+.tablewrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.table{width:100%;border-collapse:collapse;font-size:13.5px}
+.table th{
+  text-align:left;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.07em;
+  color:var(--muted);padding:13px 16px;border-bottom:1px solid var(--border);
+  background:var(--inset);white-space:nowrap;
+}
+.table td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
+.table tr:last-child td{border-bottom:0}
+.table tbody tr{transition:background .12s}
+.table tbody tr:hover{background:var(--inset)}
+.cell-name{display:flex;align-items:center;gap:10px;font-weight:600;font-size:13.5px}
+.cell-name__sub{font-size:11.5px;color:var(--muted);font-weight:400}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--inset);color:var(--muted);display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
+.avatar--danger{background:var(--danger-tint);color:var(--danger-strong)}
+.avatar--ok{background:var(--success-tint);color:var(--success-strong)}
+.rowact{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent);padding:7px 10px;border-radius:8px}
+.rowact:hover{background:var(--accent-tint)}
+.rowact.is-danger{color:var(--danger-strong)}
+.rowact.is-danger:hover{background:var(--danger-tint)}
+.pri{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600}
+.pri__dot{width:7px;height:7px;border-radius:50%}
+.pri--critical{color:var(--danger-strong)}
+.pri--critical .pri__dot{background:var(--danger);box-shadow:0 0 0 3px var(--danger-tint)}
+.pri--high{color:var(--warn-strong)}
+.pri--high .pri__dot{background:var(--warn)}
+.pri--normal{color:var(--fg)}
+.pri--normal .pri__dot{background:var(--muted)}
+.pri--low{color:var(--muted)}
+.pri--low .pri__dot{background:var(--border)}
+.wait{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.wait.is-long{color:var(--danger-strong);font-weight:600}
+
+.wards{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.wardchip{
+  height:38px;padding:0 16px;border-radius:999px;
+  border:1px solid var(--border);background:var(--surface);
+  font-size:13px;font-weight:600;color:var(--fg);
+  display:inline-flex;align-items:center;gap:8px;
+  transition:border-color .15s,background .15s,color .15s;
+}
+.wardchip:hover{border-color:var(--accent-border)}
+.wardchip.is-active{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.wardchip__count{font-size:11px;font-weight:600;color:var(--muted)}
+.wardchip.is-active .wardchip__count{color:inherit;opacity:.85}
+.bedmap{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.bed{
+  height:62px;border-radius:12px;border:1px solid var(--border);
+  background:var(--surface);position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  font-size:13px;font-weight:600;
+  transition:transform .12s,box-shadow .12s,border-color .12s;
+}
+.bed:hover{transform:translateY(-2px);box-shadow:var(--shadow-2)}
+.bed__tag{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.bed--available{border-color:var(--success);background:var(--success-tint);color:var(--success-strong)}
+.bed--available .bed__tag{color:var(--success-strong)}
+.bed--occupied{background:var(--inset);color:var(--muted)}
+.bed--occupied .bed__tag{color:var(--muted)}
+.bed--reserved{border-color:var(--warn);background:var(--warn-tint);color:var(--warn-strong)}
+.bed--reserved .bed__tag{color:var(--warn-strong)}
+.bed--cleaning{border-color:var(--info);background:var(--info-tint);color:var(--info-strong)}
+.bed--cleaning .bed__tag{color:var(--info-strong)}
+.bed--maintenance{background:repeating-linear-gradient(45deg,var(--inset) 0 6px,var(--surface) 6px 12px);color:var(--muted)}
+.bed--maintenance .bed__tag{color:var(--muted)}
+@keyframes bedIn{from{opacity:0;transform:translateY(4px) scale(.97)}to{opacity:1;transform:none}}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:20px;font-size:12px;color:var(--muted)}
+.legend__item{display:flex;align-items:center;gap:7px}
+.legend__swatch{width:12px;height:12px;border-radius:4px;border:1px solid var(--border)}
+
+.overlay{position:fixed;inset:0;z-index:50;background:color-mix(in oklab,var(--fg) 22%,transparent);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .15s}
+.overlay.is-open{opacity:1;pointer-events:auto}
+.palette{
+  position:fixed;top:84px;left:50%;transform:translateX(-50%) translateY(-8px);
+  width:min(600px,calc(100vw - 32px));
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;box-shadow:var(--shadow-3);
+  z-index:60;opacity:0;pointer-events:none;transition:opacity .16s,transform .16s cubic-bezier(.2,0,0,1);will-change:transform,opacity;
+  overflow:hidden;
+}
+.palette.is-open{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+.palette__input{width:100%;border:0;outline:none;background:var(--surface);font:inherit;font-size:15px;color:var(--fg);padding:18px 20px 18px 52px}
+.palette__search{position:absolute;left:20px;top:21px;color:var(--muted)}
+.palette__results{max-height:340px;overflow-y:auto;border-top:1px solid var(--border);padding:8px}
+.palette__cat{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:10px 12px 6px}
+.palette__item{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border-radius:10px;text-align:left}
+.palette__item:hover,.palette__item.is-sel{background:var(--accent-tint)}
+.palette__item.is-sel .palette__label{color:var(--accent)}
+.palette__item__icon{width:32px;height:32px;border-radius:9px;background:var(--inset);display:grid;place-items:center;color:var(--muted);flex:none}
+.palette__label{font-size:14px;font-weight:600;color:var(--fg)}
+.palette__sub{font-size:12px;color:var(--muted)}
+.palette__foot{display:flex;gap:16px;align-items:center;padding:10px 16px;border-top:1px solid var(--border);font-size:11.5px;color:var(--muted);background:var(--inset)}
+.palette__empty{padding:28px 20px;text-align:center;color:var(--muted);font-size:13.5px}
+
+.dropdown{
+  position:fixed;z-index:55;
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  box-shadow:var(--shadow-3);
+  width:340px;overflow:hidden;
+  opacity:0;pointer-events:none;transform:translateY(-6px);
+  transition:opacity .16s,transform .16s cubic-bezier(.2,0,0,1);will-change:transform,opacity;
+}
+.dropdown.is-open{opacity:1;pointer-events:auto;transform:translateY(0)}
+.dropdown--narrow{width:252px}
+.dropdown__head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}
+.dropdown__title{font-size:14px;font-weight:600}
+.dropdown__act{font-size:12px;font-weight:600;color:var(--accent)}
+.dropdown__act:hover{text-decoration:underline}
+.dropdown__body{max-height:400px;overflow-y:auto}
+.notif{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.notif:last-child{border-bottom:0}
+.notif:hover{background:var(--inset)}
+.notif__icon{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;margin-top:1px}
+.notif__text{font-size:13px;line-height:1.45}
+.notif__text b{font-weight:600}
+.notif__time{font-size:11px;color:var(--muted);margin-top:2px}
+.menurow{width:100%;display:flex;align-items:center;gap:11px;padding:10px 14px;font-size:13.5px;font-weight:500;color:var(--fg);transition:background .12s}
+.menurow:hover{background:var(--inset)}
+.menurow .ic{color:var(--muted)}
+.menurow.is-role{justify-content:space-between}
+.menurow__check{color:var(--accent)}
+.roleline{padding:14px 16px;border-bottom:1px solid var(--border);background:var(--inset)}
+.roleline__name{font-size:14px;font-weight:600}
+.roleline__role{font-size:12px;color:var(--muted);margin-top:1px}
+.userbox{display:flex;align-items:center;gap:10px;padding:6px 10px 6px 6px;border-radius:999px;height:46px;transition:background .15s}
+.userbox:hover{background:var(--inset)}
+.userbox__name{font-size:13px;font-weight:600;line-height:1.2;text-align:left}
+.userbox__role{font-size:11px;color:var(--muted);line-height:1.2;text-align:left}
+.menu__sep{height:1px;background:var(--border);margin:6px 0}
+
+.drawer{
+  position:fixed;top:0;right:0;bottom:0;width:min(400px,100vw);
+  background:var(--surface);border-left:1px solid var(--border);
+  z-index:52;transform:translateX(100%);transition:transform .26s cubic-bezier(.2,0,0,1);will-change:transform;
+  display:flex;flex-direction:column;
+}
+.drawer.is-open{transform:translateX(0)}
+.drawer__head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid var(--border)}
+.drawer__title{font-size:16px;font-weight:600;letter-spacing:-0.01em}
+.drawer__body{padding:22px;overflow-y:auto;flex:1}
+.drawer__field{margin-bottom:18px}
+.drawer__label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:4px}
+.drawer__value{font-size:15px;font-weight:600}
+.drawer__row{display:flex;justify-content:space-between;gap:12px}
+.drawer__actions{display:flex;flex-direction:column;gap:9px;padding:18px 22px;border-top:1px solid var(--border)}
+
+.modal{position:fixed;inset:0;z-index:70;display:none;place-items:center;padding:20px}
+.modal.is-open{display:grid}
+.modal__card{
+  width:min(440px,100%);
+  background:var(--surface);border:1px solid var(--border);border-radius:18px;
+  box-shadow:var(--shadow-3);padding:26px;animation:modalIn .2s cubic-bezier(.2,0,0,1);will-change:transform,opacity;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.modal__title{font-size:17px;font-weight:600;letter-spacing:-0.01em;display:flex;align-items:center;gap:10px}
+.modal__title .ic{color:var(--warn-strong)}
+.modal__text{font-size:13.5px;color:var(--muted);margin-top:6px;line-height:1.55}
+.modal__detail{background:var(--inset);border-radius:12px;padding:16px 18px;margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.modal__detail .drawer__label{margin-bottom:2px}
+.modal__detail .drawer__value{font-size:14px}
+.modal__actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
+
+.toasts{position:fixed;bottom:24px;right:24px;z-index:80;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.toast{
+  display:flex;align-items:center;gap:10px;
+  background:var(--surface);border:1px solid var(--border);border-radius:999px;
+  padding:11px 18px;box-shadow:var(--shadow-2);
+  font-size:13.5px;font-weight:500;
+  animation:toastIn .2s ease-out;max-width:340px;will-change:transform,opacity;
+}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.toast.is-out{opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s}
+.toast__icon{flex:none}
+.toast--success .toast__icon{color:var(--success-strong)}
+.toast--warn .toast__icon{color:var(--warn-strong)}
+.toast--info .toast__icon{color:var(--info-strong)}
+
+.bottomnav{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:40;
+  background:var(--surface);border-top:1px solid var(--border);
+  height:62px;padding-bottom:env(safe-area-inset-bottom);
+}
+.bottomnav__item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);font-size:10px;font-weight:600;height:100%;transition:color .15s}
+.bottomnav__item.is-active{color:var(--accent)}
+
+.empty{background:var(--surface);border:1px dashed var(--border);border-radius:14px;padding:44px 24px;text-align:center}
+.empty__icon{width:46px;height:46px;border-radius:12px;background:var(--inset);color:var(--muted);display:grid;place-items:center;margin:0 auto 16px}
+.empty__title{font-size:16px;font-weight:600}
+.empty__text{font-size:13.5px;color:var(--muted);margin:6px auto 20px;max-width:400px}
+.notif-screen-sev{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.notif-screen-sev__dot{width:8px;height:8px;border-radius:50%}
+
+.topbar__search-mobile{display:none;width:40px;height:40px;border-radius:10px;place-items:center;color:var(--muted);background:var(--surface)}
+
+/* ---- Pharmacy Intelligence ---- */
+.ph-chip{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 16px;border-radius:999px;border:1px solid var(--border);background:var(--surface);font-size:13px;font-weight:600;color:var(--fg);transition:border-color .15s,background .15s}
+.ph-chip:hover{border-color:var(--accent-border)}
+.ph-chip.is-active{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.ph-chip__count{font-size:11px;font-weight:600;color:var(--muted)}
+.ph-chip.is-active .ph-chip__count{color:inherit;opacity:.85}
+.ph-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.ph-prog{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12.5px;margin:11px 0}
+.ph-prog__label{color:var(--muted);font-weight:500}
+.ph-prog__val{font-weight:600;font-variant-numeric:tabular-nums}
+.ph-track{height:7px;border-radius:4px;background:var(--inset);overflow:hidden}
+.ph-track__fill{height:100%;border-radius:4px;transform-origin:left center;animation:fillIn .5s cubic-bezier(.2,0,0,1) both}
+.ph-track__fill.tone-ok{background:var(--success)}
+.ph-track__fill.tone-warn{background:var(--warn)}
+.ph-track__fill.tone-danger{background:var(--danger)}
+.ph-track__fill.tone-accent{background:var(--accent)}
+.ph-hero{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:20px}
+.ph-hero__val{font-family:var(--font-display);font-weight:400;font-size:24px;letter-spacing:-0.01em;line-height:1.1;margin-top:7px;font-variant-numeric:tabular-nums}
+.ph-tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:20px}
+.ph-tab{height:38px;padding:0 15px;border-radius:10px 10px 0 0;font-size:13px;font-weight:600;color:var(--muted);display:inline-flex;align-items:center;gap:7px;border-bottom:2px solid transparent;transition:color .15s,border-color .15s,background .15s}
+.ph-tab:hover{color:var(--fg);background:var(--inset)}
+.ph-tab.is-active{color:var(--accent);border-bottom-color:var(--accent);background:var(--accent-tint)}
+.ph-chart{display:flex;align-items:flex-end;gap:10px;height:170px;padding:0 2px}
+.ph-chart__col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px;min-width:0}
+.ph-chart__val{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ph-chart__bar{width:100%;max-width:38px;border-radius:5px 5px 0 0;transform-origin:bottom center;animation:chartUp .45s cubic-bezier(.2,0,0,1) both;min-height:2px}
+.ph-chart__label{font-size:11px;font-weight:600;color:var(--muted)}
+.ph-chart__bar.tone-ok{background:var(--success)}
+.ph-chart__bar.tone-warn{background:var(--warn)}
+.ph-chart__bar.tone-danger{background:var(--danger)}
+.ph-chart__bar.tone-accent{background:var(--accent)}
+@keyframes chartUp{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.radar{display:flex;flex-direction:column;align-items:center;gap:14px}
+.radar svg{width:100%;max-width:520px;height:auto;display:block}
+.radar-axis{font-size:11.5px;font-weight:600;fill:var(--muted)}
+.radar-poly{transition:opacity .25s ease,stroke-width .25s ease}
+.radar-poly:hover{opacity:.9;stroke-width:2.6}
+.radar-keys{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center}
+.radar-legend{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--muted)}
+.radar-legend i{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.radar-note{font-size:11.5px;color:var(--muted);text-align:center}
+@media (prefers-reduced-motion:reduce){.radar-poly{transition:none}}
+.ph-bars{margin-top:6px}
+.ph-bar{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px}
+.ph-bar:last-child{border-bottom:0}
+.ph-bar__name{flex:1;font-weight:500;display:flex;align-items:center;gap:8px}
+.ph-bar__track{width:38%;height:8px;border-radius:4px;background:var(--inset);overflow:hidden;flex:none}
+.ph-bar__fill{height:100%;border-radius:4px;transform-origin:left center;background:var(--fill);animation:fillIn .5s cubic-bezier(.2,0,0,1) both}
+.ph-bar__val{width:54px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums;flex:none}
+.ph-insight{border:1px solid var(--accent-border);border-radius:16px;padding:22px 24px;background:linear-gradient(180deg,var(--accent-tint),var(--surface) 60%);margin-bottom:16px;position:relative}
+.ph-insight__eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.ph-insight__title{font-size:17px;font-weight:600;letter-spacing:-0.01em;margin-bottom:6px}
+.ph-insight__text{font-size:13.5px;line-height:1.6;color:var(--muted);max-width:760px}
+.ph-insight__impact{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px}
+.ph-insight__impact-item{font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px}
+.ph-insight__impact-item .ic{color:var(--warn-strong)}
+.ph-insight__act{margin-top:16px}
+.ph-sev{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.ph-sev__chip{flex:1;min-width:120px;border-radius:12px;border:1px solid var(--border);background:var(--surface);padding:12px 14px}
+.ph-sev__num{font-family:var(--font-display);font-weight:400;font-size:24px;line-height:1;letter-spacing:-0.01em}
+.ph-sev__label{font-size:11.5px;color:var(--muted);margin-top:5px;display:flex;align-items:center;gap:6px}
+.ph-sev__chip.is-critical{border-color:color-mix(in oklab,var(--danger) 55%,var(--border))}
+.ph-sev__chip.is-critical .ph-sev__num{color:var(--danger-strong)}
+.ph-sev__chip.is-warning{border-color:color-mix(in oklab,var(--warn) 55%,var(--border))}
+.ph-sev__chip.is-warning .ph-sev__num{color:var(--warn-strong)}
+.ph-sev__chip.is-monitor{border-color:color-mix(in oklab,var(--info) 55%,var(--border))}
+.ph-sev__chip.is-monitor .ph-sev__num{color:var(--info-strong)}
+.ph-dot{width:7px;height:7px;border-radius:50%;background:var(--border)}
+.ph-sev__chip.is-critical .ph-dot{background:var(--danger)}
+.ph-sev__chip.is-warning .ph-dot{background:var(--warn)}
+.ph-sev__chip.is-monitor .ph-dot{background:var(--info)}
+.ph-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0}
+.ph-flow__node{display:inline-flex;align-items:center;gap:8px;background:var(--inset);border:1px solid var(--border);border-radius:10px;padding:8px 13px;font-size:12.5px;font-weight:600}
+.ph-flow__node .ic{color:var(--accent)}
+.ph-flow__arrow{color:var(--muted)}
+.ph-mini-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.ph-mini{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.ph-mini__label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);display:flex;align-items:center;gap:7px}
+.ph-mini__val{font-size:19px;font-weight:600;margin-top:7px;font-variant-numeric:tabular-nums;letter-spacing:-0.01em}
+.ph-mini__sub{font-size:11.5px;color:var(--muted);margin-top:3px}
+.ph-fefo{border:1px solid var(--accent-border);background:var(--accent-tint);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.ph-fefo__label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+.ph-fefo__row{display:flex;align-items:center;gap:14px;font-size:13.5px;flex-wrap:wrap}
+.ph-fefo__batch{font-weight:700}
+.ph-fefo__meta{color:var(--muted);font-size:12.5px;display:flex;gap:14px;flex-wrap:wrap}
+.ph-fefo__meta b{color:var(--fg);font-weight:600}
+.ph-standalone{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.ph-standalone__chart{flex:1.4;min-width:260px}
+.ph-standalone__legend{flex:1;min-width:220px;display:flex;flex-direction:column;gap:9px}
+.ph-supplier{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;font-size:12.5px}
+.ph-supplier b{font-weight:600}
+.ph-supplier__row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.ph-supplier__row:last-child{border-bottom:0}
+.ph-supplier__row span:first-child{color:var(--muted)}
+.ph-scenario-opt{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.ph-scenario-opt .ph-chip{height:32px;padding:0 13px;font-size:12px}
+.ph-heat{width:100%;border-collapse:collapse;font-size:12.5px}
+.ph-heat th{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:9px 10px;text-align:center;border-bottom:1px solid var(--border)}
+.ph-heat td{padding:10px;text-align:center;border-bottom:1px solid var(--border);font-weight:600}
+.ph-heat td:first-child{text-align:left;font-weight:600}
+.ph-heat__cell{display:inline-flex;align-items:center;justify-content:center;gap:6px;width:100%;min-width:76px;border-radius:8px;padding:7px 10px}
+.ph-heat__cell.is-0{background:var(--success-tint);color:var(--success-strong)}
+.ph-heat__cell.is-1{background:var(--warn-tint);color:var(--warn-strong)}
+.ph-heat__cell.is-2{background:color-mix(in oklab,var(--danger) 14%,var(--bg));color:var(--danger-strong)}
+.ph-heat__cell.is-3{background:var(--danger-tint);color:var(--danger-strong)}
+.ph-method{border:1px solid var(--border);background:var(--surface);border-radius:14px;padding:16px 20px}
+.ph-method summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;font-size:12.5px;font-weight:600;color:var(--muted)}
+.ph-method summary::-webkit-details-marker{display:none}
+.ph-method summary::after{content:"▾";color:var(--muted);transition:transform .2s}
+.ph-method[open] summary::after{transform:rotate(180deg)}
+.ph-method__body{font-size:12.5px;line-height:1.65;color:var(--muted);margin-top:12px;max-width:720px}
+.ph-method__body b{color:var(--fg);font-weight:600}
+.ph-plan{width:100%;border-collapse:collapse;font-size:13px}
+.ph-plan th{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:11px 12px;text-align:right;border-bottom:1px solid var(--border);background:var(--inset)}
+.ph-plan th:first-child{text-align:left}
+.ph-plan td{padding:12px;text-align:right;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums;font-weight:600}
+.ph-plan td:first-child{text-align:left;font-weight:600}
+.ph-plan tr.is-total td{border-top:2px solid var(--border);font-weight:700}
+.ph-chain{display:flex;flex-direction:column;gap:0;margin-top:4px}
+.ph-chain__row{display:flex;align-items:center;gap:12px;padding:9px 0}
+.ph-chain__row .ic{color:var(--accent);flex:none}
+.ph-chain__row div{flex:1;font-size:13px;font-weight:500}
+.ph-chain__row span{font-size:11.5px;color:var(--muted);text-align:right}
+.ph-chain__link{text-align:center;color:var(--muted);line-height:1;margin:-2px 0}
+.ph-mgr{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.ph-quick{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;transition:transform .15s,box-shadow .15s}
+.ph-quick:hover{transform:translateY(-2px);box-shadow:var(--shadow-2)}
+.ph-quick__icon{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;margin-bottom:8px}
+.ph-quick__val{font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-0.01em}
+.ph-quick__label{font-size:11.5px;color:var(--muted)}
+.ph-quick__icon.tone-ok{background:var(--success-tint);color:var(--success-strong)}
+.ph-quick__icon.tone-warn{background:var(--warn-tint);color:var(--warn-strong)}
+.ph-quick__icon.tone-danger{background:var(--danger-tint);color:var(--danger-strong)}
+.ph-quick__icon.tone-accent{background:var(--accent-tint);color:var(--accent)}
+.ph-audit{position:relative;padding-left:22px;margin-left:7px}
+.ph-audit::before{content:"";position:absolute;left:4px;top:6px;bottom:6px;width:1px;background:var(--border)}
+.ph-audit__item{position:relative;padding:0 0 16px}
+.ph-audit__item::before{content:"";position:absolute;left:-22px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--surface);border:2px solid var(--accent)}
+.ph-audit__date{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+.ph-audit__time{font-size:11.5px;color:var(--muted)}
+.ph-audit__text{font-size:13px;margin-top:3px}
+.ph-temp{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:10px}
+.ph-temp__reading{font-family:var(--font-display);font-size:34px;font-weight:400;letter-spacing:-0.01em;line-height:1;font-variant-numeric:tabular-nums}
+.ph-temp__range{font-size:12px;color:var(--muted)}
+.ph-temp__status{font-size:12.5px;font-weight:600;color:var(--success-strong);display:inline-flex;align-items:center;gap:7px}
+.ph-temp__excursion{border:1px solid color-mix(in oklab,var(--warn) 55%,var(--border));background:var(--warn-tint);border-radius:12px;padding:13px 16px;margin-top:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ph-kpi-strip{display:grid;grid-template-columns:repeat(8,1fr);gap:12px;margin-bottom:20px}
+@media (max-width:1200px){.ph-kpi-strip{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:1120px){
+  .ph-hero{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:720px){
+  .ph-kpi-strip{grid-template-columns:1fr 1fr;gap:12px}
+  .ph-hero{grid-template-columns:1fr 1fr}
+  .ph-chart{height:140px}
+  .ph-tabs{gap:2px}
+  .ph-tab{height:34px;padding:0 10px;font-size:12px}
+  .ph-insight{padding:18px 16px}
+}
+
+/* ---- Staff & Settings ---- */
+.staff-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+@media (max-width:1200px){.staff-kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:720px){.staff-kpis{grid-template-columns:1fr 1fr;gap:12px}}
+.setting-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:15px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:0}
+.setting-row__body{min-width:0}
+.setting-row__label{font-size:13.5px;font-weight:600}
+.setting-row__sub{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.5}
+.setting-row__ctrl{flex:none;display:flex;align-items:center;gap:10px}
+.switch{position:relative;width:44px;height:26px;border-radius:999px;background:var(--inset);border:1px solid var(--border);flex:none;transition:background .18s,border-color .18s}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--surface);box-shadow:var(--shadow-1);transition:transform .18s cubic-bezier(.2,0,0,1)}
+.switch.is-on{background:var(--accent);border-color:var(--accent)}
+.switch.is-on::after{transform:translateX(18px)}
+.staff-avatar{width:34px;height:34px;border-radius:10px;background:var(--inset);color:var(--muted);display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
+.staff-avatar.is-on{background:var(--success-tint);color:var(--success-strong)}
+.staff-avatar.is-off{background:var(--warn-tint);color:var(--warn-strong)}
+.staff-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.staff-meta__chip{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);background:var(--inset);border:1px solid var(--border);border-radius:999px;padding:4px 11px}
+
+@media (max-width:1120px){
+  .bedsgrid{grid-template-columns:repeat(3,1fr)}
+  .bedmap{grid-template-columns:repeat(4,1fr)}
+  .grid2{grid-template-columns:1fr}
+}
+@media (max-width:920px){.kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:860px){
+  .brand__tag{display:none}
+  .userbox__name,.userbox__role{display:none}
+  .userbox{padding:6px}
+}
+@media (max-width:720px){
+  .sidebar{display:none}
+  .bottomnav{display:flex}
+  .topbar__search{display:none}
+  .topbar__search-mobile{display:grid}
+  .topbar{height:56px;padding:0 14px}
+  .brand{width:auto}
+  .live{display:none}
+  .page{padding:22px 16px 92px}
+  .kpis{grid-template-columns:1fr 1fr;gap:12px}
+  .bedsgrid{grid-template-columns:1fr 1fr}
+  .deptgrid{grid-template-columns:1fr}
+  .bedmap{grid-template-columns:repeat(3,1fr)}
+  .deptrow__bar{width:64px}
+  .table{min-width:640px}
+  .tablewrap{overflow-x:auto}
+  .pagehead__title{font-size:26px}
+  .stat__value{font-size:28px}
+  .toasts{bottom:74px;right:12px;left:12px;align-items:stretch}
+  .toast{max-width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  html{scroll-behavior:auto!important}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar" data-od-id="topbar">
+    <div class="brand">
+      <div class="brand__mark">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8v8M8 12h8"/></svg>
+      </div>
+      <span class="brand__name">Urban<em>Med</em></span>
+      <span class="brand__tag">Hospital Operations</span>
+    </div>
+    <button class="topbar__search" id="search-trigger" data-od-id="global-search" aria-haspopup="dialog" aria-controls="palette" aria-expanded="false">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <span>Search patients, doctors, beds, admissions…</span>
+      <span class="kbd">Ctrl K</span>
+    </button>
+    <button class="topbar__search-mobile" id="search-trigger-m" aria-label="Search" aria-haspopup="dialog" aria-controls="palette" aria-expanded="false">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    </button>
+    <div class="topbar__right">
+      <span class="live" id="live-indicator" title="Connection status">
+        <span class="live__dot"></span><span id="live-text">Live</span>
+      </span>
+      <button class="iconbtn" id="notif-trigger" data-od-id="notifications-trigger" aria-label="Notifications" aria-haspopup="true" aria-controls="notif-menu" aria-expanded="false">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <span class="iconbtn__badge" id="notif-badge">4</span>
+      </button>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="ic" id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+      <button class="userbox" id="user-trigger" data-od-id="user-menu" aria-haspopup="true" aria-controls="user-menu" aria-expanded="false">
+        <span class="avatar">AA</span>
+        <span>
+          <span class="userbox__name">Aman Ali</span>
+          <span class="userbox__role" id="user-role">Hospital Administrator</span>
+        </span>
+        <svg class="ic ic--sm" style="color:var(--muted)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="shell">
+    <aside class="sidebar" id="sidebar" data-od-id="sidebar">
+      <nav class="sidebar__nav" id="nav" aria-label="Primary navigation"></nav>
+      <div class="sidebar__foot">
+        <button class="sidebar__collapse" id="nav-collapse" aria-label="Collapse navigation">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+        </button>
+        <span class="sidebar__hint">Ctrl K · search</span>
+      </div>
+    </aside>
+    <main class="main" id="main">
+      <div class="page" id="page"></div>
+    </main>
+  </div>
+
+  <nav class="bottomnav" id="bottomnav" aria-label="Mobile navigation"></nav>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="palette" id="palette" role="dialog" aria-modal="true" aria-label="Global search">
+  <svg class="ic palette__search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+  <input class="palette__input" id="palette-input" placeholder="Search patients, doctors, beds, admissions…" aria-label="Search">
+  <div class="palette__results" id="palette-results"></div>
+  <div class="palette__foot">
+    <span><span class="kbd">↑</span> <span class="kbd">↓</span> navigate</span>
+    <span><span class="kbd">↵</span> open</span>
+    <span><span class="kbd">esc</span> close</span>
+  </div>
+</div>
+
+<div class="dropdown dropdown--narrow" id="user-menu" data-od-id="user-menu-panel"></div>
+<div class="dropdown" id="notif-menu" data-od-id="notif-panel"></div>
+<div class="drawer" id="bed-drawer" data-od-id="bed-drawer" role="dialog" aria-modal="true" aria-label="Bed details"></div>
+<div class="modal" id="modal" data-od-id="confirm-modal" role="dialog" aria-modal="true" aria-label="Confirm action"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+const I={
+dashboard:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+patients:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+register:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/>',
+queue:'<path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/>',
+consult:'<path d="M4 4h12l4 4v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M14 4v6h6M9 12v4M7 14h4"/>',
+history:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+beds:'<path d="M3 20v-9"/><path d="M3 17h18"/><path d="M9 17V9a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v8"/><path d="M21 17v3"/>',
+ward:'<path d="M3 21h18M4 21V8l8-5 8 5v13"/><path d="M9 21v-6h6v6M9 11h.01M15 11h.01"/>',
+departments:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 21v-4h6v4M9 7h.01M12 7h.01M15 7h.01M9 11h.01M12 11h.01M15 11h.01"/>',
+admissions:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M12 11v6M9 14h6"/>',
+analytics:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+reports:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+staff:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m16 11 2 2 4-4"/>',
+settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>',
+search:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+alert:'<path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/>',
+info:'<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>',
+check:'<circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 5-5"/>',
+clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+x:'<path d="M18 6 6 18M6 6l12 12"/>',
+plus:'<path d="M12 5v14M5 12h14"/>',
+arrow:'<path d="M5 12h14M12 5l7 7-7 7"/>',
+logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/>',
+help:'<circle cx="12" cy="12" r="9"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>',
+ home:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22v-6h6v6"/>',
+
+ phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/>',
+ user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+ pill:'<path d="M10.5 2.5 21.5 13.5a5 5 0 0 1-7.07 7.07L3.43 9.57A5 5 0 0 1 10.5 2.5Z"/><path d="m8.5 8.5 7 7"/>',
+ flask:'<path d="M10 2v6.5L4.8 17a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 8.5V2"/><path d="M8.5 2h7"/><path d="M7 15h10"/>',
+ thermometer:'<path d="M14 4a2 2 0 0 0-4 0v8.1a4 4 0 1 0 4 0Z"/><path d="M12 9v7"/>',
+ truck:'<path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
+ trending:'<path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/>',
+ layers:'<path d="m12 2 10 6-10 6L2 8Z"/><path d="m2 17 10 6 10-6"/><path d="m2 12 10 6 10-6"/>',
+ calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+ clipboard:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6"/>',
+ box:'<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+ sparkle:'<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8Z"/>'
+};
+const icon=(n,c='')=>'<svg class="ic '+(c||'')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(I[n]||'')+'</svg>';
+const $=s=>document.querySelector(s);
+const store={get(k,d){try{const v=localStorage.getItem('ums.'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('ums.'+k,JSON.stringify(v))}catch(e){}}};
+const state={role:store.get('role','admin'),theme:store.get('theme','light'),collapsed:store.get('collapsed',false),screen:'dashboard',notifUnread:4,ward:'ICU',sel:0,connected:true,patFilter:'All',staffFilter:'All',patSearch:'',queueDept:0,regStep:1,regData:{},patId:'PT-10284',bedOv:{},med:'pcm',phTab:'Overview',phRange:'12m',scenario:'p20',notifs:store.get('notifs',{critical:true,queue:true,pharmacy:false,live:true})};
+let CURRENT_BED='ICU-04';
+
+const ROLES={
+ admin:{label:'Hospital Administrator',nav:[
+  {g:'Overview',items:[['dashboard','Dashboard','dashboard']]},
+  {g:'Patient Management',items:[['patients','Patients','patients'],['queue','Queue','queue','live'],['admissions','Admissions','admissions','3']]},
+  {g:'Hospital Operations',items:[['beds','Beds','beds'],['departments','Departments','departments']]},
+  {g:'Pharmacy',items:[['pharmacy','Pharmacy','pill','18'],['expiry','Expiry Risk','flask'],['procurement','Procurement','truck'],['casemix','Case Mix','trending']]},
+  {g:'Analytics',items:[['analytics','Analytics','analytics'],['reports','Reports','reports']]},
+  {g:'Administration',items:[['staff','Staff','staff'],['settings','Settings','settings']]}]},
+doctor:{label:'Doctor',nav:[
+ {g:'Overview',items:[['dashboard','Dashboard','dashboard']]},
+ {g:'Patient Management',items:[['patients','Patients','patients'],['queue','My Queue','queue','live'],['consult','Consultation','consult'],['history','History','history']]}]},
+nurse:{label:'Nurse',nav:[
+ {g:'Overview',items:[['dashboard','Dashboard','dashboard'],['ward','Ward','ward']]},
+ {g:'Patient Management',items:[['patients','Patients','patients'],['admissions','Admissions','admissions','3']]},
+ {g:'Hospital Operations',items:[['beds','Beds','beds']]}]},
+receptionist:{label:'Receptionist',nav:[
+ {g:'Overview',items:[['dashboard','Dashboard','dashboard']]},
+ {g:'Patient Management',items:[['register','Register Patient','register'],['patients','Patients','patients'],['queue','Queue','queue','live']]}]},
+bedmanager:{label:'Bed Manager',nav:[
+ {g:'Overview',items:[['dashboard','Dashboard','dashboard']]},
+ {g:'Hospital Operations',items:[['beds','Bed Map','beds'],['beds2','Bed Dashboard','analytics']]},
+ {g:'Admissions',items:[['admissions','Admissions','admissions','3']]}]}
+};
+const ROLE_LABELS={admin:'Hospital Administrator',doctor:'Doctor',nurse:'Nurse',receptionist:'Receptionist',bedmanager:'Bed Manager'};
+const DASH={
+admin:{hello:'Good morning, Aman',sub:'Hospital-wide overview · '+dateStr(),kpis:[
+ {label:'Total patients',val:'1,284',sub:'+8.2%',icon:'patients',tone:'ok'},
+ {label:'Waiting',val:'87',sub:'12 urgent',icon:'queue',tone:'danger',urgent:true},
+ {label:'Available beds',val:'42',sub:'of 180',icon:'beds',tone:'ok'},
+ {label:'Occupancy',val:'76%',sub:'+3.1%',icon:'analytics',tone:'warn'}]},
+doctor:{hello:'Good morning, Dr. Singh',sub:'Your clinic today · Cardiology',kpis:[
+ {label:'Today’s patients',val:'18',sub:'+4 vs yesterday',icon:'patients',tone:'ok'},
+ {label:'Waiting',val:'6',sub:'1 critical',icon:'queue',tone:'warn',urgent:true},
+ {label:'In consultation',val:'1',sub:'Rahul Sharma',icon:'consult',tone:'info'},
+ {label:'Completed',val:'11',sub:'of 18',icon:'check',tone:'ok'}]},
+nurse:{hello:'Good morning, Nurse Meera',sub:'Ward 3 · General Medicine',kpis:[
+ {label:'Ward beds',val:'18/24',sub:'6 available',icon:'beds',tone:'ok'},
+ {label:'Patients',val:'18',sub:'assigned to ward',icon:'patients',tone:'ok'},
+ {label:'Pending actions',val:'4',sub:'2 urgent',icon:'queue',tone:'danger',urgent:true},
+ {label:'Admissions today',val:'6',sub:'2 awaiting bed',icon:'admissions',tone:'warn'}]},
+receptionist:{hello:'Good morning, Ayesha',sub:'Front desk intake · ' + dateStr(),kpis:[
+ {label:'Registered today',val:'34',sub:'+6 vs yesterday',icon:'register',tone:'ok'},
+ {label:'Waiting',val:'14',sub:'across departments',icon:'queue',tone:'warn'},
+ {label:'Urgent',val:'2',sub:'expedited',icon:'alert',tone:'danger',urgent:true},
+ {label:'Avg registration',val:'4m',sub:'per patient',icon:'clock',tone:'ok'}]},
+bedmanager:{hello:'Good morning, Rohan',sub:'Bed operations · ' + dateStr(),kpis:[
+ {label:'Available',val:'42',sub:'of 180',icon:'beds',tone:'ok'},
+ {label:'Occupied',val:'128',sub:'71%',icon:'beds',tone:'info'},
+ {label:'Maintenance',val:'10',sub:'offline',icon:'settings',tone:'warn'},
+ {label:'Reserved',val:'8',sub:'for incoming',icon:'clock',tone:'info'}]}
+};
+function dateStr(){const d=new Date();return d.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})}
+const DEPTS=[
+ {name:'Emergency',wait:18,urgent:3,avg:17,avail:3,total:15,tone:'danger',pat:210},
+ {name:'Cardiology',wait:16,urgent:3,avg:24,avail:4,total:24,tone:'warn',pat:185},
+ {name:'Neurology',wait:11,urgent:2,avg:28,avail:2,total:18,tone:'warn',pat:120},
+ {name:'Orthopedics',wait:9,urgent:1,avg:15,avail:6,total:20,tone:'ok',pat:148},
+ {name:'Pediatrics',wait:13,urgent:1,avg:19,avail:7,total:30,tone:'warn',pat:260},
+ {name:'General Medicine',wait:20,urgent:2,avg:13,avail:18,total:80,tone:'ok',pat:361}];
+const WARDS={
+ ICU:{avail:4,total:20},EMERGENCY:{avail:3,total:15},GENERAL:{avail:18,total:80},PEDIATRICS:{avail:7,total:30}
+};
+const QUEUE=[
+ {n:'Rahul Sharma',id:'PT-10284',pri:'critical',wait:31,dept:'Emergency'},
+ {n:'Ankit Verma',id:'PT-10277',pri:'high',wait:24,dept:'Emergency'},
+ {n:'Sana Khan',id:'PT-10281',pri:'critical',wait:19,dept:'Emergency'},
+ {n:'Priya Singh',id:'PT-10290',pri:'normal',wait:13,dept:'Pediatrics'},
+ {n:'Dev Malhotra',id:'PT-10288',pri:'high',wait:9,dept:'Orthopedics'},
+ {n:'Neha Gupta',id:'PT-10292',pri:'low',wait:5,dept:'General Medicine'}];
+const PATIENTS=[
+ {n:'Rahul Sharma',id:'PT-10284',age:34,dept:'Cardiology',pri:'critical',status:'Waiting',doc:'Dr. Singh'},
+ {n:'Ankit Verma',id:'PT-10277',age:41,dept:'Emergency',pri:'high',status:'Waiting',doc:'Dr. Rao'},
+ {n:'Priya Singh',id:'PT-10290',age:7,dept:'Pediatrics',pri:'normal',status:'In Consultation',doc:'Dr. Iyer'},
+ {n:'Dev Malhotra',id:'PT-10288',age:52,dept:'Orthopedics',pri:'high',status:'Admitted',doc:'Dr. Kulkarni'},
+ {n:'Neha Gupta',id:'PT-10292',age:29,dept:'General Medicine',pri:'low',status:'Discharged',doc:'Dr. Fernandes'},
+ {n:'Sana Khan',id:'PT-10281',age:66,dept:'Emergency',pri:'critical',status:'In Consultation',doc:'Dr. Rao'}];
+const ALERTS=[
+ {sev:'danger',icon:'alert',t:['ICU occupancy reached ',{v:'90%'}],act:'View ICU beds',a:'beds'},
+ {sev:'danger',icon:'alert',t:['Emergency queue has ',{v:'3 critical'},' patients'],act:'View queue',a:'queue'},
+ {sev:'warn',icon:'clock',t:['Cardiology average wait exceeded ',{v:'30 min'}],act:'View queue',a:'queue'},
+ {sev:'ok',icon:'check',t:['ICU bed #14 is now ',{v:'available'}],act:'Assign bed',a:'beds'}];
+const ADMISSIONS=[
+ ['ADM-20391','Rahul Sharma','PT-10284','Cardiology','HIGH','ICU','Bed Assigned','warn'],
+ ['ADM-20387','Nisha Shah','PT-10271','General Medicine','NORMAL','General','Admitted','info'],
+ ['ADM-20385','Vikram Rao','PT-10268','General Medicine','NORMAL','General','Pending','neutral'],
+ ['ADM-20382','Arjun Kapoor','PT-10259','Cardiology','HIGH','ICU','Pending','warn'],
+ ['ADM-20376','Ritu Jain','PT-10250','Orthopedics','NORMAL','Ortho','Discharged','neutral']];
+const NOTIFS=[
+ {cat:'critical',sev:'danger',t:'ICU occupancy reached 90%',time:'2 min ago'},
+ {cat:'critical',sev:'danger',t:'Emergency queue has 3 critical patients',time:'6 min ago'},
+ {cat:'queue',sev:'warn',t:'Admission ADM-20391 requires bed assignment',time:'11 min ago'},
+ {cat:'queue',sev:'warn',t:'Patient waiting time exceeded threshold · Sana Khan',time:'14 min ago'},
+ {cat:'pharmacy',sev:'warn',t:'Paracetamol 500mg near reorder point · 420 units',time:'18 min ago'},
+ {cat:'live',sev:'info',t:'ICU-04 is now available',time:'22 min ago'},
+ {cat:'live',sev:'info',t:'3 beds marked available in General Ward',time:'40 min ago'}];
+const visibleNotifs=()=>NOTIFS.filter(n=>state.notifs[n.cat]!==false);
+const SEARCH=[
+ {cat:'Patients',icon:'patients',items:[{l:'Rahul Sharma',s:'PT-10284 · Cardiology'},{l:'Ankit Verma',s:'PT-10277 · Emergency'},{l:'Priya Singh',s:'PT-10290 · Pediatrics'}]},
+ {cat:'Beds',icon:'beds',items:[{l:'ICU-04',s:'ICU · Floor 3 · Available'},{l:'ICU-14',s:'ICU · Floor 3 · Occupied'},{l:'GEN-21',s:'General Ward · Floor 2 · Cleaning'}]},
+ {cat:'Departments',icon:'departments',items:[{l:'Cardiology',s:'24 beds · 8 doctors'},{l:'Emergency',s:'15 beds · 12 doctors'}]},
+  {cat:'Doctors',icon:'staff',items:[{l:'Dr. Singh',s:'Cardiology · 18 patients today'},{l:'Dr. Rao',s:'Emergency · On duty'}]},
+  {cat:'Medicines',icon:'pill',items:[{l:'Paracetamol 500mg',s:'Pharmacy · 8,420 in stock · Low risk'},{l:'Amoxicillin 500mg',s:'Pharmacy · 1,540 in stock · High risk'},{l:'Azithromycin 500mg',s:'Pharmacy · 980 in stock'},{l:'Oral Rehydration Salts',s:'Pharmacy · 2,400 in stock'},{l:'Pantoprazole 40mg',s:'Pharmacy · 3,200 in stock'}]}];
+const BEDS={ICU:{floors:2,per:8},EMERGENCY:{floors:2,per:8},GENERAL:{floors:3,per:8},PEDIATRICS:{floors:2,per:8}};
+const STAFF=[
+ {n:'Dr. Arjun Singh',id:'EMP-104',dept:'Cardiology',role:'Consultant',shift:'Day · 08:00-16:00',status:'On duty',tone:'ok'},
+ {n:'Dr. Kavita Rao',id:'EMP-118',dept:'Emergency',role:'Emergency Physician',shift:'Day · 08:00-16:00',status:'On duty',tone:'ok'},
+ {n:'Dr. Meera Iyer',id:'EMP-122',dept:'Pediatrics',role:'Pediatrician',shift:'Day · 08:00-16:00',status:'On leave',tone:'warn'},
+ {n:'Dr. Vikram Kulkarni',id:'EMP-131',dept:'Orthopedics',role:'Orthopedic Surgeon',shift:'Day · 08:00-16:00',status:'On duty',tone:'ok'},
+ {n:'Dr. Priya Fernandes',id:'EMP-109',dept:'General Medicine',role:'General Physician',shift:'Day · 08:00-16:00',status:'On duty',tone:'ok'},
+ {n:'Nurse Meera Patel',id:'EMP-206',dept:'General Medicine',role:'Staff Nurse · Ward 3',shift:'Night · 20:00-04:00',status:'On duty',tone:'ok'},
+ {n:'Ayesha Khan',id:'EMP-302',dept:'Front Desk',role:'Receptionist',shift:'Day · 08:00-16:00',status:'On duty',tone:'ok'},
+ {n:'Rohan Verma',id:'EMP-310',dept:'Operations',role:'Bed Manager',shift:'Day · 08:00-16:00',status:'Off duty',tone:'warn'},
+ {n:'Aman Ali',id:'EMP-001',dept:'Administration',role:'Hospital Administrator',shift:'Day · 08:00-16:00',status:'On duty',tone:'ok'}];
+const STAFF_DEPT=[['Cardiology',6],['Emergency',12],['Pediatrics',4],['Orthopedics',5],['General Medicine',14],['Front Desk',8],['Operations',5],['Administration',6]];
+
+/* ---- Pharmacy Intelligence ---- */
+const MONTHS=['Sep','Oct','Nov','Dec'];
+const PH_KPIS=[
+ {label:'Total Medicines',val:'4,820',sub:'SKUs',icon:'pill',tone:'accent'},
+ {label:'Current Inventory Value',val:'₹84.2L',sub:'across all stock',icon:'box',tone:'ok'},
+ {label:'Low Stock',val:'42',sub:'items',icon:'alert',tone:'warn',urgent:true},
+ {label:'Expiring Soon',val:'18',sub:'items',icon:'flask',tone:'warn'},
+ {label:'Out of Stock',val:'7',sub:'items',icon:'x',tone:'danger',urgent:true},
+ {label:'Pending Procurement',val:'12',sub:'orders',icon:'truck',tone:'info'},
+ {label:'Monthly Consumption',val:'₹18.4L',sub:'last 30 days',icon:'trending',tone:'info'},
+ {label:'Forecasted Demand',val:'+14.8%',sub:'next month',icon:'trending',tone:'ok'}];
+const PH_HEALTH={score:87,grade:'Good',parts:[['Stock Availability',91],['Expiry Health',82],['Demand Coverage',89],['Procurement Readiness',86],['Quality Status',94]]};
+const MEDICINES=[
+ {id:'pcm',name:'Paracetamol 500mg',generic:'Paracetamol',cat:'Analgesic / Antipyretic',form:'Tablet',strength:'500 mg',mfr:'ABC Pharma',stock:8420,reserved:420,reorder:2000,safety:1500,monthly:5200,avgDaily:173,unit:'₹',value:42100,exp:'Nov 2026',daysRemaining:110,quality:'Verified',forecast:12,risk:'Low',coverage:48.7,coverageAdj:41,trend:12.3,consumption:[5100,5250,5400,5300,5450,5600,5500,5700,5650,5800,5840,5900],demand:[5800,6100,6400,6900],batches:[{id:'PCM-1023',stock:1200,exp:'Sep 2026',daysRemaining:45,supplier:'ABC Pharma',quality:'Verified',recommended:true},{id:'PCM-1042',stock:3800,exp:'Nov 2026',daysRemaining:110,supplier:'ABC Pharma',quality:'Verified'},{id:'PCM-1091',stock:3420,exp:'Feb 2027',daysRemaining:185,supplier:'XYZ Pharma',quality:'Verified'}],cases:[['Pain / fever-related visits',42],['Respiratory-related visits',24],['Musculoskeletal',18],['Other',16]],depts:[['Emergency',26],['General Medicine',24],['Cardiology',12],['Pediatrics',18],['Orthopedics',9],['Other',11]],supplier:'ABC Pharma',supplyData:{price:'₹4.20',delivery:'2.8 days',ontime:'94%',last:'₹4.10',trend:'+4.2%',trendDir:'up'},reorderQty:5000},
+ {id:'amx',name:'Amoxicillin 500mg',generic:'Amoxicillin',cat:'Antibiotic',form:'Capsule',strength:'500 mg',mfr:'MedPlus Distributors',stock:1540,reserved:0,reorder:1200,safety:700,monthly:940,avgDaily:31,unit:'₹',value:30800,exp:'28 Sep 2026',daysRemaining:46,quality:'Inspection Required',forecast:21,risk:'High',coverage:19,coverageAdj:15,trend:8.4,consumption:[780,800,840,820,860,880,900,940,930,980,990,940],demand:[820,940,1120,1260],batches:[{id:'AMX-22081',stock:820,exp:'28 Sep 2026',daysRemaining:46,supplier:'MedPlus Distributors',quality:'Inspection Required',recommended:true},{id:'AMX-22110',stock:720,exp:'Jan 2027',daysRemaining:160,supplier:'MedPlus Distributors',quality:'Verified'}],cases:[['Respiratory-related visits',38],['Gastrointestinal',27],['Pain / fever-related visits',18],['Other',17]],depts:[['Emergency',22],['General Medicine',30],['Pediatrics',26],['Cardiology',8],['Other',14]],supplier:'MedPlus Distributors',supplyData:{price:'₹20.00',delivery:'4.0 days',ontime:'91%',last:'₹19.60',trend:'+2.1%',trendDir:'up'},reorderQty:1200},
+ {id:'azt',name:'Azithromycin 500mg',generic:'Azithromycin',cat:'Antibiotic',form:'Tablet',strength:'500 mg',mfr:'ABC Pharma',stock:980,reserved:0,reorder:600,safety:400,monthly:610,avgDaily:20,unit:'₹',value:24500,exp:'Oct 2026',daysRemaining:70,quality:'Verified',forecast:14,risk:'Medium',coverage:33,coverageAdj:28,trend:6.1,consumption:[480,500,540,520,560,580,570,600,610,640,650,610],demand:[410,520,610,680],batches:[{id:'AZT-22045',stock:980,exp:'Oct 2026',daysRemaining:70,supplier:'ABC Pharma',quality:'Verified',recommended:true}],cases:[['Respiratory-related visits',44],['Gastrointestinal',21],['Pain / fever-related visits',12],['Other',23]],depts:[['Emergency',18],['General Medicine',26],['Pediatrics',24],['Cardiology',10],['Other',22]],supplier:'ABC Pharma',supplyData:{price:'₹25.00',delivery:'3.2 days',ontime:'93%',last:'₹25.00',trend:'0%',trendDir:'flat'},reorderQty:800},
+ {id:'ors',name:'Oral Rehydration Salts',generic:'ORS Electrolyte',cat:'Electrolyte',form:'Sachet',strength:'20.5 g',mfr:'VitalCure',stock:2400,reserved:0,reorder:1800,safety:1200,monthly:2800,avgDaily:93,unit:'₹',value:21600,exp:'Feb 2027',daysRemaining:185,quality:'Verified',forecast:18,risk:'High',coverage:26,coverageAdj:22,trend:15.2,consumption:[2200,2350,2400,2500,2600,2700,2650,2800,2900,3000,3120,2800],demand:[2400,2800,3200,3600],batches:[{id:'ORS-771',stock:1800,exp:'Feb 2027',daysRemaining:185,supplier:'VitalCure',quality:'Verified',recommended:true},{id:'ORS-782',stock:600,exp:'Aug 2026',daysRemaining:12,supplier:'VitalCure',quality:'Verified'}],cases:[['Gastrointestinal',58],['Pain / fever-related visits',14],['Other',28]],depts:[['Emergency',20],['General Medicine',34],['Pediatrics',38],['Other',8]],supplier:'VitalCure',supplyData:{price:'₹9.00',delivery:'2.5 days',ontime:'96%',last:'₹8.90',trend:'+1.1%',trendDir:'up'},reorderQty:3200},
+ {id:'ppz',name:'Pantoprazole 40mg',generic:'Pantoprazole',cat:'PPI / Antacid',form:'Tablet',strength:'40 mg',mfr:'MedPlus Distributors',stock:3200,reserved:0,reorder:1400,safety:900,monthly:1900,avgDaily:63,unit:'₹',value:38400,exp:'Dec 2026',daysRemaining:135,quality:'Verified',forecast:9,risk:'Low',coverage:51,coverageAdj:47,trend:5.8,consumption:[1650,1700,1750,1720,1800,1850,1820,1880,1900,1940,1960,1900],demand:[1800,1850,1900,2000],batches:[{id:'PPZ-2190',stock:3200,exp:'Dec 2026',daysRemaining:135,supplier:'MedPlus Distributors',quality:'Verified',recommended:true}],cases:[['Gastrointestinal',52],['Pain / fever-related visits',19],['Other',29]],depts:[['General Medicine',36],['Emergency',15],['Cardiology',12],['Other',37]],supplier:'MedPlus Distributors',supplyData:{price:'₹12.00',delivery:'3.0 days',ontime:'92%',last:'₹12.00',trend:'0%',trendDir:'flat'},reorderQty:1900},
+ {id:'cfx',name:'Cough Preparation',generic:'Dextromethorphan expectorant',cat:'Respiratory',form:'Syrup',strength:'100 ml',mfr:'XYZ Pharma',stock:1120,reserved:0,reorder:900,safety:600,monthly:720,avgDaily:24,unit:'₹',value:16800,exp:'Jan 2027',daysRemaining:155,quality:'Temperature Excursion',forecast:16,risk:'Medium',coverage:47,coverageAdj:40,trend:11.4,consumption:[520,560,600,580,640,660,650,700,710,760,800,720],demand:[640,700,760,840],batches:[{id:'CFX-1188',stock:1120,exp:'Jan 2027',daysRemaining:155,supplier:'XYZ Pharma',quality:'Temperature Excursion',recommended:true}],cases:[['Respiratory-related visits',64],['Pain / fever-related visits',11],['Other',25]],depts:[['Emergency',16],['General Medicine',28],['Pediatrics',31],['Other',25]],supplier:'XYZ Pharma',supplyData:{price:'₹15.00',delivery:'3.5 days',ontime:'90%',last:'₹14.80',trend:'+1.3%',trendDir:'up'},reorderQty:800}
+];
+const EXPIRY={l30:4,l60:8,l90:18,l180:41,value:480000,breakdown:[['Medicines',310000],['Consumables',120000],['Other',50000]],exposure:[['September',1.2],['October',1.8],['November',0.9],['December',0.6]]};
+const EXPIRY_ROWS=[
+ {m:'Amoxicillin 500mg',batch:'AMX-22081',qty:820,exp:'28 Sep 2026',days:46,value:'₹16,400',consumption:'940/mo',risk:'HIGH',act:'Prioritize existing stock according to approved pharmacy policy'},
+ {m:'Paracetamol 500mg',batch:'PCM-1023',qty:1200,exp:'Sep 2026',days:45,value:'₹6,000',consumption:'5,200/mo',risk:'HIGH',act:'Prioritize existing stock according to approved pharmacy policy'},
+ {m:'ORS Sachet',batch:'ORS-782',qty:600,exp:'Aug 2026',days:12,value:'₹5,400',consumption:'2,800/mo',risk:'CRITICAL',act:'Flag for review with pharmacy supervisor'},
+ {m:'Azithromycin 500mg',batch:'AZT-22045',qty:980,exp:'Oct 2026',days:70,value:'₹24,500',consumption:'610/mo',risk:'MEDIUM',act:'Rotate to FEFO in dispensing queue'},
+ {m:'Pantoprazole 40mg',batch:'PPZ-2190',qty:1200,exp:'Dec 2026',days:135,value:'₹14,400',consumption:'1,900/mo',risk:'MONITOR',act:'Standard FEFO rotation'}];
+const DEPT_CONS=[['Emergency',28],['General Medicine',21],['Cardiology',16],['Pediatrics',12],['Orthopedics',10],['Other',13]];
+const CASE_MIX=[['Respiratory',142,22],['Cardiovascular',84,12],['Gastrointestinal',73,14],['Musculoskeletal',61,17],['Dermatology',44,8],['Other',95,27]];
+const DISEASE_TREND=[['June',820],['July',910],['August',1120]];
+const CASE_FORECAST=[['Respiratory',1240,18],['Musculoskeletal',890,7],['Gastrointestinal',740,0]];
+const RECALLS={active:3,batches:8,records:42};
+const QUALITY={verified:98.2,quarantined:3,temp:4,recall:1,inspection:8};
+const AUDIT=[
+ ['Today','10:42','500 units received','Pharmacy store'],
+ ['Today','09:31','100 units dispensed','Dispensing counter'],
+ ['Yesterday','18:05','Batch moved to pharmacy store','Batch PCM-1042'],
+ ['12 Aug','14:20','Quality inspection completed','Batch AMX-22110']];
+const PROC_PLAN=[['Paracetamol',5800,6100,6400,6900],['Amoxicillin',820,940,1120,1260],['Azithromycin',410,520,610,680],['ORS',2400,2800,3200,3600],['Pantoprazole',1800,1850,1900,2000],['Cough Preparation',640,700,760,840]];
+const PROC_PRI={high:12,medium:24,monitor:48};
+const SCENARIOS=[
+ {id:'p20',label:'Patient volume +20%',demand:'+18%',coverage:'-11 days',stockout:'↑',proc:'+₹4.2L'},
+ {id:'p10',label:'Patient volume +10%',demand:'+9%',coverage:'-5 days',stockout:'↑',proc:'+₹2.1L'},
+ {id:'p30',label:'Patient volume +30%',demand:'+27%',coverage:'-16 days',stockout:'↑↑',proc:'+₹6.3L'},
+ {id:'seasonal',label:'Seasonal increase',demand:'+14%',coverage:'-8 days',stockout:'↑',proc:'+₹3.1L'},
+ {id:'supplier',label:'Supplier delay 7 days',demand:'+2%',coverage:'-3 days',stockout:'↑',proc:'+₹2.4L'},
+ {id:'stockred',label:'Current stock reduction',demand:'0%',coverage:'-9 days',stockout:'↑',proc:'+₹2.8L'}];
+
+
+const PRI_BADGE={critical:'badge--danger',high:'badge--warn',normal:'badge--neutral',low:'badge--neutral'};
+const PRI_LABEL={critical:'CRITICAL',high:'HIGH',normal:'NORMAL',low:'LOW'};
+const priHTML=p=>'<span class="pri pri--'+p+'"><span class="pri__dot"></span>'+PRI_LABEL[p]+'</span>';
+const statusHTML=s=>s==='Waiting'?'<span class="badge badge--warn">Waiting</span>':s==='In Consultation'?'<span class="badge badge--accent">In Consultation</span>':s==='Admitted'?'<span class="badge badge--info">Admitted</span>':s==='Discharged'?'<span class="badge badge--neutral">Discharged</span>':'<span class="badge badge--neutral">'+s+'</span>';
+const bedStatusHTML=s=>({'available':'<span class="badge badge--ok">Available</span>','occupied':'<span class="badge badge--info">Occupied</span>','reserved':'<span class="badge badge--warn">Reserved</span>','cleaning':'<span class="badge badge--info">Cleaning</span>','maintenance':'<span class="badge badge--neutral">Maintenance</span>'})[s]||'<span class="badge badge--neutral">'+s+'</span>';
+const initials=n=>n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+function toast(msg,sev){
+ const map={success:'check',warn:'alert',info:'info'};
+ const t=document.createElement('div');
+ t.className='toast toast--'+sev;
+ t.innerHTML='<span class="toast__icon">'+icon(map[sev]||'check')+'</span><span>'+msg+'</span>';
+ $('#toasts').appendChild(t);
+ setTimeout(()=>{t.classList.add('is-out');setTimeout(()=>t.remove(),300)},3600);
+}
+function renderNav(){
+ const cfg=ROLES[state.role];
+ const qbadge=DEPTS.reduce((s,d)=>s+d.wait,0);
+ const hot=DEPTS.reduce((s,d)=>s+d.urgent,0);
+ $('#nav').innerHTML=cfg.nav.map(sec=>{
+  const items=sec.items.map(it=>{
+   const[id,label,ic,badge]=it;
+   let b=badge==='live'?qbadge:badge;
+   let cls='navitem'+(state.screen===id?' is-active':'');
+   const badgeHTML=b?('<span class="navitem__badge'+(id==='queue'?' is-hot':'')+'">'+b+'</span>'):'';
+   return '<button class="'+cls+'" data-nav="'+id+'" title="'+label+'">'+icon(ic)+'<span class="navitem__label">'+label+'</span>'+badgeHTML+'</button>';
+  }).join('');
+  return '<div class="sidebar__group"><div class="sidebar__label">'+sec.g+'</div>'+items+'</div>';
+ }).join('');
+ $('#sidebar').classList.toggle('collapsed',state.collapsed);
+ renderBottomNav();
+}
+function renderBottomNav(){
+ const items=[['dashboard','Home','home'],['patients','Patients','patients'],['queue','Queue','queue'],['pharmacy','Pharmacy','pill'],['beds','Beds','beds']];
+ $('#bottomnav').innerHTML=items.map(([id,label,ic])=>{
+  const active=state.screen===id;
+  return '<button class="bottomnav__item'+(active?' is-active':'')+'" data-nav="'+id+'">'+icon(ic)+'<span>'+label+'</span></button>';
+ }).join('');
+}
+let _lastBadge='';
+function renderTopbar(){
+ $('#user-role').textContent=ROLE_LABELS[state.role];
+  const nb=$('#notif-badge');
+  const v=Math.min(state.notifUnread,visibleNotifs().length);
+  nb.textContent=v;
+  nb.style.display=v?'grid':'none';
+  if(v&&v!==_lastBadge){nb.classList.remove('bump');void nb.offsetWidth;nb.classList.add('bump')}
+  _lastBadge=v;
+}
+function updateNavBadges(){
+ const q=DEPTS.reduce((s,d)=>s+d.wait,0);
+ const b=$('#nav').querySelector('[data-nav="queue"] .navitem__badge');
+ if(b){if(b.textContent!=q){b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump');b.textContent=q}}
+ renderTopbar();
+}
+const KICK={admin:'Hospital Operations',doctor:'Patient Care',nurse:'Ward Operations',receptionist:'Front Desk',bedmanager:'Bed Operations'};
+function pageShell(title,sub,meta,body,kick){
+ const k=kick?'<span class="kicker">'+kick+'</span>':'';
+ return '<div class="pagehead"><div>'+k+'<h1 class="pagehead__title">'+title+'</h1><p class="pagehead__sub">'+sub+'</p></div><div class="pagehead__meta">'+meta+'</div></div>'+body;
+}
+const callBtn=()=>'<button class="rowact" data-act="call">'+icon('phone','ic--sm')+'Call</button>';
+const viewBtn=(id)=>'<button class="rowact" data-act="view"'+(id?' data-pat="'+id+'"':'')+'>View</button>';
+
+function renderScreen(){
+ const map={dashboard:renderDashboard,queue:renderQueue,beds:renderBeds,patients:renderPatients,patient:renderPatient,departments:renderDepartments,notifications:renderNotifications,consult:renderConsult,history:renderHistory,ward:renderWard,register:renderRegister,admissions:renderAdmissions,analytics:renderAnalytics,reports:renderReports,staff:renderStaff,settings:renderSettings,beds2:renderBeds2,pharmacy:renderPharmacy,medicine:renderMedicine,expiry:renderExpiry,procurement:renderProcurement,casemix:renderCasemix};
+ const fn=map[state.screen]||renderDashboard;
+ const page=$('#page');
+ page.classList.remove('enter');
+ page.innerHTML=fn();
+ void page.offsetWidth;
+ page.classList.add('enter');
+  renderNav();renderBottomNav();renderTopbar();
+  animateStats();
+}
+function countUp(el,reduce){
+ try{
+  const txt=(el.textContent||'').trim();
+  const m=txt.match(/^([^\d]*)([\d,]+(?:\.\d+)?)(.*)$/);
+  if(!m)return;
+  const pre=m[1],num=m[2],post=m[3];
+  const dec=(num.split('.')[1]||'').length;
+  const target=parseFloat(num.replace(/,/g,''));
+  const fmt=v=>pre+v.toLocaleString('en-IN',{minimumFractionDigits:dec,maximumFractionDigits:dec})+post;
+  if(reduce){el.textContent=fmt(target);return}
+  const dur=650;
+  const t0=(window.performance&&window.performance.now&&window.performance.now())||0;
+  const step=now=>{
+   const p=Math.min(1,((now||t0)-t0)/dur);
+   el.textContent=fmt(target*(1-Math.pow(1-p,3)));
+   if(p<1)window.requestAnimationFrame(step);
+  };
+  window.requestAnimationFrame(step);
+  setTimeout(()=>{el.textContent=fmt(target)},dur+60);
+ }catch(e){}
+}
+function animateStats(){
+ const reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+ document.querySelectorAll('.stat__value,.ph-quick__val,.ph-mini__val,.ph-sev__num').forEach(el=>countUp(el,reduce));
+}
+function renderDashboard(){
+ const r=DASH[state.role];
+ const kpis=r.kpis.map((k,i)=>{
+  const trend=k.tone==='ok'&&k.sub&&!k.urgent?'<span class="trend trend--up">'+icon('arrow','ic--sm')+k.sub+'</span>':k.urgent?'<span class="stat__urgent">'+k.sub+'</span>':k.sub?k.sub:'';
+  return '<div class="stat" data-od-id="kpi-'+k.label.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'">'
+   +'<div class="stat__label"><span class="stat__icon">'+icon(k.icon)+'</span>'+k.label+'</div>'
+   +'<div class="stat__value">'+k.val+'</div>'
+   +'<div class="stat__sub">'+trend+'</div></div>';
+ }).join('');
+ const meta='<span class="datechip">'+icon('clock','ic--sm')+dateStr()+'</span>';
+ const body='<div class="kpis">'+kpis+'</div>'+rolePanels(r.hello);
+ return pageShell(r.hello,r.sub,meta,body,KICK[state.role]);
+}
+function rolePanels(hello){
+ if(state.role==='admin')return adminPanels();
+ if(state.role==='doctor')return doctorPanels();
+ if(state.role==='nurse')return nursePanels();
+ if(state.role==='receptionist')return receptionPanels();
+ return bedManagerPanels();
+}
+function adminPanels(){
+ const q=DEPTS.map(d=>{
+  const max=Math.max(...DEPTS.map(x=>x.wait));
+  return '<div class="deptrow tone-'+d.tone+'">'
+   +'<span class="deptrow__name">'+d.name+(d.urgent>0?'<span class="badge badge--danger">'+d.urgent+' urgent</span>':'')+'</span>'
+   +'<span class="deptrow__wait">avg '+d.avg+'m</span>'
+   +'<div class="deptrow__bar"><div class="deptrow__fill" style="width:'+Math.round(d.wait/max*100)+'%"></div></div>'
+   +'<span class="deptrow__wait">'+d.wait+' waiting</span></div>';
+ }).join('');
+ const alerts=ALERTS.map(a=>{
+  const t=a.t.map(seg=>typeof seg==='object'?'<b>'+seg.v+'</b>':seg).join('');
+  return '<div class="alertrow alertrow--'+a.sev+'" data-od-id="alert-'+a.sev+'">'
+   +'<span class="alertrow__icon">'+icon(a.icon)+'</span>'
+   +'<div class="alertrow__body"><div class="alertrow__text">'+t+'</div>'
+   +'<div class="alertrow__meta">'+timeAgo(a.sev)+'</div>'
+   +'<button class="alertrow__act" data-nav="'+a.a+'">'+a.act+' '+icon('arrow','ic--sm')+'</button></div></div>';
+ }).join('');
+ const beds=DEPTS.map(d=>{
+  const pct=Math.round((1-d.avail/d.total)*100);
+  return '<div class="bedprog tone-'+d.tone+'" data-od-id="bed-avail-'+d.name.toLowerCase().replace(/[^a-z]+/g,'-')+'">'
+   +'<div class="bedprog__name">'+d.name+'<span class="bedprog__val">'+d.avail+'/'+d.total+'</span></div>'
+   +'<div class="bedprog__track"><div class="bedprog__fill" style="width:'+pct+'%"></div></div>'
+   +'<div class="bedprog__sub">'+pct+'% occupied</div></div>';
+ }).join('');
+ return '<div class="grid2">'
+  +'<section class="panel" data-od-id="queue-overview"><div class="panel__head"><h2 class="panel__title">'+icon('queue')+'Queue Overview</h2><button class="panel__link" data-nav="queue">View queue '+icon('arrow','ic--sm')+'</button></div>'+q+'</section>'
+  +'<section class="panel" data-od-id="critical-alerts"><div class="panel__head"><h2 class="panel__title">'+icon('alert')+'Critical Alerts</h2></div>'+alerts+'</section>'
+  +'</div>'
+  +'<section class="panel" data-od-id="bed-availability"><div class="panel__head"><h2 class="panel__title">'+icon('beds')+'Bed Availability</h2><button class="panel__link" data-nav="beds">Open bed map '+icon('arrow','ic--sm')+'</button></div><div class="bedsgrid">'+beds+'</div></section>';
+}
+function doctorPanels(){
+ const rows=QUEUE.filter((q,i)=>i<4).map((q,i)=>queueRow(q,i)).join('');
+ return '<section class="panel" data-od-id="my-queue"><div class="panel__head"><h2 class="panel__title">'+icon('queue')+'My Queue</h2><button class="panel__link" data-nav="queue">View all '+icon('arrow','ic--sm')+'</button></div><div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Patient</th><th>Priority</th><th>Wait</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div></section>';
+}
+function nursePanels(){
+ const ward='<section class="panel"><div class="panel__head"><h2 class="panel__title">'+icon('ward')+'Ward 3 · General Medicine</h2></div>'
+  +'<div class="kpis" style="grid-template-columns:repeat(3,1fr);margin:0">'
+  +'<div class="stat"><div class="stat__label">Beds</div><div class="stat__value">18/24</div><div class="stat__sub">occupied</div></div>'
+  +'<div class="stat"><div class="stat__label">Patients</div><div class="stat__value">18</div><div class="stat__sub">in ward</div></div>'
+  +'<div class="stat"><div class="stat__label">Pending actions</div><div class="stat__value" style="color:var(--danger-strong)">4</div><div class="stat__sub">2 urgent</div></div>'
+  +'</div></section>';
+ const pending='<section class="panel"><div class="panel__head"><h2 class="panel__title">'+icon('queue')+'Pending Actions</h2></div>'
+  +'<div class="alertrow alertrow--danger"><span class="alertrow__icon">'+icon('alert')+'</span><div class="alertrow__body"><div class="alertrow__text"><b>Sana Khan</b> · change priority to Critical</div><div class="alertrow__meta">Requested by Dr. Rao · 4 min ago</div><button class="alertrow__act" data-nav="queue">Review queue '+icon('arrow','ic--sm')+'</button></div></div>'
+  +'<div class="alertrow alertrow--warn"><span class="alertrow__icon">'+icon('admissions')+'</span><div class="alertrow__body"><div class="alertrow__text">Admission <b>ADM-20391</b> awaiting bed</div><div class="alertrow__meta">Cardiology · 11 min ago</div><button class="alertrow__act" data-nav="admissions">Assign bed '+icon('arrow','ic--sm')+'</button></div></div>'
+  +'</section>';
+ return ward+pending;
+}
+function receptionPanels(){
+ const rows=QUEUE.slice(0,3).map((q,i)=>queueRow(q,i)).join('');
+ return '<section class="panel" data-od-id="intake-queue"><div class="panel__head"><h2 class="panel__title">'+icon('queue')+'Intake Queue</h2><button class="panel__link" data-nav="register">'+icon('plus','ic--sm')+'Register patient</button></div><div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Patient</th><th>Priority</th><th>Wait</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div></section>';
+}
+function bedManagerPanels(){
+ const beds=DEPTS.map(d=>{
+  const pct=Math.round((1-d.avail/d.total)*100);
+  return '<div class="bedprog tone-'+d.tone+'"><div class="bedprog__name">'+d.name+'<span class="bedprog__val">'+d.avail+'/'+d.total+'</span></div><div class="bedprog__track"><div class="bedprog__fill" style="width:'+pct+'%"></div></div></div>';
+ }).join('');
+ return '<section class="panel"><div class="panel__head"><h2 class="panel__title">'+icon('beds')+'Bed Availability</h2><button class="panel__link" data-nav="beds">Open bed map '+icon('arrow','ic--sm')+'</button></div><div class="bedsgrid">'+beds+'</div></section>'
+  +'<section class="panel" style="margin-top:16px"><div class="panel__head"><h2 class="panel__title">'+icon('admissions')+'Awaiting Bed Assignment</h2></div>'
+  +'<div class="alertrow alertrow--warn"><span class="alertrow__icon">'+icon('admissions')+'</span><div class="alertrow__body"><div class="alertrow__text">Admission <b>ADM-20391</b> · Rahul Sharma, Cardiology, <b>HIGH</b></div><div class="alertrow__meta">Requested ward: ICU · 11 min ago</div><button class="alertrow__act" data-nav="admissions">Assign bed '+icon('arrow','ic--sm')+'</button></div></div></section>';
+}
+function queueRow(q,i){
+ return '<tr><td class="wait">'+String(i+1).padStart(2,'0')+'</td>'
+  +'<td><div class="cell-name"><span class="avatar'+(q.pri==='critical'?' avatar--danger':q.pri==='high'?'':' avatar--ok')+'">'+initials(q.n)+'</span><span>'+q.n+'<div class="cell-name__sub">'+q.id+'</div></span></div></td>'
+  +'<td>'+priHTML(q.pri)+'</td>'
+   +'<td class="wait'+(q.wait>20?' is-long':'')+'">'+q.wait+' min</td>'
+   +'<td style="text-align:right">'+callBtn()+' '+viewBtn(q.id)+'</td></tr>';
+}
+function renderQueue(){
+ const deptIdx=state.queueDept||0;
+ const dept=DEPTS[deptIdx];
+ const deptWait=DEPTS.reduce((s,d)=>s+d.wait,0);
+ const tabs=DEPTS.map((d,i)=>'<button class="wardchip'+(i===deptIdx?' is-active':'')+'" data-ward="'+i+'">'+d.name+'<span class="wardchip__count">'+d.wait+' waiting</span></button>').join('');
+ const rows=QUEUE.filter(q=>q.dept===dept.name).map((q,i)=>queueRow(q,i)).join('');
+ const noRows=QUEUE.filter(q=>q.dept===dept.name).length===0?'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:26px 16px">No patients waiting in '+dept.name+'.<br><button class="btn btn--ghost btn--sm" style="margin-top:12px" data-nav="register">'+icon('plus','ic--sm')+'Register patient</button></td></tr>':'';
+ const meta='<button class="btn btn--ghost" data-nav="notifications">'+icon('bell','ic--sm')+'Alerts</button>';
+ const body='<div class="wards">'+tabs+'</div>'
+  +'<section class="panel"><div class="panel__head"><h2 class="panel__title" id="queue-dept">'+icon('queue')+dept.name+' · '+dept.wait+' waiting</h2><span class="badge badge--danger">'+icon('alert','ic--sm')+dept.urgent+' critical</span></div>'
+  +'<div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Patient</th><th>Priority</th><th>Wait</th><th style="text-align:right">Action</th></tr></thead><tbody>'+rows+noRows+'</tbody></table></div></section>';
+ return pageShell('Queue Management','Real-time view · department '+dept.name+' · avg wait '+dept.avg+' min',meta,body);
+}
+function bedStatus(){
+ return ['available','occupied','occupied','reserved','available','cleaning','occupied','available','maintenance','occupied','available','occupied'];
+}
+function renderBeds(){
+ const kpis=[['Total Beds','180',null],['Available','42','success'],['Occupied','128','info'],['Maintenance','10','warn'],['Reserved','8','info']];
+ const krow=kpis.map(k=>'<div class="stat"><div class="stat__label">'+k[0]+'</div><div class="stat__value" '+(k[2]?'style="color:var(--'+k[2]+'-strong)"':'')+'>'+k[1]+'</div></div>').join('');
+ const wards=Object.keys(WARDS).map((w,i)=>'<button class="wardchip'+(i===0?' is-active':'')+'" data-wardmap="'+w+'">'+w.replace(/_/g,' ')+'<span class="wardchip__count">'+WARDS[w].avail+'/'+WARDS[w].total+'</span></button>').join('');
+ const meta='<button class="btn btn--primary" data-act="assign-flow">'+icon('beds','ic--sm')+'Assign patient</button>';
+ const body='<div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">'+krow+'</div>'
+  +'<div class="wards">'+wards+'</div>'
+  +'<section class="panel"><div class="panel__head"><h2 class="panel__title">'+icon('beds')+'ICU · Bed Map</h2><span class="badge badge--danger">'+icon('alert','ic--sm')+'90% occupancy</span></div>'
+  +'<div class="bedmap" id="bedmap"></div></section>'
+  +'<div class="legend"><span class="legend__item"><span class="legend__swatch" style="background:var(--success-tint);border-color:var(--success)"></span>Available</span><span class="legend__item"><span class="legend__swatch" style="background:var(--inset)"></span>Occupied</span><span class="legend__item"><span class="legend__swatch" style="background:var(--warn-tint);border-color:var(--warn)"></span>Reserved</span><span class="legend__item"><span class="legend__swatch" style="background:var(--info-tint);border-color:var(--info)"></span>Cleaning</span><span class="legend__item"><span class="legend__swatch" style="background:repeating-linear-gradient(45deg,var(--surface) 0 4px,var(--bg) 4px 8px)"></span>Maintenance</span></div>';
+ return pageShell('Bed Management','Bed dashboard & allocation · click a bed to inspect',meta,body);
+}
+function patientRowsHTML(){
+ const flt=state.patFilter||'All';
+ const q=state.patSearch||'';
+ const vis=PATIENTS.filter(p=>flt==='All'||p.dept===flt);
+ const ql=q.toLowerCase();
+ const rows=vis.filter(p=>!ql||(p.n+' '+p.id+' '+p.dept+' '+p.doc+' '+p.age).toLowerCase().includes(ql)).map(p=>'<tr>'
+  +'<td><div class="cell-name"><span class="avatar'+(p.pri==='critical'?' avatar--danger':p.pri==='high'?' avatar--ok':'')+'">'+initials(p.n)+'</span><span>'+p.n+'<div class="cell-name__sub">'+p.id+'</div></span></div></td>'
+  +'<td>'+p.age+'</td><td>'+p.dept+'</td><td>'+priHTML(p.pri)+'</td><td>'+statusHTML(p.status)+'</td><td>'+p.doc+'</td>'
+  +'<td style="text-align:right">'+viewBtn(p.id)+'</td></tr>').join('');
+ const noRows=rows===''?'<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:26px 16px">No patients match “'+q+'”.<br><button class="btn btn--ghost btn--sm" style="margin-top:12px" data-act="clear-patsearch">'+icon('x','ic--sm')+'Clear search</button></td></tr>':'';
+ return rows+noRows;
+}
+function renderPatients(){
+ const flt=state.patFilter||'All';
+ const q=state.patSearch||'';
+ const filterOpts=[['All',''],['Emergency','Emergency'],['Cardiology','Cardiology'],['Pediatrics','Pediatrics'],['Orthopedics','Orthopedics'],['General','General Medicine']];
+ const filters='<div class="wards" style="margin-bottom:12px">'+filterOpts.map(([l,m])=>'<button class="wardchip'+(flt===l?' is-active':'')+'" data-act="patfilter" data-filter="'+l+'" aria-pressed="'+(flt===l)+'">'+l+'</button>').join('')+'</div>';
+ const search='<div style="position:relative;max-width:380px;margin-bottom:16px"><span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)">'+icon('search','ic--sm')+'</span><input class="palette__input" data-act="patsearch" value="'+q+'" placeholder="Search by name, ID, phone, department…" aria-label="Search patients" style="border:1px solid var(--border);border-radius:var(--radius);margin:0;padding:10px 12px 10px 34px;font-size:14px"></div>';
+ const meta='<button class="btn btn--primary" data-nav="register">'+icon('plus','ic--sm')+'Register patient</button>';
+ const body=filters+search+'<div class="tablewrap"><table class="table"><thead><tr><th>Patient</th><th>Age</th><th>Department</th><th>Priority</th><th>Status</th><th>Doctor</th><th style="text-align:right">Action</th></tr></thead><tbody id="patient-rows">'+patientRowsHTML()+'</tbody></table></div>';
+ return pageShell('Patients',''+PATIENTS.filter(p=>flt==='All'||p.dept===flt).length+' patients · search by name, ID, phone, department, doctor',meta,body);
+}
+function renderPatient(){
+ const p=PATIENTS.find(x=>x.id===state.patId)||PATIENTS[0];
+ const q=QUEUE.find(x=>x.id===p.id);
+ const admission=ADMISSIONS?ADMISSIONS.find(a=>a[2]===p.id):null;
+ const header='<div style="display:flex;gap:14px;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--border)"><span class="avatar'+(p.pri==='critical'?' avatar--danger':p.pri==='high'?' avatar--ok':'')+'" style="width:46px;height:46px;font-size:14px">'+initials(p.n)+'</span><div><div style="font-size:18px;font-weight:600">'+p.n+'</div><div style="color:var(--muted);font-size:12.5px">'+p.age+' yrs · '+p.id+' · '+p.dept+'</div></div><div style="margin-left:auto;display:flex;gap:8px;align-items:center">'+priHTML(p.pri)+statusHTML(p.status)+'</div></div>';
+ const field=(l,v)=>'<div class="drawer__row drawer__field"><div><div class="drawer__label">'+l+'</div><div class="drawer__value">'+v+'</div></div></div>';
+ const summary='<section class="panel" data-od-id="patient-summary"><div class="panel__head"><h2 class="panel__title">'+icon('clipboard')+'Summary</h2><button class="panel__link" data-nav="history">History '+icon('arrow','ic--sm')+'</button></div>'
+  +field('Age',''+p.age+' years')+field('Department',p.dept)+field('Doctor',p.doc)
+  +(q?field('Queue position','#'+QUEUE.indexOf(q)+1+' · '+q.wait+' min wait'):'')
+  +(admission?field('Admission',admission[0]+' · '+admission[6]):'')
+  +'</section>';
+ const actions='<section class="panel" data-od-id="patient-actions"><div class="panel__head"><h2 class="panel__title">'+icon('staff')+'Actions</h2></div>'
+  +'<div style="display:flex;flex-direction:column;gap:8px">'
+  +'<button class="btn btn--primary" data-act="call">'+icon('phone','ic--sm')+'Call to consultation</button>'
+  +'<button class="btn btn--ghost" data-nav="consult">'+icon('consult','ic--sm')+'Open consultation</button>'
+  +'<button class="btn btn--ghost" data-act="assign-flow">'+icon('beds','ic--sm')+'Request admission</button>'
+  +'</div></section>';
+ const meta='<button class="btn btn--ghost" data-nav="patients">'+icon('arrow','ic--sm')+'Patients</button>';
+ return pageShell(p.n,p.id+' · Registered patient record',meta,'<div class="panel">'+header+'</div><div class="grid2" style="margin-top:16px">'+summary+actions+'</div>');
+}
+function renderDepartments(){
+ const cards=DEPTS.map((d,i)=>'<div class="panel"><div class="panel__head"><h2 class="panel__title">'+icon('departments')+d.name+'</h2><span class="badge '+(d.tone==='danger'?'badge--danger':d.tone==='warn'?'badge--warn':'badge--ok')+'">'+d.wait+' waiting</span></div>'
+  +'<div class="deptmeta"><div class="deptmeta__cell"><span class="dm__label">Patients</span><span class="dm__value">'+d.pat+'</span></div><div class="deptmeta__cell"><span class="dm__label">Doctors</span><span class="dm__value">'+(6+i)+'</span></div><div class="deptmeta__cell"><span class="dm__label">Beds</span><span class="dm__value">'+d.total+'</span></div><div class="deptmeta__cell"><span class="dm__label">Avg wait</span><span class="dm__value">'+d.avg+' min</span></div></div>'
+  +'<div style="margin-top:16px"><button class="panel__link" data-nav="queue">View queue '+icon('arrow','ic--sm')+'</button></div></div>').join('');
+ return pageShell('Departments','Operational overview · occupancy, queues, staffing per department','', '<div class="deptgrid">'+cards+'</div>');
+}
+function renderNotifications(){
+ const vis=visibleNotifs();
+ const groups=[['Critical',vis.filter(n=>n.sev==='danger'),'danger'],['Action required',vis.filter(n=>n.sev==='warn'),'warn'],['Information',vis.filter(n=>n.sev==='info'),'info']];
+ const body=vis.length===0
+  ?'<div class="empty" data-od-id="notifications-empty"><div class="empty__icon">'+icon('bell')+'</div><div class="empty__title">No notifications</div><div class="empty__text">You are all caught up. Re-enable a category in Settings to resume updates here.</div><button class="btn btn--ghost" data-nav="settings">'+icon('settings','ic--sm')+'Open settings</button></div>'
+  :groups.map(g=>'<div style="margin-bottom:24px"><div class="notif-screen-sev"><span class="notif-screen-sev__dot" style="background:var(--'+g[2]+')"></span><h2 class="panel__title">'+g[0]+'</h2></div>'
+  +g[1].map(n=>'<div class="panel" style="margin-bottom:10px;padding:14px 16px"><div style="display:flex;gap:10px;align-items:flex-start"><span class="alertrow__icon" style="background:var(--'+n.sev+'-tint);color:var(--'+n.sev+'-strong);width:28px;height:28px">'+icon(n.sev==='danger'?'alert':n.sev==='warn'?'clock':'info')+'</span><div><div class="alertrow__text">'+n.t+'</div><div class="alertrow__meta">'+n.time+'</div></div></div></div>').join('')+'</div>').join('');
+ const meta='<button class="btn btn--ghost" data-act="mark-read">'+icon('check','ic--sm')+'Mark all read</button>';
+ return pageShell('Notifications','Critical, action-required, and informational updates',meta,body);
+}
+function renderConsult(){
+ const p=PATIENTS.find(x=>x.id===state.patId)||PATIENTS[0];
+ return pageShell('Consultation',p.n+' · '+p.age+' yrs · '+p.id+' · '+dateStr(),'', '<div class="panel"><div style="display:flex;gap:14px;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--border)"><span class="avatar'+(p.pri==='critical'?' avatar--danger':p.pri==='high'?' avatar--ok':'')+'" style="width:44px;height:44px;font-size:14px">'+initials(p.n)+'</span><div><div style="font-size:17px;font-weight:600">'+p.n+'</div><div style="color:var(--muted);font-size:12.5px">'+p.age+' years · '+p.id+' · '+p.dept+'</div></div><span class="badge badge--danger" style="margin-left:auto">'+icon('alert','ic--sm')+(PRI_LABEL[p.pri]||'NORMAL')+'</span></div>'
+  +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px 0;border-bottom:1px solid var(--border)"><div><div class="drawer__label">Reason for visit</div><div style="font-size:14px;font-weight:500">Chest pain, radiating to left arm</div></div><div><div class="drawer__label">Priority</div><div>'+priHTML(p.pri)+'</div></div></div>'
+  +'<div style="padding-top:18px"><label class="drawer__label" for="consult-notes" style="margin-top:16px">Consultation notes</label><textarea class="palette__input" id="consult-notes" name="consult-notes" rows="3" placeholder="Clinical findings…" style="border:1px solid var(--border);border-radius:var(--radius);margin-top:8px;padding:12px;resize:vertical"></textarea>'
+  +'<label class="drawer__label" for="consult-diagnosis" style="margin-top:16px">Diagnosis</label><textarea class="palette__input" id="consult-diagnosis" name="consult-diagnosis" rows="2" placeholder="Diagnosis…" style="border:1px solid var(--border);border-radius:var(--radius);margin-top:8px;padding:12px;resize:vertical"></textarea>'
+  +'<label class="drawer__label" for="consult-treatment" style="margin-top:16px">Treatment / instructions</label><textarea class="palette__input" id="consult-treatment" name="consult-treatment" rows="2" placeholder="Prescription, follow-up…" style="border:1px solid var(--border);border-radius:var(--radius);margin-top:8px;padding:12px;resize:vertical"></textarea>'
+  +'<div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end"><button class="btn btn--ghost">Cancel</button><button class="btn btn--primary" data-act="save-consult">'+icon('check','ic--sm')+'Save consultation</button></div></div></div>');
+}
+function renderHistory(){
+ const p=PATIENTS.find(x=>x.id===state.patId)||PATIENTS[0];
+ return pageShell('Visit History','All consultations & admissions for '+p.n,'', '<div class="panel"><div class="tablewrap"><table class="table"><thead><tr><th>Date</th><th>Type</th><th>Department</th><th>Doctor</th><th>Outcome</th></tr></thead><tbody>'
+  +'<tr><td>'+dateStr()+'</td><td><span class="badge badge--danger">Consultation</span></td><td>'+p.dept+'</td><td>'+p.doc+'</td><td><span class="badge badge--warn">In progress</span></td></tr>'
+  +'<tr><td>Jun 28, 2026</td><td><span class="badge badge--info">Admission</span></td><td>'+p.dept+'</td><td>'+p.doc+'</td><td><span class="badge badge--neutral">Discharged</span></td></tr>'
+  +'<tr><td>Apr 12, 2026</td><td><span class="badge badge--neutral">OPD Visit</span></td><td>General Medicine</td><td>Dr. Fernandes</td><td><span class="badge badge--neutral">Completed</span></td></tr>'
+  +'</tbody></table></div></div>');
+}
+function renderWard(){
+ return pageShell('Ward','Ward 3 · General Medicine · 24 beds','', '<div class="grid2"><section class="panel"><div class="panel__head"><h2 class="panel__title">'+icon('beds')+'Beds · 18/24 occupied</h2></div><div class="bedmap" style="grid-template-columns:repeat(4,1fr)">'+bedCells('GENERAL')+'</div></section>'
+  +'<section class="panel"><div class="panel__head"><h2 class="panel__title">'+icon('queue')+'Patients</h2></div><div class="tablewrap"><table class="table"><thead><tr><th>Patient</th><th>Status</th></tr></thead><tbody>'
+  +'<tr><td><div class="cell-name"><span class="avatar">NS</span><span>Nisha Shah<div class="cell-name__sub">G-12</div></span></div></td><td><span class="badge badge--info">Admitted</span></td></tr>'
+  +'<tr><td><div class="cell-name"><span class="avatar">VR</span><span>Vikram Rao<div class="cell-name__sub">G-14</div></span></div></td><td><span class="badge badge--info">Admitted</span></td></tr>'
+  +'<tr><td><div class="cell-name"><span class="avatar avatar--danger">AK</span><span>Arjun Kapoor<div class="cell-name__sub">G-09</div></span></div></td><td><span class="badge badge--danger">Critical</span></td></tr>'
+  +'</tbody></table></div></section></div>');
+}
+function renderRegister(){
+ const step=state.regStep||1;
+ const d=state.regData||{};
+ const step1='<div class="panel"><div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><span class="avatar" style="background:var(--accent);color:#fff">1</span><div><div style="font-size:16px;font-weight:600">Personal Information</div><div style="font-size:12px;color:var(--muted)">Step 1 of 3</div></div></div>'
+  +field('Full name','name',d)+field('Date of birth','dob',d)+field('Gender','gender',d)+field('Phone','phone',d)+field('Email','email',d)+'</div>';
+ const step2='<div class="panel"><div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><span class="avatar" style="background:var(--accent);color:#fff">2</span><div><div style="font-size:16px;font-weight:600">Visit Information</div><div style="font-size:12px;color:var(--muted)">Step 2 of 3</div></div></div>'
+  +field('Department','dept',d)+field('Reason for visit','reason',d)+field('Priority','priority',d)+field('Doctor','doctor',d)+'</div>';
+ const review='<div class="panel"><div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><span class="avatar" style="background:var(--accent);color:#fff">3</span><div><div style="font-size:16px;font-weight:600">Review & Confirm</div><div style="font-size:12px;color:var(--muted)">Step 3 of 3</div></div></div>'
+  +Object.entries({name:'Full name',dob:'Date of birth',gender:'Gender',phone:'Phone',email:'Email',dept:'Department',reason:'Reason for visit',priority:'Priority',doctor:'Doctor'}).filter(([k])=>d[k]).map(([k,l])=>'<div class="drawer__row drawer__field"><div><div class="drawer__label">'+l+'</div><div class="drawer__value">'+d[k]+'</div></div></div>').join('')
+  +'</div>';
+  const nav='<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">'
+   +(step>1?'<button class="btn btn--ghost" data-act="reg-back">'+icon('arrow','ic--sm')+'Back</button>':'')
+   +(step<3?'<button class="btn btn--primary" data-act="reg-next">'+icon('arrow','ic--sm')+'Continue · '+(step===1?'Visit information':'Review')+'</button>'
+       :'<button class="btn btn--primary" data-act="reg-submit">'+icon('check','ic--sm')+'Register patient</button>')
+   +'</div>';
+ const meta='<span class="badge badge--neutral">'+step+' / 3</span>';
+ return pageShell('Register Patient',step===1?'Step 1 · personal information':step===2?'Step 2 · visit information':'Step 3 · review & confirm',meta,'<div style="max-width:640px">'+(step===1?step1:step===2?step2:review)+nav+'</div>');
+}
+function collectReg(){
+ const out={};
+ document.querySelectorAll('#page input[data-reg]').forEach(i=>{out[i.dataset.reg]=i.value});
+ return out;
+}
+function field(l,k,d){
+ return '<div style="margin-bottom:14px"><label class="drawer__label" for="reg-'+k+'" style="text-transform:none;font-size:12.5px">'+l+'</label><input class="palette__input" id="reg-'+k+'" name="'+k+'" data-reg="'+k+'" placeholder="'+l+'…" value="'+((d&&d[k])||'')+'" style="border:1px solid var(--border);border-radius:var(--radius);margin-top:6px;padding:11px 12px;font-size:14px"></div>';
+}
+function renderAdmissions(){
+ const rows=ADMISSIONS;
+ const trs=rows.map(r=>'<tr><td><b>'+r[0]+'</b></td><td><div class="cell-name"><span class="avatar'+(r[4]==='HIGH'?' avatar--danger':'')+'">'+initials(r[1])+'</span><span>'+r[1]+'<div class="cell-name__sub">'+r[2]+'</div></span></div></td><td>'+r[3]+'</td><td>'+priHTML(r[4].toLowerCase()==='high'?'high':'normal')+'</td><td>'+r[5]+'</td><td>'+statusHTML(r[6])+'</td><td style="text-align:right">'+viewBtn(r[2])+'</td></tr>').join('');
+ return pageShell('Admissions','Requests bridging patients and beds · '+rows.length+' this week','','<div class="tablewrap"><table class="table"><thead><tr><th>Admission ID</th><th>Patient</th><th>Department</th><th>Priority</th><th>Requested Ward</th><th>Status</th><th style="text-align:right">Action</th></tr></thead><tbody>'+trs+'</tbody></table></div>');
+}
+function renderAnalytics(){
+ const maxPat=Math.max(...DEPTS.map(d=>d.pat));
+ const deptBars=DEPTS.map(d=>'<div class="ph-bar"><span class="ph-bar__name">'+d.name+'</span><div class="ph-bar__track"><div class="ph-bar__fill tone-'+d.tone+'" style="width:'+Math.round(d.pat/maxPat*100)+'%"></div></div><span class="ph-bar__val">'+d.pat.toLocaleString('en-IN')+'</span></div>').join('');
+ const occ=DEPTS.map(d=>'<div class="bedprog tone-'+d.tone+'" style="border:0;border-bottom:1px solid var(--border);border-radius:0;padding:10px 0"><div class="bedprog__name">'+d.name+'<span class="bedprog__val">'+Math.round((1-d.avail/d.total)*100)+'%</span></div><div class="bedprog__track"><div class="bedprog__fill" style="width:'+Math.round((1-d.avail/d.total)*100)+'%"></div></div></div>').join('');
+ const waitBars=phBarList([['Emergency',DEPTS[0].wait],['Cardiology',DEPTS[1].wait],['Neurology',DEPTS[2].wait],['Orthopedics',DEPTS[3].wait],['Pediatrics',DEPTS[4].wait],['General Medicine',DEPTS[5].wait]],'warn');
+ return pageShell('Analytics','Hospital performance · patient flow & occupancy','<span class="datechip">'+icon('clock','ic--sm')+'Last 7 days</span>',
+  '<div class="grid2"><section class="panel" data-od-id="analytics-patient-volume"><div class="panel__head"><h2 class="panel__title">'+icon('analytics')+'Patient Volume by Department</h2></div>'+deptBars+'</section>'
+  +'<section class="panel" data-od-id="analytics-queue-wait"><div class="panel__head"><h2 class="panel__title">'+icon('queue')+'Current Queue Wait</h2><button class="panel__link" data-nav="queue">View queue '+icon('arrow','ic--sm')+'</button></div>'+waitBars+'</section></div>'
+  +'<section class="panel" data-od-id="analytics-load-radar"><div class="panel__head"><h2 class="panel__title">'+icon('analytics')+'Department Load Radar</h2></div>'+phRadar()+'</section>'
+  +'<section class="panel" data-od-id="analytics-bed-occupancy"><div class="panel__head"><h2 class="panel__title">'+icon('beds')+'Bed Occupancy</h2><button class="panel__link" data-nav="beds">Open bed map '+icon('arrow','ic--sm')+'</button></div>'+occ+'</section>');
+}
+function phRadar(){
+ const CX=230,CY=196,R=132;
+ const occM=Math.max(...DEPTS.map(d=>1-d.avail/d.total));
+ const waitM=Math.max(...DEPTS.map(d=>d.wait));
+ const urgM=Math.max(...DEPTS.map(d=>d.urgent));
+ const patM=Math.max(...DEPTS.map(d=>d.pat));
+ const maxs=[occM,waitM,urgM,patM];
+ const names=['Occupancy','Avg wait','Urgent','Volume'];
+ const toneOf=t=>t==='danger'?'var(--danger)':t==='warn'?'var(--warn)':'var(--success)';
+ const pt=(i,f)=>{const a=-Math.PI/2+i*Math.PI/2;return [CX+R*f*Math.cos(a),CY+R*f*Math.sin(a)];};
+ const ring=f=>'M'+[0,1,2,3].map(i=>pt(i,f).map(n=>n.toFixed(1)).join(',')).join('L')+'Z';
+ const rings=[0.25,0.5,0.75,1].map(f=>'<path d="'+ring(f)+'" fill="none" stroke="var(--border)" stroke-width="1"/>').join('');
+ const spokes=[0,1,2,3].map(i=>{const p=pt(i,1);return '<line x1="'+CX+'" y1="'+CY+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'" stroke="var(--border)" stroke-width="1"/>';}).join('');
+ const labels=[0,1,2,3].map(i=>{const p=pt(i,1.17);const anch=['middle','start','middle','end'][i];const dy=i===0?-2:i===2?14:4;return '<text x="'+p[0].toFixed(1)+'" y="'+(p[1]+dy).toFixed(1)+'" text-anchor="'+anch+'" class="radar-axis">'+names[i]+'</text>';}).join('');
+ const polys=DEPTS.map(d=>{
+  const vals=[1-d.avail/d.total,d.wait,d.urgent,d.pat];
+  const pts=[0,1,2,3].map(i=>pt(i,vals[i]/maxs[i]));
+  const p=pts.map(x=>x[0].toFixed(1)+','+x[1].toFixed(1)).join(' ');
+  const tone=toneOf(d.tone);
+  return '<polygon points="'+p+'" fill="'+tone+'" fill-opacity="0.12" stroke="'+tone+'" stroke-width="1.8" stroke-linejoin="round" class="radar-poly"><title>'+d.name+' · occupancy '+Math.round((1-d.avail/d.total)*100)+'% · wait '+d.wait+' min · urgent '+d.urgent+' · '+d.pat+' patients</title></polygon>';
+ }).join('');
+ const legend=DEPTS.map(d=>'<span class="radar-legend"><i style="background:'+toneOf(d.tone)+'"></i>'+d.name+'</span>').join('');
+ return '<div class="radar">'
+  +'<svg viewBox="0 0 460 400" role="img" aria-label="Department load compared across occupancy, average wait, urgent cases and patient volume">'+rings+spokes+labels+polys+'</svg>'
+  +'<div class="radar-keys">'+legend+'</div>'
+  +'<p class="radar-note">Each axis scaled to its busiest department · closer to the rim means higher load</p></div>';
+}
+function renderReports(){
+ const totalWait=DEPTS.reduce((s,d)=>s+d.wait,0);
+ const urgent=DEPTS.reduce((s,d)=>s+d.urgent,0);
+ const bedsAvail=DEPTS.reduce((s,d)=>s+d.avail,0);
+ const bedsTotal=DEPTS.reduce((s,d)=>s+d.total,0);
+ const occ=Math.round((1-bedsAvail/bedsTotal)*100);
+ const report=(ic,title,desc,stat,sub,act)=>'<div class="report" data-od-id="report-'+title.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'">'
+  +'<div class="report__top"><span class="report__icon">'+icon(ic)+'</span><span class="badge badge--neutral">CSV</span></div>'
+  +'<div class="report__title">'+title+'</div><div class="report__desc">'+desc+'</div>'
+  +'<div class="report__stat">'+stat+'<span class="report__sub">'+sub+'</span></div>'
+  +'<div class="report__act">'+act+'</div></div>';
+ const repExport=(act)=>'<button class="btn btn--ghost btn--sm" data-act="rep-export">'+icon('reports','ic--sm')+act+'</button>';
+ return pageShell('Reports','Operational reports across patients, beds, pharmacy and admissions.','<button class="btn btn--primary" data-act="rep-export">'+icon('reports','ic--sm')+'Export all</button>',
+  '<div class="reportgrid">'
+  +report('patients','Patient Census','Registered patients per department and priority mix.', '1,284', 'total this period · '+DEPTS.length+' departments', repExport('Patient list'))
+  +report('queue','Queue & Wait Times','Waiting patients per department with average wait minutes.', totalWait+'', urgent+' urgent · avg '+DEPTS.reduce((s,d)=>s+d.avg,0)/DEPTS.length+' min', repExport('Queue report'))
+  +report('beds','Bed Utilization','Occupancy by department, bed status and ward allocation.', occ+'%', bedsAvail+' of '+bedsTotal+' beds available', repExport('Bed report'))
+  +report('admissions','Admissions Summary','Admission requests, bed assignments and discharge flow.', '5', 'this week · 2 awaiting assignment', repExport('Admissions log'))
+  +report('pill','Pharmacy Inventory','Medicine stock, expiry exposure and forecasted demand.', '4,820', 'SKUs · ₹84.2L value · 7 at stockout risk', repExport('Inventory CSV'))
+  +report('flask','Expiry Risk','Batches approaching expiry and value at risk by window.', '₹4.8L', '18 batches within 90 days', repExport('Expiry report'))
+  +'</div>'
+  +'<div class="ph-method" style="margin-top:16px"><details><summary>'+icon('info','ic--sm')+'Report scope</summary><div class="ph-method__body">Reports aggregate the recorded live workspace dataset. Export produces a CSV of the current view. Figures update as the workspace changes; no values are simulated.</div></details></div>');
+}
+function renderStaff(){
+ const flt=state.staffFilter||'All';
+ const vis=flt==='All'?STAFF:STAFF.filter(s=>s.dept===flt);
+ const onDuty=STAFF.filter(s=>s.status==='On duty').length;
+ const kpis='<div class="staff-kpis">'
+  +phQuick('staff','accent',STAFF_DEPT.reduce((s,d)=>s+d[1],0),'Total staff')
+  +phQuick('check','ok',onDuty,'On duty · roster')
+  +phQuick('departments','info',STAFF_DEPT.length,'Departments')
+  +phQuick('shield','warn','3','Pending access requests')
+  +'</div>';
+ const chips='<div class="wards" data-od-id="staff-filters">'
+  +[['All','All staff'],...STAFF_DEPT.map(d=>[d[0],d[0]])].map(c=>'<button class="wardchip'+(flt===c[0]?' is-active':'')+'" data-act="staff-filter" data-filter="'+c[0]+'" aria-pressed="'+(flt===c[0])+'">'+c[1]+'</button>').join('')
+  +'</div>';
+ const staffStatus=s=>s==='On duty'?'<span class="badge badge--ok">'+icon('check','ic--sm')+'On duty</span>':s==='Off duty'?'<span class="badge badge--neutral">Off duty</span>':'<span class="badge badge--warn">On leave</span>';
+ const rows=vis.map(s=>'<tr data-od-id="staff-'+s.id.toLowerCase()+'">'
+  +'<td><div class="cell-name"><span class="avatar'+(s.status==='On duty'?' avatar--ok':s.status==='On leave'?' avatar--danger':'')+'">'+initials(s.n)+'</span><span>'+s.n+'<div class="cell-name__sub">'+s.id+' · '+s.dept+'</div></span></div></td>'
+  +'<td>'+s.role+'</td><td class="wait">'+s.shift+'</td><td>'+staffStatus(s.status)+'</td>'
+  +'<td style="text-align:right"><button class="rowact" data-act="staff-profile" data-staff="'+s.id+'">'+icon('user','ic--sm')+'Profile</button></td></tr>').join('');
+ const noRows=vis.length===0?'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:26px 16px">No staff in this department.</td></tr>':'';
+ const dept='<section class="panel" data-od-id="staff-departments"><div class="panel__head"><h2 class="panel__title">'+icon('departments')+'Staffing by Department</h2></div>'
+  +phBarList(STAFF_DEPT.map(d=>[d[0],d[1]]),'accent')
+  +'</section>';
+ const access='<section class="panel" data-od-id="staff-access"><div class="panel__head"><h2 class="panel__title">'+icon('shield')+'Role Access</h2></div>'
+  +Object.keys(ROLES).map(r=>'<div class="alertrow"><span class="alertrow__icon">'+icon(r==='doctor'?'staff':r==='nurse'?'ward':r==='bedmanager'?'beds':r==='receptionist'?'register':'shield')+'</span><div class="alertrow__body"><div class="alertrow__text"><b>'+ROLE_LABELS[r]+'</b></div><div class="alertrow__meta">'+ROLES[r].nav.map(g=>g.g).join(' · ')+'</div></div></div>').join('')
+  +'</section>';
+ const body=kpis+chips
+  +'<section class="panel" data-od-id="staff-directory"><div class="panel__head"><h2 class="panel__title">'+icon('staff')+'Staff Directory</h2><span class="badge badge--neutral">'+vis.length+' shown</span></div>'
+  +'<div class="tablewrap" style="border:0;border-radius:0"><table class="table"><thead><tr><th>Staff</th><th>Role</th><th>Shift</th><th>Status</th><th style="text-align:right">Action</th></tr></thead><tbody>'+rows+noRows+'</tbody></table></div></section>'
+  +'<div class="grid2" style="margin-top:16px">'+dept+access+'</div>';
+ return pageShell('Staff Management','Roles, shifts, and access across the hospital.', '<button class="btn btn--primary" data-act="staff-add">'+icon('plus','ic--sm')+'Add staff</button>', body, 'Hospital Operations');
+}
+function renderSettings(){
+ const row=(act,label,sub,on,key)=>'<div class="setting-row"><div class="setting-row__body"><div class="setting-row__label">'+label+'</div>'+(sub?'<div class="setting-row__sub">'+sub+'</div>':'')+'</div><div class="setting-row__ctrl"><button class="switch'+(on?' is-on':'')+'" data-act="'+act+'"'+(key?' data-notif="'+key+'"':'')+' role="switch" aria-checked="'+on+'" aria-label="'+label+'"></button></div></div>';
+ const info=(label,val)=>'<div class="setting-row"><div class="setting-row__body"><div class="setting-row__label">'+label+'</div></div><div class="setting-row__ctrl"><span class="staff-meta__chip">'+val+'</span></div></div>';
+ const profile='<section class="panel" data-od-id="settings-profile"><div class="panel__head"><h2 class="panel__title">'+icon('user')+'Profile</h2><button class="panel__link" data-act="prefs">Edit '+icon('arrow','ic--sm')+'</button></div>'
+  +'<div style="display:flex;align-items:center;gap:14px"><span class="avatar" style="width:46px;height:46px;font-size:14px;background:var(--accent);color:#ffffff">AA</span><div><div style="font-size:16px;font-weight:600">Aman Ali</div><div style="font-size:12.5px;color:var(--muted)">'+ROLE_LABELS[state.role]+' · Hospital Operations</div></div></div>'
+  +'<div class="staff-meta"><span class="staff-meta__chip">'+icon('phone','ic--sm')+'+91 98200 12345</span><span class="staff-meta__chip">'+icon('user','ic--sm')+'EMP-001</span></div>'
+  +'</section>';
+ const appearance='<section class="panel" data-od-id="settings-appearance"><div class="panel__head"><h2 class="panel__title">'+icon('sun')+'Appearance</h2></div>'
+  +row('set-theme','Dark mode','Switch between light and dark',state.theme==='dark')
+  +row('set-collapse','Collapsed sidebar','Compact navigation rail',state.collapsed)
+  +'</section>';
+  const notifs='<section class="panel" data-od-id="settings-notifications"><div class="panel__head"><h2 class="panel__title">'+icon('bell')+'Notifications</h2></div>'
+   +row('set-notif','Critical alerts','ICU occupancy and queue criticals',state.notifs.critical,'critical')
+   +row('set-notif','Queue updates','Waiting-time changes',state.notifs.queue,'queue')
+   +row('set-notif','Pharmacy alerts','Stockout and expiry risk',state.notifs.pharmacy,'pharmacy')
+   +'</section>';
+  const data='<section class="panel" data-od-id="settings-data"><div class="panel__head"><h2 class="panel__title">'+icon('settings')+'Data &amp; Sync</h2></div>'
+   +info('Time zone','IST · UTC+5:30')
+   +info('Auto-refresh','14 seconds')
+   +row('set-notif','Live updates','Simulated hospital feed',state.notifs.live,'live')
+   +'</section>';
+ return pageShell('Settings','Profile, appearance, and notification preferences.', '<button class="btn btn--ghost" data-act="prefs">'+icon('settings','ic--sm')+'Preferences</button>', '<div class="grid2">'+profile+appearance+'</div><div class="grid2" style="margin-top:16px">'+notifs+data+'</div>', 'Workspace');
+}
+function renderBeds2(){return renderBeds()}
+
+/* ---- Pharmacy Intelligence: shared helpers ---- */
+const phRiskBadge=(r)=>r==='HIGH'?'<span class="badge badge--danger">HIGH</span>':r==='MEDIUM'?'<span class="badge badge--warn">MEDIUM</span>':r==='CRITICAL'?'<span class="badge badge--danger">CRITICAL</span>':r==='MONITOR'?'<span class="badge badge--info">MONITOR</span>':'<span class="badge badge--ok">LOW</span>';
+const phQualityBadge=(q)=>q==='Verified'?'<span class="badge badge--ok">'+icon('check','ic--sm')+'Verified</span>':q==='Inspection Required'?'<span class="badge badge--warn">'+icon('alert','ic--sm')+'Inspection Required</span>':q==='Temperature Excursion'?'<span class="badge badge--warn">'+icon('thermometer','ic--sm')+'Temp Excursion</span>':q==='Quarantined'?'<span class="badge badge--danger">Quarantined</span>':q==='Recalled'?'<span class="badge badge--danger">Recalled</span>':'<span class="badge badge--neutral">'+q+'</span>';
+const phChart=(vals,labels,tone='accent')=>{
+ const max=Math.max(...vals,1);
+ return '<div class="ph-chart">'+vals.map((v,i)=>'<div class="ph-chart__col"><span class="ph-chart__val">'+Math.round(v).toLocaleString('en-IN')+'</span><div class="ph-chart__bar tone-'+tone+'" style="height:'+Math.round(v/max*100)+'%"></div><span class="ph-chart__label">'+(labels?labels[i]:'')+'</span></div>').join('')+'</div>';
+};
+const phBarList=(rows,tone)=>{
+ const max=Math.max(...rows.map(r=>r[1]));
+ return '<div class="ph-bars">'+rows.map(r=>'<div class="ph-bar"><span class="ph-bar__name">'+r[0]+'</span><div class="ph-bar__track"><div class="ph-bar__fill tone-'+tone+'" style="width:'+Math.round(r[1]/max*100)+'%"></div></div><span class="ph-bar__val">'+r[1]+'</span></div>').join('')+'</div>';
+};
+const phMini=(label,val,sub,iconName='')=>'<div class="ph-mini"><div class="ph-mini__label">'+(iconName?icon(iconName,'ic--sm'):'')+label+'</div><div class="ph-mini__val">'+val+'</div>'+(sub?'<div class="ph-mini__sub">'+sub+'</div>':'')+'</div>';
+const phQuick=(iconName,tone,val,label)=>'<div class="ph-quick"><div class="ph-quick__icon tone-'+tone+'">'+icon(iconName)+'</div><div class="ph-quick__val">'+val+'</div><div class="ph-quick__label">'+label+'</div></div>';
+const phFlow=(nodes)=>'<div class="ph-flow">'+nodes.map((n,i)=>(i?'<span class="ph-flow__arrow">'+icon('arrow','ic--sm')+'</span>':'')+'<span class="ph-flow__node">'+icon(n[1],'ic--sm')+n[0]+'</span>').join('')+'</div>';
+const phTone=(v)=>{if(v<=40)return 'danger';if(v<=65)return 'warn';if(v<=85)return 'info';return 'ok'};
+
+/* ---- Pharmacy Intelligence: dashboard ---- */
+function renderPharmacy(){
+ const meta='<span class="ph-chip"><span class="ph-chip__count" style="color:var(--success-strong);font-weight:700">●</span>Pharmacy systems operational</span><span class="ph-chip">'+icon('clock','ic--sm')+'Last updated 2 min ago</span>';
+ const kpis=PH_KPIS.map(k=>{
+  const trend=k.tone==='ok'?'<span class="trend trend--up">'+icon('arrow','ic--sm')+k.sub+'</span>':k.urgent?'<span class="stat__urgent">'+k.sub+'</span>':k.sub;
+  return '<div class="stat" data-od-id="ph-kpi-'+k.label.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'">'
+   +'<div class="stat__label"><span class="stat__icon">'+icon(k.icon)+'</span>'+k.label+'</div>'
+   +'<div class="stat__value">'+k.val+'</div>'
+   +'<div class="stat__sub">'+trend+'</div></div>';
+ }).join('');
+ const health='<section class="panel" data-od-id="pharmacy-health"><div class="panel__head"><h2 class="panel__title">'+icon('shield')+'Pharmacy Health</h2></div>'
+  +'<div class="ph-standalone"><div style="text-align:center;min-width:110px"><div class="ph-hero__val" style="font-size:44px">'+PH_HEALTH.score+'</div><div class="trend trend--up" style="margin-top:2px">'+icon('check','ic--sm')+PH_HEALTH.grade+'</div></div>'
+  +'<div style="flex:1">'+PH_HEALTH.parts.map(p=>'<div class="ph-prog"><span class="ph-prog__label">'+p[0]+'</span><span class="ph-prog__val">'+p[1]+'</span></div>'+'<div class="ph-track"><div class="ph-track__fill tone-'+phTone(p[1])+'" style="width:'+p[1]+'%"></div></div>').join('')+'</div></div>'
+  +'<div class="ph-method"><details><summary>'+icon('info','ic--sm')+'Operational indicator</summary><div class="ph-method__body">Pharmacy Health is an <b>operational indicator</b> computed from stock availability, expiry exposure, demand coverage, procurement readiness and quality status. It is not a clinical or regulatory certification.</div></details></div>'
+  +'</section>';
+ const demand='<section class="panel" data-od-id="pharmacy-demand-forecast"><div class="panel__head"><h2 class="panel__title">'+icon('trending')+'Medicine Demand Forecast</h2><button class="panel__link" data-nav="procurement">Procurement '+icon('arrow','ic--sm')+'</button></div>'
+  +'<div class="stat__value" style="font-size:30px">+14.8%</div><div class="stat__sub" style="margin-bottom:14px">Expected demand next month</div>'
+  +phChart(MEDICINES[0].demand,MONTHS)
+  +'<div class="ph-method" style="margin-top:14px"><details><summary>'+icon('info','ic--sm')+'Forecast basis</summary><div class="ph-method__body">Based on <b>12 months historical consumption</b>, current stock coverage, patient volume trend, recorded case mix and seasonality. Confidence 82% · Updated 13 Aug 2026.</div></details></div>'
+  +'</section>';
+ const expiry='<section class="panel" data-od-id="pharmacy-expiry-risk"><div class="panel__head"><h2 class="panel__title">'+icon('flask')+'Expiry Risk</h2><button class="panel__link" data-nav="expiry">Expiry center '+icon('arrow','ic--sm')+'</button></div>'
+  +'<div class="ph-standalone"><div style="min-width:120px"><div class="stat__value" style="font-size:30px">₹4.8L</div><div class="stat__sub">Potential inventory value within expiry window</div></div>'
+  +'<div style="flex:1">'+phBarList([['Critical <30d',4],['Warning 30-90d',18],['Monitor 90-180d',41]],'warn')+'</div></div></section>';
+ const stockout='<section class="panel" data-od-id="pharmacy-stockout"><div class="panel__head"><h2 class="panel__title">'+icon('alert')+'Stockout Risk</h2><button class="panel__link" data-nav="procurement">Review '+icon('arrow','ic--sm')+'</button></div>'
+  +'<div class="stat__value" style="font-size:30px">7</div><div class="stat__sub">medicines projected to stock out</div>'
+  +'<div class="ph-method" style="margin-top:12px"><details><summary>'+icon('info','ic--sm')+'Forecast · not guaranteed</summary><div class="ph-method__body">Projections assume current consumption and no replenishment. <b>Forecasted</b> stock-out dates: Amoxicillin ~17 Oct, Paracetamol ~18 Oct. These are planning estimates, not guaranteed events.</div></details></div>'
+  +'</section>';
+ const insight='<div class="ph-insight" data-od-id="pharmacy-intelligence"><div class="ph-insight__eyebrow">'+icon('sparkle','ic--sm')+'UrbanMed Intelligence</div>'
+  +'<div class="ph-insight__title">Respiratory-related visits are forecast to increase over the next 30 days</div>'
+  +'<div class="ph-insight__text">Recorded case-mix data from OPD and recorded diagnosis coding indicates a rising share of respiratory-related consultations. Potential pharmacy impact for review:</div>'
+  +'<div class="ph-insight__impact"><span class="ph-insight__impact-item">'+icon('trending','ic--sm')+'Amoxicillin · demand ↑</span><span class="ph-insight__impact-item">'+icon('trending','ic--sm')+'Paracetamol · demand ↑</span><span class="ph-insight__impact-item">'+icon('trending','ic--sm')+'Cough preparations · demand ↑</span></div>'
+  +'<div class="ph-insight__act"><button class="btn btn--primary" data-nav="casemix">'+icon('trending','ic--sm')+'Review forecast</button></div></div>';
+ const caseMix='<section class="panel" data-od-id="pharmacy-case-mix"><div class="panel__head"><h2 class="panel__title">'+icon('patients')+'Patient Case Mix</h2><button class="panel__link" data-nav="casemix">View mix '+icon('arrow','ic--sm')+'</button></div>'
+  +phBarList([['Respiratory',22],['Musculoskeletal',17],['Gastrointestinal',14],['Cardiovascular',12],['Other',35]],'accent')
+  +'</section>';
+ const proc='<section class="panel" data-od-id="pharmacy-procurement"><div class="panel__head"><h2 class="panel__title">'+icon('truck')+'Procurement Plan</h2><button class="panel__link" data-nav="procurement">Review all '+icon('arrow','ic--sm')+'</button></div>'
+  +phQuick('alert','danger',PROC_PRI.high,'High priority medicines')
+  +phQuick('layers','warn',PROC_PRI.medium,'Medium priority')
+  +phQuick('shield','ok',PROC_PRI.monitor,'Monitor')
+  +'</section>';
+ const alerts='<section class="panel" data-od-id="pharmacy-alerts"><div class="panel__head"><h2 class="panel__title">'+icon('bell')+'Pharmacy Alerts</h2></div>'
+  +'<div class="alertrow alertrow--danger"><span class="alertrow__icon">'+icon('alert')+'</span><div class="alertrow__body"><div class="alertrow__text"><b>7 medicines</b> projected to stock out</div><div class="alertrow__meta">Within next 30 days · review procurement</div></div></div>'
+  +'<div class="alertrow alertrow--warn"><span class="alertrow__icon">'+icon('flask')+'</span><div class="alertrow__body"><div class="alertrow__text"><b>18 batches</b> expiring within 90 days</div><div class="alertrow__meta">₹4.8L at expiry risk</div></div></div>'
+  +'<div class="alertrow alertrow--warn"><span class="alertrow__icon">'+icon('thermometer')+'</span><div class="alertrow__body"><div class="alertrow__text"><b>3 batches</b> under quality review</div><div class="alertrow__meta">1 temperature excursion flagged</div></div></div>'
+  +'<div class="alertrow alertrow--warn"><span class="alertrow__icon">'+icon('truck')+'</span><div class="alertrow__body"><div class="alertrow__text"><b>12 purchase orders</b> pending</div><div class="alertrow__meta">2 awaiting supplier confirmation</div></div></div>'
+  +'<div class="alertrow alertrow--ok"><span class="alertrow__icon">'+icon('check')+'</span><div class="alertrow__body"><div class="alertrow__text">Inventory coverage <b>healthy</b> overall</div><div class="alertrow__meta">87 / 100 pharmacy health</div></div></div>'
+  +'</section>';
+ const table='<section class="panel" data-od-id="pharmacy-inventory-table" style="padding:0;overflow:hidden"><div class="tablewrap" style="border:0;border-radius:0"><div style="padding:22px 22px 0;display:flex;align-items:center;justify-content:space-between;gap:12px"><h2 class="panel__title">'+icon('box')+'Medicine Inventory</h2><button class="panel__link" data-act="ph-export">'+icon('reports','ic--sm')+'Export</button></div>'
+  +'<table class="table" style="margin-top:14px"><thead><tr><th>Medicine</th><th>Category</th><th>Current Stock</th><th>Monthly Use</th><th>Expiry</th><th>Forecast</th><th>Status</th><th>Risk</th><th style="text-align:right">Action</th></tr></thead><tbody>'
+  +MEDICINES.map(m=>'<tr data-med="'+m.id+'" style="cursor:pointer"><td><div class="cell-name">'+icon('pill')+'<span>'+m.name+'<div class="cell-name__sub">'+m.generic+'</div></span></div></td><td>'+m.cat+'</td><td><b>'+m.stock.toLocaleString('en-IN')+'</b></td><td>'+m.monthly.toLocaleString('en-IN')+'</td><td>'+m.exp+'</td><td class="trend trend--up">+'+m.forecast+'%</td><td>'+phQualityBadge(m.quality)+'</td><td>'+phRiskBadge(m.risk.toUpperCase())+'</td><td style="text-align:right"><button class="rowact" data-med="'+m.id+'">'+icon('arrow','ic--sm')+'Open</button></td></tr>').join('')
+  +'</tbody></table></div></section>';
+ return pageShell('Pharmacy Operations','Monitor medicine availability, expiry risk, consumption trends and future demand.',meta,'<div class="ph-kpi-strip">'+PH_KPIS.map(k=>phQuick(k.icon,k.tone,k.val,k.label)).join('')+'</div><div class="grid2">'+health+demand+'</div><div class="grid2">'+expiry+stockout+'</div>'+insight+'<div class="grid2">'+caseMix+proc+'</div>'+alerts+table,'Pharmacy Intelligence');
+}
+
+/* ---- Pharmacy Intelligence: medicine detail ---- */
+function renderMedicine(){
+ const m=MEDICINES.find(x=>x.id===state.med)||MEDICINES[0];
+ const tabs=[['Overview','box'],['Inventory','layers'],['Batches','pill'],['Consumption','trending'],['Demand','calendar'],['Case Mix','patients'],['Expiry','flask'],['Quality','shield'],['Procurement','truck'],['History','clock']];
+ const meta='<button class="btn btn--ghost" data-nav="pharmacy">'+icon('arrow','ic--sm')+'Pharmacy</button>';
+ const hero='<div class="ph-hero">'
+  +phMini('Current Stock',m.stock.toLocaleString('en-IN'),m.reserved+' reserved','box')
+  +phMini('Monthly Usage',m.monthly.toLocaleString('en-IN'),'avg '+m.avgDaily+'/day','trending')
+  +phMini('Stock Coverage',m.coverage+' days','demand-adjusted '+m.coverageAdj,'clock')
+  +phMini('Projected Demand','+'+m.forecast+'%','next month','calendar')
+  +phMini('Expiry Exposure','₹'+Math.round(m.value*m.daysRemaining/365).toLocaleString('en-IN'),m.exp,'flask')
+  +phMini('Quality',m.quality,'batch verified','shield')
+  +'</div>';
+ const tabbar='<div class="ph-tabs" data-od-id="medicine-tabs">'+tabs.map(t=>'<button class="ph-tab'+(state.phTab===t[0]?' is-active':'')+'" data-ptab="'+t[0]+'">'+icon(t[1])+t[0]+'</button>').join('')+'</div>';
+ const body=hero+tabbar+phTabContent(m);
+ return pageShell(m.name,m.generic+' · '+m.cat+' · '+m.strength,meta,body,m.mfr);
+}
+function phTabContent(m){
+ if(state.phTab==='Overview'){
+  return '<div class="grid2">'
+   +'<section class="panel" data-od-id="medicine-inventory-overview"><div class="panel__head"><h2 class="panel__title">'+icon('layers')+'Inventory Overview</h2></div>'
+   +'<div class="ph-mini-grid">'+phMini('Current Stock',m.stock.toLocaleString('en-IN'),'units')+phMini('Reserved',m.reserved.toLocaleString('en-IN'),'allocated')+phMini('Available',(m.stock-m.reserved).toLocaleString('en-IN'),'dispensable')+phMini('Reorder Level',m.reorder.toLocaleString('en-IN'),'trigger')+'</div>'
+   +'<div style="margin-top:14px">'+[['Stock vs Reorder',Math.min(100,Math.round(m.stock/m.reorder*100)),'ok'],['Safety Stock Coverage',Math.min(100,Math.round(m.stock/m.safety*100)),'accent']].map(p=>'<div class="ph-prog"><span class="ph-prog__label">'+p[0]+'</span><span class="ph-prog__val">'+p[1]+'%</span></div>'+'<div class="ph-track"><div class="ph-track__fill tone-'+p[2]+'" style="width:'+p[1]+'%"></div></div>').join('')+'</div>'
+   +'</section>'
+   +'<section class="panel" data-od-id="medicine-fefo"><div class="panel__head"><h2 class="panel__title">'+icon('flask')+'First Expiry, First Out</h2></div>'
+   +'<div class="ph-fefo"><div class="ph-fefo__label">'+icon('check','ic--sm')+'Recommended batch · per pharmacy FEFO policy</div>'
+   +'<div class="ph-fefo__row"><span class="ph-fefo__batch">'+m.batches[0].id+'</span><span class="ph-fefo__meta"><span>Expiry <b>'+m.batches[0].exp+'</b></span><span>Stock <b>'+m.batches[0].stock.toLocaleString('en-IN')+'</b></span><span>Supplier <b>'+m.batches[0].supplier+'</b></span></span></div>'
+   +'</div><div style="margin-top:12px;font-size:12.5px;color:var(--muted)">FEFO is a <b>recommendation</b> based on configured pharmacy inventory policy. Final dispensing decisions follow approved hospital dispensing rules.</div></section>'
+   +'</div>'
+   +'<section class="panel" style="margin-top:16px"><div class="panel__head"><h2 class="panel__title">'+icon('clipboard')+'Batches</h2></div>'
+   +'<div class="tablewrap"><table class="table"><thead><tr><th>Batch</th><th>Stock</th><th>Expiry</th><th>Days</th><th>Supplier</th><th>Quality</th></tr></thead><tbody>'
+   +m.batches.map(b=>'<tr><td><b>'+b.id+'</b>'+(b.recommended?' <span class="badge badge--accent">FEFO</span>':'')+'</td><td>'+b.stock.toLocaleString('en-IN')+'</td><td>'+b.exp+'</td><td>'+b.daysRemaining+'</td><td>'+b.supplier+'</td><td>'+phQualityBadge(b.quality)+'</td></tr>').join('')
+   +'</tbody></table></div></section>';
+ }
+ if(state.phTab==='Inventory'){
+  return '<div class="grid2"><section class="panel" data-od-id="medicine-stock-coverage"><div class="panel__head"><h2 class="panel__title">'+icon('layers')+'Days of Stock</h2></div>'
+   +'<div class="ph-mini-grid">'+phMini('Current Stock',m.stock.toLocaleString('en-IN'),'units')+phMini('Avg Daily Consumption',m.avgDaily.toLocaleString('en-IN'),'units/day')+phMini('Stock Coverage',m.coverage+' days','at current rate')+phMini('Forecast-adjusted',m.coverageAdj+' days','after +'+m.forecast+'% demand')+'</div>'
+   +'<div style="margin-top:14px">'+[['Coverage at current rate',Math.min(100,Math.round(m.coverage/60*100)),'info'],['Coverage after forecast',Math.min(100,Math.round(m.coverageAdj/60*100)),'warn']].map(p=>'<div class="ph-prog"><span class="ph-prog__label">'+p[0]+'</span><span class="ph-prog__val">'+p[1]+'%</span></div>'+'<div class="ph-track"><div class="ph-track__fill tone-'+p[2]+'" style="width:'+p[1]+'%"></div></div>').join('')+'</div>'
+   +'</section><section class="panel" data-od-id="medicine-quality-status"><div class="panel__head"><h2 class="panel__title">'+icon('shield')+'Quality &amp; Stock Status</h2></div>'
+   +'<div class="ph-mini-grid">'+phMini('Batch Verification','98.2%','across batches','check')+phMini('Inspection Pending',QUALITY.inspection,'batches','clock')+phMini('Quarantined',QUALITY.quarantined,'batches','alert')+phMini('Temp Alerts',QUALITY.temp,'flags','thermometer')+'</div>'
+   +'<div style="margin-top:14px" class="ph-bars">'+[['Verified batches',98.2],['Inspection pending',8],['Quarantined',3],['Recalled',1]].map(p=>'<div class="ph-bar"><span class="ph-bar__name">'+p[0]+'</span><div class="ph-bar__track"><div class="ph-bar__fill tone-'+phTone(100-p[1]*6)+'" style="width:'+Math.max(4,p[1])+'%"></div></div><span class="ph-bar__val">'+p[1]+'</span></div>').join('')+'</div>'
+   +'</section></div>';
+ }
+ if(state.phTab==='Batches'){
+  return '<section class="panel" data-od-id="medicine-batches"><div class="panel__head"><h2 class="panel__title">'+icon('pill')+'Batch Tracking</h2><button class="panel__link" data-act="ph-batch">'+icon('plus','ic--sm')+'Record receipt</button></div>'
+   +'<div class="tablewrap"><table class="table"><thead><tr><th>Batch</th><th>Stock</th><th>Expiry</th><th>Days Remaining</th><th>Supplier</th><th>Quality Status</th></tr></thead><tbody>'
+   +m.batches.map(b=>'<tr><td><b>'+b.id+'</b>'+(b.recommended?' <span class="badge badge--accent">FEFO</span>':'')+'</td><td>'+b.stock.toLocaleString('en-IN')+'</td><td>'+b.exp+'</td><td>'+b.daysRemaining+'</td><td>'+b.supplier+'</td><td>'+phQualityBadge(b.quality)+'</td></tr>').join('')
+   +'</tbody></table></div>'
+   +'<div class="ph-method" style="margin-top:14px"><details><summary>'+icon('info','ic--sm')+'FEFO note</summary><div class="ph-method__body">The highlighted batch is the <b>recommended next-dispense batch</b> under First Expiry First Out policy. This is a recommendation; the dispensing pharmacist applies approved hospital dispensing rules.</div></details></div>'
+   +'</section>';
+ }
+ if(state.phTab==='Consumption'){
+  const r=state.phRange;
+  const rn=r==='7d'?7:r==='30d'?30:r==='3m'?3:r==='6m'?6:12;
+  const vals=r==='12m'?m.consumption:m.consumption.slice(-rn);
+  const labels=r==='12m'?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']:null;
+  return '<div class="ph-chips" data-od-id="consumption-range">'+[['7d','7 days'],['30d','30 days'],['3m','3 months'],['6m','6 months'],['12m','12 months']].map(rr=>'<button class="ph-chip'+(state.phRange===rr[0]?' is-active':'')+'" data-prange="'+rr[0]+'">'+rr[1]+'</button>').join('')+'</div>'
+   +'<div class="grid2"><section class="panel" data-od-id="medicine-consumption-chart"><div class="panel__head"><h2 class="panel__title">'+icon('trending')+'Medicine Consumption</h2></div>'
+   +phChart(vals,labels,phTone(m.coverage))
+   +'</section><section class="panel" data-od-id="medicine-consumption-trend"><div class="panel__head"><h2 class="panel__title">'+icon('clock')+'Consumption Trend</h2></div>'
+   +'<div class="ph-mini-grid">'+phMini('Avg monthly',m.monthly.toLocaleString('en-IN'),'units')+phMini('Current month',m.consumption[m.consumption.length-1].toLocaleString('en-IN'),'units')+phMini('Trend','+'+m.trend+'%','vs avg','trending')+'</div>'
+   +'<div class="ph-method" style="margin-top:14px"><details open><summary>'+icon('info','ic--sm')+'Possible contributors</summary><div class="ph-method__body">The following are <b>possible contributors</b>, not definitive causation:<br>· OPD volume increased<br>· Respiratory-related visits increased<br>· Prescription frequency increased</div></details></div>'
+   +'</section></div>';
+ }
+ if(state.phTab==='Demand'){
+  const expected=m.demand[0],rem=m.stock-expected,next=m.demand[1],short=next-rem;
+  return '<div class="grid2"><section class="panel" data-od-id="medicine-demand-forecast"><div class="panel__head"><h2 class="panel__title">'+icon('calendar')+'Future Medicine Demand</h2><button class="panel__link" data-act="ph-forecast">'+icon('info','ic--sm')+'Confidence 82%</button></div>'
+   +phChart(m.demand,MONTHS,'accent')
+   +'<div class="ph-method" style="margin-top:14px"><details><summary>'+icon('info','ic--sm')+'Forecast explanation</summary><div class="ph-method__body">Forecast <b>+'+m.forecast+'%</b> · Confidence <b>82%</b> · Window next 30 days<br>Based on: 12 months historical data, current consumption, patient volume trend, recorded case mix, seasonality.<br><b>Forecasted, not guaranteed.</b> Updated 13 Aug 2026.</div></details></div>'
+   +'</section><section class="panel" data-od-id="medicine-stock-sim"><div class="panel__head"><h2 class="panel__title">'+icon('layers')+'Future Stock Simulation</h2></div>'
+   +'<div class="ph-mini-grid">'+phMini('Current Stock',m.stock.toLocaleString('en-IN'),'units')+phMini('Expected · '+MONTHS[0],expected.toLocaleString('en-IN'),'consumption')+phMini('Remaining',Math.max(0,rem).toLocaleString('en-IN'),'after '+MONTHS[0])+phMini('Potential shortage',short>0?short.toLocaleString('en-IN'):'None','if no restock')+'</div>'
+   +'<div style="margin-top:14px" class="alertrow alertrow--danger"><span class="alertrow__icon">'+icon('alert')+'</span><div class="alertrow__body"><div class="alertrow__text"><b>Projected stock-out · '+MONTHS[1]+' 18</b></div><div class="alertrow__meta">Estimated · planning estimate, not guaranteed</div><div class="alertrow__act" style="margin-top:4px">'+phRiskBadge(m.risk.toUpperCase())+'</div></div></div>'
+   +'<div style="margin-top:14px" class="alertrow alertrow--warn"><span class="alertrow__icon">'+icon('truck')+'</span><div class="alertrow__body"><div class="alertrow__text"><b>Reorder recommendation</b></div><div class="alertrow__meta">Suggested order '+m.reorderQty.toLocaleString('en-IN')+' units · review, do not auto-order</div><button class="alertrow__act" data-act="ph-reorder">'+icon('arrow','ic--sm')+'Review recommendation</button></div></div>'
+   +'</section></div>';
+ }
+ if(state.phTab==='Case Mix'){
+  return '<div class="grid2"><section class="panel" data-od-id="medicine-case-mix"><div class="panel__head"><h2 class="panel__title">'+icon('patients')+'Frequently Associated Prescription Categories</h2></div>'
+   +'<div class="stat__sub" style="margin-bottom:12px">From recorded prescription and diagnosis data · '+m.name+'</div>'
+   +phBarList(m.cases,'accent')
+   +'</section><section class="panel"><div class="panel__head"><h2 class="panel__title">'+icon('shield')+'Analytics note</h2></div>'
+   +'<div class="ph-method__body" style="font-size:13px;line-height:1.65;color:var(--muted)">This medicine is <b>frequently associated</b> with recorded case categories from prescription data. Association is <b>not</b> a treatment claim and is not used to infer a patient diagnosis. Patient-level disease information is protected by role-based access.</div>'
+   +'</section></div>';
+ }
+ if(state.phTab==='Expiry'){
+  return '<section class="panel" data-od-id="medicine-expiry"><div class="panel__head"><h2 class="panel__title">'+icon('flask')+'Expiry Exposure · '+m.name+'</h2></div>'
+   +'<div class="ph-mini-grid">'+phMini('Inventory value',m.unit+' '+m.value.toLocaleString('en-IN'),'total')+phMini('At-risk window','₹'+Math.round(m.value*m.daysRemaining/365).toLocaleString('en-IN'),'within '+m.daysRemaining+'d')+phMini('Earliest expiry',m.exp,m.daysRemaining+' days','calendar')+'</div>'
+   +'<div class="tablewrap" style="margin-top:16px"><table class="table"><thead><tr><th>Batch</th><th>Stock</th><th>Expiry</th><th>Days</th><th>Risk</th></tr></thead><tbody>'
+   +m.batches.map(b=>'<tr><td><b>'+b.id+'</b></td><td>'+b.stock.toLocaleString('en-IN')+'</td><td>'+b.exp+'</td><td>'+b.daysRemaining+'</td><td>'+phRiskBadge(b.daysRemaining<60?'HIGH':b.daysRemaining<120?'MEDIUM':'LOW')+'</td></tr>').join('')
+   +'</tbody></table></div></section>';
+ }
+ if(state.phTab==='Quality'){
+  const temp=state.med==='cfx';
+  return '<div class="grid2"><section class="panel" data-od-id="medicine-quality"><div class="panel__head"><h2 class="panel__title">'+icon('shield')+'Quality Status · '+m.name+'</h2></div>'
+   +'<div class="ph-mini-grid">'+m.batches.map(b=>phMini(b.id,'₹'+Math.round(m.value*b.stock/m.stock).toLocaleString('en-IN'),b.quality,'pill')).join('')+'</div>'
+   +'<div style="margin-top:14px">'+m.batches.map(b=>'<div class="ph-bar"><span class="ph-bar__name">'+b.id+'</span>'+phQualityBadge(b.quality)+'<span class="ph-bar__val">'+b.supplier+'</span></div>').join('')+'</div>'
+   +'</section>'
+   +(temp?'<section class="panel" data-od-id="medicine-temperature"><div class="panel__head"><h2 class="panel__title">'+icon('thermometer')+'Storage Conditions</h2></div>'
+     +'<div class="ph-mini__label" style="margin-bottom:8px">'+icon('thermometer','ic--sm')+'Refrigerated storage · 2–8°C</div>'
+     +'<div class="ph-temp"><span class="ph-temp__reading">4.2°C</span><span class="ph-temp__range">Allowed range 2–8°C</span><span class="ph-temp__status">'+icon('check','ic--sm')+'Normal</span></div>'
+     +'<div class="ph-temp__excursion">'+icon('alert','ic--sm')+'<div style="flex:1"><b>Temperature excursion detected</b><div style="font-size:12px;color:var(--muted);margin-top:2px">Duration 18 min · Affected batches 3</div></div><button class="btn btn--ghost" data-act="ph-review-temp">Review</button></div>'
+     +'</section>':'<section class="panel" data-od-id="medicine-temperature"><div class="panel__head"><h2 class="panel__title">'+icon('thermometer')+'Storage Conditions</h2></div><div class="ph-method__body" style="font-size:13px;line-height:1.6;color:var(--muted)">This medicine is stored at ambient conditions per its storage class. No controlled-temperature logging is required for this item.</div></section>')
+   +'</div>';
+ }
+ if(state.phTab==='Procurement'){
+  return '<div class="grid2"><section class="panel" data-od-id="medicine-reorder"><div class="panel__head"><h2 class="panel__title">'+icon('truck')+'Reorder Recommendation · '+m.name+'</h2></div>'
+   +'<div class="ph-mini-grid">'+phMini('Expected demand',m.demand[1].toLocaleString('en-IN'),MONTHS[1])+phMini('Safety stock',m.safety.toLocaleString('en-IN'),'units')+phMini('Current projected stock',Math.max(0,m.stock-m.demand[0]).toLocaleString('en-IN'),'after '+MONTHS[0])+phMini('Suggested order',m.reorderQty.toLocaleString('en-IN'),'units')+'</div>'
+   +'<div style="margin-top:14px"><button class="btn btn--primary" data-act="ph-reorder">'+icon('truck','ic--sm')+'Review recommendation</button><span style="font-size:12px;color:var(--muted);margin-left:12px">Review required · purchase order is not placed automatically</span></div>'
+   +'</section>'
+   +'<section class="panel" data-od-id="medicine-supplier"><div class="panel__head"><h2 class="panel__title">'+icon('box')+'Supplier · '+m.supplier+'</h2></div>'
+   +'<div class="ph-supplier">'+[['Average price',m.supplyData.price],['Average delivery',m.supplyData.delivery],['On-time rate',m.supplyData.ontime],['Last purchase',m.supplyData.last],['Price trend','<span class="trend trend--up">'+icon('arrow','ic--sm')+m.supplyData.trend+'</span>']].map(r=>'<div class="ph-supplier__row"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>').join('')+'</div>'
+   +'</section></div>';
+ }
+ if(state.phTab==='History'){
+  return '<section class="panel" data-od-id="medicine-history"><div class="panel__head"><h2 class="panel__title">'+icon('clock')+'Inventory Audit Trail · '+m.name+'</h2></div>'
+   +'<div class="ph-audit">'+AUDIT.map(a=>'<div class="ph-audit__item"><div><span class="ph-audit__date">'+a[0]+'</span><span class="ph-audit__time"> · '+a[1]+'</span></div><div class="ph-audit__text">'+a[2]+'</div><div style="font-size:11.5px;color:var(--muted);margin-top:1px">'+a[3]+'</div></div>').join('')+'</div>'
+   +'</section>';
+ }
+ return '';
+}
+
+/* ---- Pharmacy Intelligence: expiry ---- */
+function renderExpiry(){
+ const meta='<span class="ph-chip">'+icon('flask','ic--sm')+'Expiry Risk Center</span>';
+ return pageShell('Expiry Risk Center','Monitor medicine batches approaching expiry and potential inventory value at risk.','<span class="ph-chip">'+icon('clock','ic--sm')+'Updated 13 Aug 2026</span>',
+  '<div class="ph-sev">'
+  +'<div class="ph-sev__chip is-critical" data-od-id="expiry-critical"><div class="ph-sev__num">4</div><div class="ph-sev__label"><span class="ph-dot"></span>Critical · &lt;30 days</div></div>'
+  +'<div class="ph-sev__chip is-warning" data-od-id="expiry-warning"><div class="ph-sev__num">18</div><div class="ph-sev__label"><span class="ph-dot"></span>Warning · 30–90 days</div></div>'
+  +'<div class="ph-sev__chip is-monitor" data-od-id="expiry-monitor"><div class="ph-sev__num">41</div><div class="ph-sev__label"><span class="ph-dot"></span>Monitor · 90–180 days</div></div>'
+  +'</div>'
+  +'<div class="grid2"><section class="panel" data-od-id="expiry-value-at-risk"><div class="panel__head"><h2 class="panel__title">'+icon('flask')+'Inventory Value at Expiry Risk</h2></div>'
+  +'<div class="ph-standalone"><div style="min-width:130px"><div class="stat__value" style="font-size:32px">₹4.8L</div><div class="stat__sub">Potential inventory value within expiry window</div></div>'
+  +'<div style="flex:1">'+phBarList(EXPIRY.breakdown.map(b=>[b[0],Math.round(b[1]/1000)]),'warn')+'</div></div></section>'
+  +'<section class="panel" data-od-id="expiry-exposure"><div class="panel__head"><h2 class="panel__title">'+icon('calendar')+'Upcoming Expiry Exposure</h2></div>'
+  +'<div class="stat__sub" style="margin-bottom:12px">Forecasted value exposed per month · lakh ₹</div>'
+  +phChart(EXPIRY.exposure.map(e=>e[1]),EXPIRY.exposure.map(e=>e[0]),'warn')
+  +'</section></div>'
+  +'<section class="panel" style="margin-top:16px"><div class="panel__head"><h2 class="panel__title">'+icon('shield')+'Recall Center</h2><button class="panel__link" data-act="ph-recall">'+icon('arrow','ic--sm')+'Review recall workflow</button></div>'
+  +'<div class="ph-mgr">'+phQuick('alert','danger',RECALLS.active,'Active recalls')+phQuick('pill','warn',RECALLS.batches,'Affected batches')+phQuick('patients','info',RECALLS.records,'Potential patient records')+'</div>'
+  +'<div class="ph-method" style="margin-top:14px"><details><summary>'+icon('info','ic--sm')+'Recall policy</summary><div class="ph-method__body">Recall information reflects recorded supplier and regulatory notices. Where a recall is active, the workflow supports identifying affected <b>dispensing records</b> for review. No recall information is fabricated.</div></details></div>'
+  +'</section>'
+  +'<section class="panel" style="margin-top:16px" data-od-id="expiry-risk-table"><div class="panel__head"><h2 class="panel__title">'+icon('flask')+'Expiry Risk Table</h2></div>'
+  +'<div class="tablewrap"><table class="table"><thead><tr><th>Medicine</th><th>Batch</th><th>Quantity</th><th>Expiry</th><th>Days</th><th>Value</th><th>Consumption</th><th>Risk</th><th>Suggested Action</th></tr></thead><tbody>'
+  +EXPIRY_ROWS.map(r=>'<tr data-med="'+(r.m.includes('Paracetamol')?'pcm':r.m.includes('Amoxicillin')?'amx':r.m.includes('ORS')?'ors':r.m.includes('Azithromycin')?'azt':'ppz')+'" style="cursor:pointer"><td><b>'+r.m+'</b></td><td>'+r.batch+'</td><td>'+r.qty+'</td><td>'+r.exp+'</td><td>'+r.days+'</td><td>'+r.value+'</td><td>'+r.consumption+'</td><td>'+phRiskBadge(r.risk)+'</td><td style="font-size:12.5px;color:var(--muted)">'+r.act+'</td></tr>').join('')
+  +'</tbody></table></div>'
+  +'<div style="margin-top:12px;font-size:12.5px;color:var(--muted)">Suggested actions follow approved pharmacy policy. Staff are never instructed to violate established dispensing rules.</div>'
+  +'</section>', 'Pharmacy Intelligence');
+}
+
+/* ---- Pharmacy Intelligence: procurement ---- */
+function renderProcurement(){
+ const meta='<span class="ph-chip">'+icon('truck','ic--sm')+'Procurement Planning</span>';
+ const sc=SCENARIOS.find(s=>s.id===state.scenario)||SCENARIOS[0];
+ return pageShell('Procurement Planning','Multi-month procurement forecast and what-if pharmacy scenario planner.','<button class="btn btn--ghost" data-act="ph-export">'+icon('reports','ic--sm')+'Export plan</button>',
+  '<div class="ph-mgr">'+phQuick('alert','danger',PROC_PRI.high,'High priority')+phQuick('layers','warn',PROC_PRI.medium,'Medium priority')+phQuick('shield','ok',PROC_PRI.monitor,'Monitor')+phQuick('truck','accent','12','Orders in review')+'</div>'
+  +'<section class="panel" style="margin-top:16px" data-od-id="procurement-plan-table"><div class="panel__head"><h2 class="panel__title">'+icon('calendar')+'Procurement Plan · Expected demand</h2></div>'
+  +'<div class="tablewrap"><table class="ph-plan"><thead><tr><th>Medicine</th>'+MONTHS.map(mth=>'<th>'+mth+'</th>').join('')+'</tr></thead><tbody>'
+  +PROC_PLAN.map(p=>'<tr data-med="'+({Paracetamol:'pcm',Amoxicillin:'amx',Azithromycin:'azt',ORS:'ors',Pantoprazole:'ppz',Cough:''}[(p[0].split(' ')[0])])+'" style="cursor:pointer"><td>'+p[0]+'</td>'+p.slice(1).map(v=>'<td>'+v.toLocaleString('en-IN')+'</td>').join('')+'</tr>').join('')
+  +'<tr class="is-total"><td>Total</td><td>13,260</td><td>14,310</td><td>15,690</td><td>17,330</td></tr>'
+  +'</tbody></table></div>'
+  +'</section>'
+  +'<section class="panel" style="margin-top:16px" data-od-id="pharmacy-scenario"><div class="panel__head"><h2 class="panel__title">'+icon('layers')+'Pharmacy Scenario Planner</h2></div>'
+  +'<div class="ph-scenario-opt">'+SCENARIOS.map(s=>'<button class="ph-chip'+(state.scenario===s.id?' is-active':'')+'" data-scenario="'+s.id+'">'+s.label+'</button>').join('')+'</div>'
+  +'<div class="ph-mini-grid">'+[['Expected medicine demand',sc.demand],['Inventory coverage',sc.coverage],['Stockout risk',sc.stockout],['Additional procurement',sc.proc]].map(p=>phMini(p[0],p[1],'impact estimate')).join('')+'</div>'
+  +'<div class="ph-method" style="margin-top:14px"><details><summary>'+icon('info','ic--sm')+'What-if basis</summary><div class="ph-method__body">Scenario impacts are <b>estimates</b> derived from current consumption and case-mix trends. They support planning conversation, not commitments.</div></details></div>'
+  +'</section>'
+  +'<section class="panel" style="margin-top:16px" data-od-id="procurement-forecast"><div class="panel__head"><h2 class="panel__title">'+icon('trending')+'Upcoming Procurement Requirements</h2><button class="panel__link" data-nav="pharmacy">Pharmacy '+icon('arrow','ic--sm')+'</button></div>'
+  +'<div class="ph-kpi-strip" style="grid-template-columns:repeat(3,1fr)">'+phQuick('alert','danger',PROC_PRI.high,'High priority · '+MONTHS[0])+phQuick('layers','warn',PROC_PRI.medium,'Medium · '+MONTHS[0])+phQuick('shield','info',PROC_PRI.monitor,'Monitor · '+MONTHS[0])+'</div>'
+  +'</section>', 'Pharmacy Intelligence');
+}
+
+/* ---- Pharmacy Intelligence: case mix ---- */
+function renderCasemix(){
+ return pageShell('Patient Case Mix','Recorded visit reasons and case categories driving medicine demand.','<span class="ph-chip">'+icon('clock','ic--sm')+'Today’s OPD</span>',
+  '<div class="ph-flow">'+[['Patient visits','patients'],['Recorded case category','clipboard'],['Prescription','pill'],['Dispensing','box'],['Consumption','trending']].map((n,i)=>'<span class="ph-flow__node">'+icon(n[1],'ic--sm')+n[0]+'</span>'+(i<4?'<span class="ph-flow__arrow">'+icon('arrow','ic--sm')+'</span>':'')).join('')+'</div>'
+  +'<div class="ph-method" style="margin-bottom:16px"><details open><summary>'+icon('info','ic--sm')+'How this chain is built</summary><div class="ph-method__body">Case categories come from <b>recorded diagnosis / clinical coding / visit reason</b>. Medicine analytics correlate with those recorded categories. We do <b>not</b> infer a disease from a prescription, and patient-level disease information is gated by role-based access.</div></details></div>'
+  +'<div class="grid2"><section class="panel" data-od-id="casemix-today"><div class="panel__head"><h2 class="panel__title">'+icon('patients')+'Today’s OPD · Recorded case mix</h2></div>'
+  +phBarList(CASE_MIX.slice(0,5).map(c=>[c[0],c[1]]),'accent')
+  +'</section><section class="panel" data-od-id="casemix-departments"><div class="panel__head"><h2 class="panel__title">'+icon('departments')+'Department Consumption</h2><button class="panel__link" data-nav="departments">Departments '+icon('arrow','ic--sm')+'</button></div>'
+  +phBarList(DEPT_CONS,'info')
+  +'</section></div>'
+  +'<div class="grid2" style="margin-top:16px"><section class="panel" data-od-id="casemix-trend"><div class="panel__head"><h2 class="panel__title">'+icon('trending')+'Respiratory-related visits · trend</h2></div>'
+  +phChart(DISEASE_TREND.map(d=>d[1]),DISEASE_TREND.map(d=>d[0]),'accent')
+  +'<div class="stat__sub" style="margin-top:10px">Trend <span class="trend trend--up">'+icon('arrow','ic--sm')+'+23%</span></div>'
+  +'</section><section class="panel" data-od-id="casemix-forecast"><div class="panel__head"><h2 class="panel__title">'+icon('calendar')+'Forecasted Case Mix · next 30 days</h2></div>'
+  +'<div class="ph-mini-grid">'+CASE_FORECAST.map(c=>phMini(c[0],c[1].toLocaleString('en-IN'),c[2]===0?'stable':'forecast ↑'+c[2]+'%','trending')).join('')+'</div>'
+  +'<div class="ph-method" style="margin-top:14px"><details><summary>'+icon('info','ic--sm')+'Forecast language</summary><div class="ph-method__body">Values are marked <b>Expected / Forecasted</b>, not guaranteed. They derive from recorded case trends and patient volume forecasts.</div></details></div>'
+  +'</section></div>'
+  +'<div class="ph-insight" style="margin-top:16px" data-od-id="casemix-medicine-link"><div class="ph-insight__eyebrow">'+icon('sparkle','ic--sm')+'UrbanMed Intelligence · Case Mix → Medicine Demand</div>'
+  +'<div class="ph-insight__title">Respiratory-related visits are forecast to increase over the next 30 days</div>'
+  +'<div class="ph-insight__text">Recorded respiratory case volume is trending up (+23% month over month). Based on prescription patterns, potential pharmacy demand increases to review:</div>'
+  +'<div class="ph-insight__impact"><span class="ph-insight__impact-item">'+icon('trending','ic--sm')+'Amoxicillin</span><span class="ph-insight__impact-item">'+icon('trending','ic--sm')+'Paracetamol</span><span class="ph-insight__impact-item">'+icon('trending','ic--sm')+'Cough preparations</span></div>'
+  +'<div class="ph-insight__act"><button class="btn btn--primary" data-nav="procurement">'+icon('truck','ic--sm')+'Review procurement</button></div></div>', 'Pharmacy Intelligence');
+}
+
+function timeAgo(){return 'Updated just now'}
+function bedCells(ward){
+ const names=ward==='GENERAL'?['G-01','G-02','G-03','G-04','G-05','G-06','G-07','G-08']:['W-01','W-02','W-03','W-04','W-05','W-06','W-07','W-08'];
+ const st=bedStatus();
+ return names.map((n,i)=>'<button class="bed bed--'+st[i%st.length]+'" data-bed="'+n+'" data-ward="'+ward+'" data-status="'+st[i%st.length]+'"><span>'+n+'</span><span class="bed__tag">'+st[i%st.length]+'</span></button>').join('');
+}
+function renderBedMap(){
+ const st=bedStatus();
+ const w=state.ward;
+ const ids=Array.from({length:16},(_,i)=>String(i+1).padStart(2,'0'));
+ const el=$('#bedmap');
+ if(!el)return;
+  el.innerHTML=ids.map((n,i)=>'<button class="bed bed--'+st[i%st.length]+'" data-bed="'+w+'-'+n+'" data-ward="'+w+'" data-status="'+st[i%st.length]+'" data-od-id="bed-'+w.toLowerCase()+'-'+n+'" style="animation:bedIn .18s cubic-bezier(.2,0,0,1) backwards;animation-delay:'+Math.min(i*18,180)+'ms"><span>'+w+'-'+n+'</span><span class="bed__tag">'+st[i%st.length]+'</span></button>').join('');
+}
+
+function openPalette(){
+ $('#palette').classList.add('is-open');
+ $('#overlay').classList.add('is-open');
+ $('#palette-input').value='';
+ filterPalette('');
+ $('#palette-input').focus();
+ $('#search-trigger').setAttribute('aria-expanded','true');
+ $('#search-trigger-m').setAttribute('aria-expanded','true');
+}
+function closePalette(){$('#palette').classList.remove('is-open');$('#overlay').classList.remove('is-open');$('#search-trigger').setAttribute('aria-expanded','false');$('#search-trigger-m').setAttribute('aria-expanded','false')}
+function filterPalette(q){
+ const ql=q.toLowerCase();
+ const res=[];
+ SEARCH.forEach(cat=>{
+  const hits=cat.items.filter(it=>it.l.toLowerCase().includes(ql)||it.s.toLowerCase().includes(ql));
+  if(hits.length){res.push({cat:cat.cat,icon:cat.icon,items:hits})}
+ });
+ state.sel=0;
+ renderPalette(res);
+}
+function openSearchResult(label,sub){
+ const medId={['Paracetamol 500mg']:'pcm',['Amoxicillin 500mg']:'amx',['Azithromycin 500mg']:'azt',['Oral Rehydration Salts']:'ors',['Pantoprazole 40mg']:'ppz'}[label];
+ if(medId){state.med=medId;state.phTab='Overview';go('medicine');return}
+ const pat=PATIENTS.find(p=>p.n===label);
+ if(pat){state.patId=pat.id;go('patient');return}
+ const dept=DEPTS.find(d=>d.name===label);
+ if(dept){go('departments');return}
+ const bed=/^[A-Z]+-\d+/.test(label);
+ if(bed){go('beds');state.ward=label.slice(0,label.indexOf('-'));return}
+ if(sub&&sub.includes('Doctor')){go('staff');return}
+ toast('Opening '+label+'…','info');
+}
+function renderPalette(res){
+ const box=$('#palette-results');
+ if(!res.length){box.innerHTML='<div class="palette__empty">No results for “'+$('#palette-input').value+'”</div>';return}
+ box.innerHTML=res.map(c=>'<div><div class="palette__cat">'+c.cat+'</div>'+c.items.map(it=>'<button class="palette__item" data-pidx><span class="palette__item__icon">'+icon(c.icon)+'</span><span><div class="palette__label">'+it.l+'</div><div class="palette__sub">'+it.s+'</div></span></button>').join('')+'</div>').join('');
+ const items=box.querySelectorAll('.palette__item');
+ items.forEach((el,i)=>el.classList.toggle('is-sel',i===state.sel));
+ if(items[state.sel]){box.scrollTop=items[state.sel].offsetTop-box.clientHeight/2}
+}
+function openUserMenu(){
+ const roles=Object.keys(ROLE_LABELS);
+ const menu=$('#user-menu');
+ menu.innerHTML='<div class="roleline"><div class="roleline__name">Aman Ali</div><div class="roleline__role" id="menu-role">'+ROLE_LABELS[state.role]+'</div></div>'
+  +'<button class="menurow" data-act="profile">'+icon('user')+'Profile</button>'
+  +'<button class="menurow" data-act="prefs">'+icon('settings')+'Preferences</button>'
+  +'<div class="menu__sep"></div>'
+  +'<div class="dropdown__head" style="border-bottom:0;padding:10px 14px 6px"><span class="dropdown__title" style="font-size:12px;text-transform:uppercase;letter-spacing:0.07em">Demo role</span></div>'
+  +roles.map(r=>'<button class="menurow is-role" data-act="role" data-role="'+r+'"><span style="display:flex;align-items:center;gap:11px">'+icon(r==='doctor'?'staff':r==='nurse'?'ward':r==='bedmanager'?'beds':r==='receptionist'?'register':'shield')+ROLE_LABELS[r]+'</span>'+(state.role===r?'<span class="menurow__check">'+icon('check','ic--sm')+'</span>':'')+'</button>').join('')
+  +'<div class="menu__sep"></div>'
+  +'<button class="menurow" data-act="help">'+icon('help')+'Help & shortcuts</button>'
+  +'<button class="menurow" data-act="logout">'+icon('logout')+'Sign out</button>';
+ positionDropdown(menu,$('#user-trigger'),false);
+ menu.classList.add('is-open');
+ $('#overlay').classList.add('is-open');
+ $('#user-trigger').setAttribute('aria-expanded','true');
+}
+function openNotifMenu(){
+ const menu=$('#notif-menu');
+ const rows=visibleNotifs().slice(0,5).map(n=>'<div class="notif"><span class="notif__icon" style="background:var(--'+n.sev+'-tint);color:var(--'+n.sev+'-strong)">'+icon(n.sev==='danger'?'alert':n.sev==='warn'?'clock':'info')+'</span><div><div class="notif__text">'+n.t+'</div><div class="notif__time">'+n.time+'</div></div></div>').join('');
+ menu.innerHTML='<div class="dropdown__head"><span class="dropdown__title">Notifications</span><button class="dropdown__act" data-act="mark-read">Mark all read</button></div>'
+  +'<div class="dropdown__body">'+rows+'<button class="menurow" data-nav="notifications">'+icon('bell','ic--sm')+'View notification center</button></div>';
+ positionDropdown(menu,$('#notif-trigger'),true);
+ menu.classList.add('is-open');
+ $('#overlay').classList.add('is-open');
+ $('#notif-trigger').setAttribute('aria-expanded','true');
+}
+function positionDropdown(menu,anchor,rightAlign){
+ const r=anchor.getBoundingClientRect();
+ const mw=menu.offsetWidth||parseInt(menu.classList.contains('dropdown--narrow')?'252':'340');
+ let left;
+ if(rightAlign){left=Math.min(r.right-mw,window.innerWidth-mw-12)}else{left=Math.min(r.left,window.innerWidth-mw-12)}
+ left=Math.max(12,left);
+ menu.style.left=left+'px';
+ menu.style.top=(r.bottom+8)+'px';
+}
+function closeMenus(){['#user-menu','#notif-menu'].forEach(s=>$(s).classList.remove('is-open'));$('#user-trigger').setAttribute('aria-expanded','false');$('#notif-trigger').setAttribute('aria-expanded','false');if(!$('#palette').classList.contains('is-open'))$('#overlay').classList.remove('is-open')}
+
+function openBedDrawer(bedId,ward,status){
+ const st=status||'available';
+ CURRENT_BED=bedId;
+ const meta={ICU:{fl:3,rm:'302',type:'ICU'},EMERGENCY:{fl:1,rm:'104',type:'Emergency'},GENERAL:{fl:2,rm:'216',type:'General'},PEDIATRICS:{fl:1,rm:'112',type:'Pediatric'}}[ward]||{fl:1,rm:'101',type:'General'};
+ const drawer=$('#bed-drawer');
+ drawer.innerHTML='<div class="drawer__head"><h2 class="drawer__title">'+bedId+'</h2><button class="iconbtn" data-act="close-drawer">'+icon('x')+'</button></div>'
+  +'<div class="drawer__body">'
+  +'<div class="drawer__row drawer__field"><div><div class="drawer__label">Status</div><div class="drawer__value">'+bedStatusHTML(st)+'</div></div><span class="avatar'+(st==='available'?' avatar--ok':st==='cleaning'?'':' avatar--danger')+'" style="width:40px;height:40px">'+icon('beds','ic--sm')+'</span></div>'
+  +'<div class="drawer__row drawer__field"><div><div class="drawer__label">Department</div><div class="drawer__value">'+ward.replace(/_/g,' ')+'</div></div><div style="text-align:right"><div class="drawer__label">Floor</div><div class="drawer__value">'+meta.fl+'</div></div></div>'
+  +'<div class="drawer__row drawer__field"><div><div class="drawer__label">Room</div><div class="drawer__value">'+meta.rm+'</div></div><div style="text-align:right"><div class="drawer__label">Bed type</div><div class="drawer__value">'+meta.type+'</div></div></div>'
+  +'<div style="margin-top:8px;background:var(--surface);border-radius:var(--radius);padding:12px 14px;font-size:12.5px;color:var(--muted)">Last updated '+timeAgo()+' · audited by operations</div>'
+  +'</div>'
+  +'<div class="drawer__actions">'
+   +'<button class="btn btn--primary" data-act="assign-bed" '+(st!=='available'?'disabled':'')+'>'+icon('beds','ic--sm')+'Assign patient</button>'
+   +'<button class="btn btn--ghost" data-act="reserve-bed" '+(st!=='available'?'disabled':'')+'>Reserve bed</button>'
+  +'<button class="btn btn--ghost" data-act="mark-maint">'+icon('settings','ic--sm')+'Mark maintenance</button>'
+  +'</div>';
+ drawer.classList.add('is-open');
+ $('#overlay').classList.add('is-open');
+}
+function closeDrawer(){$('#bed-drawer').classList.remove('is-open');if(!$('#palette').classList.contains('is-open')&&!$('#user-menu').classList.contains('is-open')&&!$('#notif-menu').classList.contains('is-open'))$('#overlay').classList.remove('is-open')}
+function openModal(title,text,detail,confirmLabel){
+ $('#modal').innerHTML='<div class="modal__card"><h2 class="modal__title">'+icon('alert')+title+'</h2>'
+  +'<p class="modal__text">'+text+'</p>'
+  +(detail?'<div class="modal__detail">'+detail+'</div>':'')
+  +'<div class="modal__actions"><button class="btn btn--ghost" data-act="modal-cancel">Cancel</button><button class="btn btn--primary" data-act="modal-confirm">'+confirmLabel+'</button></div></div>';
+ $('#modal').classList.add('is-open');
+ $('#overlay').classList.add('is-open');
+}
+function closeModal(){$('#modal').classList.remove('is-open');if(!$('#palette').classList.contains('is-open')&&!$('#user-menu').classList.contains('is-open')&&!$('#notif-menu').classList.contains('is-open')&&!$('#bed-drawer').classList.contains('is-open'))$('#overlay').classList.remove('is-open')}
+
+const SCREENS=['dashboard','queue','beds','patients','patient','departments','notifications','consult','history','ward','register','admissions','analytics','reports','staff','settings','pharmacy','medicine','expiry','procurement','casemix'];
+function go(id){
+ if(id==='beds2')id='beds';
+ if(!SCREENS.includes(id)){toast('Screen coming in the next build pass','info');return}
+ state.screen=id;
+ renderScreen();
+}
+function onNavClick(target){
+ const nav=target.closest('[data-nav]');
+ if(!nav)return;
+ const id=nav.dataset.nav;
+ go(id);
+ closeMenus();
+ if($('#notif-menu').classList.contains('is-open'))$('#notif-menu').classList.remove('is-open');
+}
+function queueCount(){return DEPTS.reduce((s,d)=>s+d.wait,0)}
+
+document.addEventListener('click',e=>{
+ const nav=e.target.closest('[data-nav]');
+ if(nav){onNavClick(nav);return}
+ const act=e.target.closest('[data-act]');
+ if(act){handleAct(act);return}
+  const wardChip=e.target.closest('[data-wardmap]');
+  if(wardChip){state.ward=wardChip.dataset.wardmap;document.querySelectorAll('[data-wardmap]').forEach(c=>c.classList.toggle('is-active',c===wardChip));renderBedMap();$('#bedmap').closest('.panel').querySelector('.panel__title').innerHTML=icon('beds')+state.ward.replace(/_/g,' ')+' · Bed Map';return}
+  const bed=e.target.closest('[data-bed]');
+  if(bed){openBedDrawer(bed.dataset.bed,bed.dataset.ward,bed.dataset.status);return}
+  const qDept=e.target.closest('.wardchip[data-ward]');
+  if(qDept){state.queueDept=parseInt(qDept.dataset.ward,10);renderScreen();return}
+   const pItem=e.target.closest('.palette__item');
+   if(pItem){const l=pItem.querySelector('.palette__label').textContent;const s=pItem.querySelector('.palette__sub').textContent;closePalette();openSearchResult(l,s);return}
+  const notif=e.target.closest('.notif');
+  if(notif){closeMenus();return}
+  const med=e.target.closest('[data-med]');
+  if(med){const id=med.dataset.med;if(id){state.med=id;state.phTab='Overview';go('medicine');return}}
+  const ptab=e.target.closest('[data-ptab]');
+  if(ptab){state.phTab=ptab.dataset.ptab;renderScreen();return}
+  const prange=e.target.closest('[data-prange]');
+  if(prange){state.phRange=prange.dataset.prange;renderScreen();return}
+  const scenario=e.target.closest('[data-scenario]');
+  if(scenario){state.scenario=scenario.dataset.scenario;renderScreen();return}
+});
+function handleAct(act){
+ const a=act.dataset.act;
+  if(a==='patfilter'){state.patFilter=act.dataset.filter||'All';renderScreen();return}
+  if(a==='clear-patsearch'){state.patSearch='';renderScreen();return}
+  if(a==='staff-filter'){state.staffFilter=act.dataset.filter||'All';renderScreen();return}
+  if(a==='staff-add')toast('Invitation sent · staff member will be onboarded by HR','success')
+  if(a==='staff-profile'){closeMenus();toast('Opening '+act.dataset.staff+' profile…','info')}
+  if(a==='set-theme'){state.theme=state.theme==='light'?'dark':'light';store.set('theme',state.theme);document.documentElement.dataset.theme=state.theme;const ti=$('#theme-icon');if(ti){ti.classList.remove('swap');void ti.offsetWidth;ti.classList.add('swap');ti.innerHTML=state.theme==='dark'?I.sun:I.moon}renderScreen();toast(state.theme==='dark'?'Dark mode enabled':'Light mode enabled','info')}
+  if(a==='set-collapse'){state.collapsed=!state.collapsed;store.set('collapsed',state.collapsed);renderNav();renderScreen();toast(state.collapsed?'Sidebar collapsed':'Sidebar expanded','info')}
+  if(a==='set-notif'){const k=act.dataset.notif;if(!k)return;const label=act.getAttribute('aria-label');state.notifs[k]=!state.notifs[k];store.set('notifs',state.notifs);const on=state.notifs[k];act.classList.toggle('is-on',on);act.setAttribute('aria-checked',on?'true':'false');renderTopbar();if($('#notif-menu').classList.contains('is-open'))openNotifMenu();toast((on?'Enabled':'Disabled')+' '+label,'info')}
+ if(a==='mark-read'){state.notifUnread=0;renderTopbar();toast('All notifications marked as read','success')}
+  if(a==='call')toast('Patient called to consultation','info')
+  if(a==='view'){const id=act.dataset.pat;if(id&&PATIENTS.some(p=>p.id===id)){state.patId=id;closeMenus();go('patient')}else toast('Opening patient profile…','info');return}
+ if(a==='assign-bed')openModal('Assign bed to patient','This action will mark the bed as occupied.','<div><div class="drawer__label">Bed</div><div class="drawer__value">'+CURRENT_BED+'</div></div><div><div class="drawer__label">Suggested patient</div><div class="drawer__value">Rahul Sharma · PT-10284</div></div><div><div class="drawer__label">Department</div><div class="drawer__value">'+state.ward.replace(/_/g,' ')+'</div></div><div><div class="drawer__label">Priority</div><div class="drawer__value">CRITICAL</div></div>','Confirm assignment')
+  if(a==='modal-confirm'){closeModal();state.bedOv[CURRENT_BED]='occupied';toast('Bed assigned successfully','success');state.notifUnread++;renderTopbar();if($('#bedmap'))renderBedMap();return}
+  if(a==='modal-cancel')closeModal()
+  if(a==='reserve-bed'){state.bedOv[CURRENT_BED]='reserved';closeDrawer();toast('Bed reserved for incoming patient','success');if($('#bedmap'))renderBedMap();return}
+  if(a==='mark-maint'){state.bedOv[CURRENT_BED]='maintenance';closeDrawer();toast('Bed marked for maintenance','warn');if($('#bedmap'))renderBedMap();return}
+  if(a==='assign-flow')toast('Assignment workflow · select patient first','info')
+  if(a==='soon')toast('This module ships in the next build pass','info')
+  if(a==='save-consult')toast('Consultation saved · patient marked Completed','success')
+  if(a==='reg-next'){const step=state.regStep||1;state.regStep=step===1?2:3;state.regData=collectReg();renderScreen();return}
+  if(a==='reg-back'){state.regStep=Math.max(1,(state.regStep||1)-1);renderScreen();return}
+  if(a==='reg-submit'){state.regData=collectReg();toast('Patient registered · queue position #7 · est. 18 min','success');state.regStep=1;state.regData={};go('register');return}
+ if(a==='close-drawer')closeDrawer()
+ if(a==='close')closeMenus()
+  if(a==='profile'){closeMenus();go('settings');return}
+  if(a==='prefs'){closeMenus();go('settings');return}
+ if(a==='help'){closeMenus();toast('Press Ctrl K for global search','info')}
+ if(a==='logout'){closeMenus();toast('Signed out (demo)','info')}
+  const role=a==='role'?act.dataset.role:null;
+  if(a==='role'&&role){state.role=role;state.screen='dashboard';store.set('role',role);closeMenus();renderScreen();renderNav();toast('Switched to '+ROLE_LABELS[role]+' view','success')}
+  if(a==='ph-export')toast('Pharmacy inventory export queued · CSV ready in downloads','success')
+  if(a==='ph-batch')toast('Recording new batch receipt…','info')
+  if(a==='ph-forecast')toast('Forecast confidence 82% · based on 12 months history, recorded case mix and seasonality','info')
+  if(a==='ph-reorder')toast('Reorder recommendation staged for review · PO not placed','warn')
+  if(a==='ph-review-temp')toast('Temperature excursion under review by pharmacy QA','info')
+  if(a==='ph-recall')toast('Recall workflow opened · affected records flagged for review','info')
+  if(a==='rep-export')toast('Report export queued · CSV ready in downloads','success')
+}
+
+$('#nav').addEventListener('click',e=>{const b=e.target.closest('[data-nav]');if(b)onNavClick(b)});
+$('#bottomnav').addEventListener('click',e=>{const b=e.target.closest('[data-nav]');if(b)onNavClick(b)});
+$('#search-trigger').addEventListener('click',openPalette);
+$('#search-trigger-m').addEventListener('click',openPalette);
+$('#notif-trigger').addEventListener('click',e=>{e.stopPropagation();if($('#notif-menu').classList.contains('is-open')){closeMenus()}else openNotifMenu()});
+$('#user-trigger').addEventListener('click',e=>{e.stopPropagation();if($('#user-menu').classList.contains('is-open')){closeMenus()}else openUserMenu()});
+$('#nav-collapse').addEventListener('click',()=>{state.collapsed=!state.collapsed;store.set('collapsed',state.collapsed);renderNav()});
+$('#theme-toggle').addEventListener('click',()=>{state.theme=state.theme==='light'?'dark':'light';store.set('theme',state.theme);document.documentElement.dataset.theme=state.theme;const ti=$('#theme-icon');ti.classList.remove('swap');void ti.offsetWidth;ti.classList.add('swap');ti.innerHTML=state.theme==='dark'?I.sun:I.moon});
+$('#overlay').addEventListener('click',()=>{closeMenus();closePalette();closeDrawer();closeModal()});
+$('#palette-input').addEventListener('input',e=>filterPalette(e.target.value));
+document.addEventListener('input',e=>{
+ const s=e.target.closest('[data-act="patsearch"]');
+ if(s){state.patSearch=s.value;const tb=$('#patient-rows');if(tb){tb.innerHTML=patientRowsHTML()}}
+});
+$('#palette-input').addEventListener('keydown',e=>{
+ const items=$('#palette-results').querySelectorAll('.palette__item');
+ if(e.key==='ArrowDown'){e.preventDefault();state.sel=Math.min(state.sel+1,items.length-1);items.forEach((el,i)=>el.classList.toggle('is-sel',i===state.sel));}
+ if(e.key==='ArrowUp'){e.preventDefault();state.sel=Math.max(state.sel-1,0);items.forEach((el,i)=>el.classList.toggle('is-sel',i===state.sel));}
+  if(e.key==='Enter'){const it=items[state.sel];if(it){const l=it.querySelector('.palette__label').textContent;const s=it.querySelector('.palette__sub').textContent;closePalette();openSearchResult(l,s)}}
+ if(e.key==='Escape')closePalette();
+});
+document.addEventListener('keydown',e=>{
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();if($('#palette').classList.contains('is-open'))closePalette();else openPalette()}
+ if(e.key==='Escape'){closeMenus();closePalette();closeDrawer();closeModal()}
+});
+
+const SIM_EVENTS=[
+ ['Emergency patient added to queue','warn','danger','queue'],
+ ['ICU bed #17 is now available','success','ok','live'],
+ ['Admission ADM-20395 awaiting bed assignment','info','warn','queue'],
+ ['Patient moved to position #2 · Ankit Verma','info','ok','queue']];
+setInterval(()=>{
+ const ev=SIM_EVENTS[Math.floor(Math.random()*SIM_EVENTS.length)];
+ toast(ev[0],ev[1]);
+ if(state.notifs[ev[3]]!==false){state.notifUnread++;NOTIFS.unshift({cat:ev[3],sev:ev[2]==='ok'?'info':ev[2],t:ev[0],time:'just now'});NOTIFS.pop()}
+ const d=DEPTS[Math.floor(Math.random()*DEPTS.length)];
+ d.wait=Math.max(0,d.wait+(Math.random()>0.5?1:-1));
+ updateNavBadges();
+},14000);
+
+renderNav();
+renderBottomNav();
+renderScreen();
+renderBedMap();
+document.documentElement.dataset.theme=state.theme;
+$('#theme-icon').innerHTML=state.theme==='dark'?I.sun:I.moon;
+</script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UrbanMed · Ad Creative Pack · Hospital Operations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf7f1;
+  --surface:#ffffff;
+  --inset:color-mix(in oklab,var(--fg) 4%,var(--surface));
+  --fg:#191a1f;
+  --muted:#5e5a52;
+  --border:#e9e2d5;
+  --accent:#33409c;
+  --accent-strong:color-mix(in oklab,var(--accent) 84%,#06061a);
+  --accent-dark:color-mix(in oklab,var(--accent) 78%,#000000);
+  --accent-tint:color-mix(in oklab,var(--accent) 8%,var(--bg));
+  --accent-border:color-mix(in oklab,var(--accent) 30%,var(--border));
+  --success:#3ecf9e;
+  --success-tint:color-mix(in oklab,var(--success) 12%,var(--bg));
+  --warn:#c27612;
+  --warn-tint:color-mix(in oklab,var(--warn) 10%,var(--bg));
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",Helvetica Neue,Arial,sans-serif;
+  --font-display:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --radius:12px;
+  --shadow-2:0 10px 30px -12px rgba(25,26,31,.18);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:22px 0;border-bottom:1px solid var(--border);gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.brand__mark{width:34px;height:34px;border-radius:10px;background:var(--accent);display:grid;place-items:center;color:#fff}
+.brand__name{font-family:var(--font-display);font-size:22px;letter-spacing:-0.01em}
+.brand__sub{font-size:11.5px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-top:1px}
+.topbar__tag{font-size:12.5px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:7px 14px;font-weight:500}
+.hero{padding:56px 0 40px}
+.hero__kicker{font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.hero h1{font-family:var(--font-display);font-size:clamp(36px,5vw,54px);font-weight:400;letter-spacing:-0.02em;line-height:1.08;margin:14px 0 16px}
+.hero p{color:var(--muted);max-width:62ch;font-size:16.5px}
+.hero__rule{width:52px;height:4px;border-radius:2px;background:var(--accent);margin-top:24px}
+.lead{display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin:36px 0 8px}
+.lead__ic{width:32px;height:32px;border-radius:9px;background:var(--accent-tint);color:var(--accent);display:grid;place-items:center;flex:none;margin-top:1px}
+.lead__ic svg{width:18px;height:18px}
+.lead__title{font-weight:600;font-size:14px}
+.lead__body{font-size:13.5px;color:var(--muted);margin-top:2px;line-height:1.6}
+section{padding:40px 0}
+.shead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap}
+.shead h2{font-family:var(--font-display);font-size:30px;font-weight:400;letter-spacing:-0.01em}
+.shead__note{font-size:12.5px;color:var(--muted);max-width:44ch;text-align:right}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:12px}
+.card__label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.card__head{font-size:15px;font-weight:600;line-height:1.35}
+.card__body{font-size:13.5px;color:var(--muted);line-height:1.6}
+.card__meta{font-size:11.5px;color:var(--accent);font-weight:600;letter-spacing:.02em;margin-top:auto;padding-top:10px;border-top:1px solid var(--border)}
+.copybox{background:var(--inset);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:14px;line-height:1.55;position:relative}
+.copybox + .copybox{margin-top:10px}
+.copybox .tag{position:absolute;top:-8px;left:12px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:2px 7px}
+.serp{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;max-width:600px}
+.serp__url{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.serp__url b{color:var(--accent);font-weight:600}
+.serp__title{font-size:19px;color:var(--accent);font-weight:600;margin:4px 0 4px;line-height:1.3}
+.serp__desc{font-size:13.5px;color:var(--fg);line-height:1.55}
+.serp__desc span{color:var(--accent);font-weight:600}
+.serp__foot{display:flex;gap:10px;margin-top:10px}
+.serp__foot i{display:block;width:14px;height:14px;border-radius:4px;background:var(--inset)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:5px 11px;border-radius:999px;background:var(--surface);border:1px solid var(--border);color:var(--muted)}
+.chip.is-accent{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip.is-warn{background:var(--warn-tint);border-color:color-mix(in oklab,var(--warn) 30%,var(--border));color:var(--warn)}
+.matrix{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.matrix th{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:13px 16px;border-bottom:1px solid var(--border);background:var(--inset)}
+.matrix td{font-size:13.5px;padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+.matrix tr:last-child td{border-bottom:0}
+.matrix td.metric{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
+.foot{padding:36px 0 56px;border-top:1px solid var(--border)}
+.foot__grid{display:flex;gap:28px;flex-wrap:wrap;justify-content:space-between}
+.foot__note{font-size:12.5px;color:var(--muted);max-width:52ch;line-height:1.65}
+.foot__pill{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--accent);border:1px solid var(--accent-border);border-radius:999px;padding:8px 14px;background:var(--surface)}
+@media (max-width:860px){
+  .grid2,.grid3{grid-template-columns:1fr}
+  .shead__note{text-align:left}
+}
+@media (max-width:560px){
+  .wrap{padding:0 16px}
+  .hero{padding:40px 0 28px}
+}
+</style>
+</head>
+<body>
+<header class="wrap topbar" data-od-id="pack-header">
+  <div class="brand">
+    <span class="brand__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>
+    <div><div class="brand__name">UrbanMed</div><div class="brand__sub">Ad Creative Pack</div></div>
+  </div>
+  <span class="topbar__tag">Hospital Operations Platform · B2B</span>
+</header>
+
+<section class="wrap hero" data-od-id="pack-intro">
+  <div class="hero__kicker">Paid Search + Social · Iteration 01</div>
+  <h1>Clear operations, <em style="font-style:italic">calm leadership.</em></h1>
+  <p>Search and social creative for hospital administrators who run bed occupancy, queues, staff, and pharmacy risk from a single live dashboard. Every claim below maps to a feature already in the product · nothing is invented.</p>
+  <div class="hero__rule"></div>
+  <div class="lead" data-od-id="voice-guardrails">
+    <span class="lead__ic" style="background:var(--inset);color:var(--muted)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span>
+    <div><div class="lead__title">Voice guardrails for every variant</div>
+    <div class="lead__body">Calm and factual, never hyped. No percentages we can't show, no "10× faster" inflation. Numbers appear only when the dashboard displays them (e.g. ER wait in minutes). One idea per ad. B2B decision-maker tone · hospital operators, not patients.</div></div>
+  </div>
+</section>
+
+<section class="wrap" data-od-id="section-search">
+  <div class="shead">
+    <h2>Google Search ads</h2>
+    <div class="shead__note">Headlines ≤30 characters · descriptions ≤90 · responsive ad preview</div>
+  </div>
+  <div class="grid2">
+    <div>
+      <div class="card__label" style="margin-bottom:10px">Ad 1 · Awareness</div>
+      <div class="serp">
+        <div class="serp__url"><b>UrbanMed</b> · urbanmed.app <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="serp__title">Hospital operations, live in one dashboard</div>
+        <div class="serp__desc">Bed occupancy, ER waits, staff and pharmacy risk · <span>visible at a glance</span>. See UrbanMed.</div>
+        <div class="serp__foot"><i></i><i></i><i></i><i></i></div>
+        <div class="chips"><span class="chip">≤30 · max 29</span><span class="chip is-accent">Description 78</span></div>
+      </div>
+      <div class="copybox" style="margin-top:16px"><span class="tag">Headlines</span>
+        Hospital ops in one dashboard<br>
+        Live hospital ops dashboard<br>
+        One view of your hospital
+      </div>
+      <div class="copybox"><span class="tag">Descriptions</span>
+        Bed occupancy, ER waits, staff and pharmacy risk · visible at a glance. See UrbanMed.<br>
+        Run your hospital on live numbers, not guesses. See UrbanMed.
+      </div>
+    </div>
+    <div>
+      <div class="card__label" style="margin-bottom:10px">Ad 2 · Pain / outcome</div>
+      <div class="serp">
+        <div class="serp__url"><b>UrbanMed</b> · urbanmed.app <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="serp__title">Stop guessing where your beds are</div>
+        <div class="serp__desc">Live occupancy, queues and staff rosters in <span>one screen</span>. Book a walkthrough.</div>
+        <div class="serp__foot"><i></i><i></i><i></i><i></i></div>
+        <div class="chips"><span class="chip">≤30 · max 28</span><span class="chip is-accent">Description 76</span></div>
+      </div>
+      <div class="copybox" style="margin-top:16px"><span class="tag">Headlines</span>
+        Stop guessing where beds are<br>
+        Live bed occupancy dashboard<br>
+        Know your hospital, live
+      </div>
+      <div class="copybox"><span class="tag">Descriptions</span>
+        Live occupancy, queues and staff rosters in one screen. Book a walkthrough.<br>
+        See every bed, queue and shift at a glance. Walkthrough available.
+      </div>
+    </div>
+    <div>
+      <div class="card__label" style="margin-bottom:10px">Ad 3 · Pharmacy risk</div>
+      <div class="serp">
+        <div class="serp__url"><b>UrbanMed</b> · urbanmed.app <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="serp__title">Catch stockouts before they happen</div>
+        <div class="serp__desc">Reorder risk, expiry and temperature alerts in <span>one pharmacy view</span>.</div>
+        <div class="serp__foot"><i></i><i></i><i></i><i></i></div>
+        <div class="chips"><span class="chip">≤30 · max 30</span><span class="chip is-accent">Description 74</span></div>
+      </div>
+      <div class="copybox" style="margin-top:16px"><span class="tag">Headlines</span>
+        Catch stockouts early<br>
+        Pharmacy risk, forecast early<br>
+        Pharmacy alerts that act early
+      </div>
+      <div class="copybox"><span class="tag">Descriptions</span>
+        Reorder risk, expiry and temperature alerts in one pharmacy view.<br>
+        Forecast pharmacy needs months ahead. See UrbanMed.
+      </div>
+    </div>
+    <div>
+      <div class="card__label" style="margin-bottom:10px">Ad 4 · Staff / access</div>
+      <div class="serp">
+        <div class="serp__url"><b>UrbanMed</b> · urbanmed.app <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="serp__title">Your staff roster, live and role-aware</div>
+        <div class="serp__desc">Shifts, departments and role-based access in <span>one directory</span>.</div>
+        <div class="serp__foot"><i></i><i></i><i></i><i></i></div>
+        <div class="chips"><span class="chip">≤30 · max 29</span><span class="chip is-accent">Description 70</span></div>
+      </div>
+      <div class="copybox" style="margin-top:16px"><span class="tag">Headlines</span>
+        Your staff roster, live<br>
+        Staff shifts, one directory<br>
+        Role-based access, done right
+      </div>
+      <div class="copybox"><span class="tag">Descriptions</span>
+        Shifts, departments and role-based access in one directory.<br>
+        Keep every role on the right screen. See UrbanMed.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" data-od-id="section-social">
+  <div class="shead">
+    <h2>Social primary text</h2>
+    <div class="shead__note">LinkedIn · Meta · one idea per post · calm B2B voice</div>
+  </div>
+  <div class="grid3">
+    <div class="card" data-od-id="social-variant-a">
+      <div class="card__label">Variant A · The calm</div>
+      <div class="card__body">Hospital operations run on live numbers · beds, queues, shifts, pharmacy risk. UrbanMed puts them in one calm view, so decisions happen before problems do.<br><br>Built for hospital administrators.</div>
+      <div class="card__meta">CTA · See UrbanMed</div>
+    </div>
+    <div class="card" data-od-id="social-variant-b">
+      <div class="card__label">Variant B · The specific</div>
+      <div class="card__body">A pharmacy temperature excursion, a ward at 90% occupancy, a bed assignment waiting on the board. UrbanMed surfaces the exceptions · staff act on what matters, not what's quiet.</div>
+      <div class="card__meta">CTA · Book a walkthrough</div>
+    </div>
+    <div class="card" data-od-id="social-variant-c">
+      <div class="card__label">Variant C · The question</div>
+      <div class="card__body">How many of your decisions today were made from a stale number? UrbanMed keeps bed occupancy, ER waits and pharmacy risk live · so your leadership view is the real one.</div>
+      <div class="card__meta">CTA · See it live</div>
+    </div>
+    <div class="card" data-od-id="social-variant-d">
+      <div class="card__label">Variant D · The proof</div>
+      <div class="card__body">One dashboard, five live signals: bed occupancy, ER wait, OR utilization, pending orders, and pharmacy reorder risk. UrbanMed turns scattered spreadsheets into a single screen your whole team can trust.</div>
+      <div class="card__meta">CTA · Try the dashboard</div>
+    </div>
+    <div class="card" data-od-id="social-variant-e">
+      <div class="card__label">Variant E · The contrast</div>
+      <div class="card__body">Some teams find out a ward is full at handover. UrbanMed shows it the moment it happens · with the queue, the shifts and the pharmacy stock beside it. Fewer surprises, calmer rounds.</div>
+      <div class="card__meta">CTA · See it in your shift</div>
+    </div>
+    <div class="card" data-od-id="social-variant-f">
+      <div class="card__label">Variant F · The role</div>
+      <div class="card__body">Admins see the whole hospital. Doctors see their patients. Bed managers see the board. UrbanMed gives every role its own live view · one source of truth, no noise.</div>
+      <div class="card__meta">CTA · Role-aware dashboard</div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" data-od-id="section-matrix">
+  <div class="shead">
+    <h2>A/B test matrix</h2>
+    <div class="shead__note">Primary CTA never repeats verbatim across a single ad</div>
+  </div>
+  <table class="matrix">
+    <thead><tr><th>Test</th><th>Control</th><th>Challenger</th><th>Metric to watch</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Headline angle</td>
+        <td>"Hospital operations, live in one dashboard"</td>
+        <td>"Stop guessing where your beds are"</td>
+        <td class="metric">CTR</td>
+      </tr>
+      <tr>
+        <td>Description length</td>
+        <td>78 chars, feature-first</td>
+        <td>54 chars, outcome-first</td>
+        <td class="metric">CTR / Quality score</td>
+      </tr>
+      <tr>
+        <td>Social opening line</td>
+        <td>"Hospital operations run on live numbers…"</td>
+        <td>"How many of your decisions today were made from a stale number?"</td>
+        <td class="metric">Engagement</td>
+      </tr>
+      <tr>
+        <td>CTA copy</td>
+        <td>See UrbanMed</td>
+        <td>Book a walkthrough</td>
+        <td class="metric">Click-through</td>
+      </tr>
+      <tr>
+        <td>Landing promise</td>
+        <td>Operations dashboard tour</td>
+        <td>Live bedmap walkthrough</td>
+        <td class="metric">Demo requests</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<footer class="wrap foot" data-od-id="pack-footer">
+  <div class="foot__grid">
+    <div class="foot__note">All claims in this pack correspond to features in the current product: live KPIs (bed occupancy, ER wait, OR utilization, pending orders), bedmap, queues, staff directory with role-based access, pharmacy reorder/expiry/temperature intelligence, and procurement forecasting. Copy stays calm, factual and B2B · no invented metrics.</div>
+    <div class="foot__pill">Creative Director · Ad Creative Pack · v01</div>
+  </div>
+</footer>
+</body>
+</html>

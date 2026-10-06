@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UrbanMed — Your hospital visit, without the waiting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf7f1;
+  --surface:#ffffff;
+  --fg:#191a1f;
+  --muted:#5e5a52;
+  --border:#e9e2d5;
+  --accent:#33409c;
+  --accent-strong:color-mix(in oklab,var(--accent) 84%,#06061a);
+  --accent-soft:color-mix(in oklab,var(--accent) 7%,var(--bg));
+  --accent-border:color-mix(in oklab,var(--accent) 30%,var(--border));
+  --teal:#0e9d8c;
+  --teal-soft:color-mix(in oklab,var(--teal) 9%,var(--bg));
+  --teal-strong:color-mix(in oklab,var(--teal) 62%,#052f2a);
+  --mint:#3ecf9e;
+  --mint-strong:color-mix(in oklab,var(--mint) 44%,#073126);
+  --mint-soft:color-mix(in oklab,var(--mint) 12%,var(--bg));
+  --amber:#c27612;
+  --amber-strong:color-mix(in oklab,var(--amber) 66%,#3a2400);
+  --amber-soft:color-mix(in oklab,var(--amber) 10%,var(--bg));
+  --danger:#d33a2b;
+  --danger-strong:color-mix(in oklab,var(--danger) 84%,#380a05);
+  --danger-soft:color-mix(in oklab,var(--danger) 9%,var(--bg));
+  --radius:14px;
+  --shadow-1:0 1px 2px rgba(25,26,31,.05);
+  --shadow-2:0 10px 30px -12px rgba(25,26,31,.18);
+  --shadow-3:0 30px 70px -20px rgba(25,26,31,.28);
+  --font-display:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --font-body:Inter,system-ui,-apple-system,"Segoe UI",Helvetica Neue,Arial,sans-serif;
+  --container:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body);
+  font-size:16px;line-height:1.6;
+  color:var(--fg);background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{display:block}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.container{max-width:var(--container);margin:0 auto;padding:0 24px}
+.ic{width:18px;height:18px;flex:none}
+.ic--sm{width:15px;height:15px}
+.kicker{
+  font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);display:inline-flex;align-items:center;gap:8px;margin-bottom:16px;
+}
+.kicker::before{content:"";width:20px;height:1px;background:var(--accent);opacity:.5}
+.h-display{
+  font-family:var(--font-display);font-weight:400;
+  letter-spacing:-0.01em;line-height:1.04;
+}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.section{padding:104px 0}
+.section--tight{padding:72px 0}
+
+.nav{
+  position:sticky;top:0;z-index:40;
+  background:color-mix(in oklab,var(--bg) 86%,transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid transparent;
+  transition:border-color .2s,box-shadow .2s;
+}
+.nav.is-scrolled{border-bottom-color:var(--border);box-shadow:var(--shadow-1)}
+.nav__inner{max-width:var(--container);margin:0 auto;padding:0 24px;height:72px;display:flex;align-items:center;gap:32px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;letter-spacing:-0.01em}
+.logo__mark{width:30px;height:30px;border-radius:9px;background:var(--accent);color:#fff;display:grid;place-items:center}
+.logo em{font-style:normal;color:var(--accent)}
+.nav__links{display:flex;align-items:center;gap:26px;margin-left:8px}
+.nav__link{font-size:14.5px;font-weight:500;color:var(--muted);position:relative;padding:6px 0;transition:color .15s}
+.nav__link:hover{color:var(--fg)}
+.nav__link.is-cta{color:var(--accent);font-weight:600}
+.nav__right{margin-left:auto;display:flex;align-items:center;gap:14px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  height:48px;padding:0 22px;border-radius:999px;
+  font-size:15px;font-weight:600;letter-spacing:0.01em;
+  transition:transform .12s,background .18s,box-shadow .18s,border-color .18s;
+  white-space:nowrap;
+}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn--primary{background:var(--accent);color:#ffffff;box-shadow:0 8px 20px -8px color-mix(in oklab,var(--accent) 70%,transparent)}
+.btn--primary:hover{background:var(--accent-strong)}
+.btn--ghost{background:var(--surface);border:1px solid var(--border);color:var(--fg)}
+.btn--ghost:hover{border-color:color-mix(in oklab,var(--border) 45%,var(--fg));background:var(--bg)}
+.btn--text{background:none;color:var(--accent);padding:0 6px;height:auto}
+.btn--text:hover{text-decoration:underline}
+.btn--sm{height:42px;padding:0 18px;font-size:14px}
+.link-arrow{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--accent)}
+.link-arrow:hover{text-decoration:underline}
+.link-arrow .ic{transition:transform .15s}
+.link-arrow:hover .ic{transform:translateX(3px)}
+.menu-btn{display:none;width:42px;height:42px;border-radius:10px;place-items:center;color:var(--fg)}
+.menu-btn:hover{background:var(--surface)}
+.mobile-menu{
+  position:fixed;top:72px;left:0;right:0;z-index:39;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  box-shadow:var(--shadow-2);
+  padding:16px 24px 24px;
+  display:none;
+}
+.mobile-menu.is-open{display:block;animation:menuIn .16s ease-out}
+@keyframes menuIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.mobile-menu a{display:block;padding:13px 4px;font-size:16px;font-weight:500;border-bottom:1px solid var(--border)}
+.mobile-menu a:last-of-type{border-bottom:0}
+
+.hero{position:relative;overflow:hidden}
+.hero__bg{position:absolute;inset:0;pointer-events:none}
+.hero__blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5}
+.hero__blob--a{width:520px;height:520px;background:color-mix(in oklab,var(--accent) 18%,transparent);top:-160px;right:-80px}
+.hero__blob--b{width:420px;height:420px;background:color-mix(in oklab,var(--teal) 14%,transparent);bottom:-160px;left:-120px}
+.hero__inner{position:relative;max-width:var(--container);margin:0 auto;padding:88px 24px 96px;display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center}
+.hero__title{font-size:clamp(46px,5.2vw,72px);letter-spacing:-0.02em}
+.hero__title em{font-style:italic;color:var(--accent)}
+.hero__sub{font-size:18px;color:var(--muted);max-width:44ch;margin-top:24px}
+.hero__sub b{color:var(--fg);font-weight:600}
+.hero__cta{display:flex;align-items:center;gap:16px;margin-top:36px;flex-wrap:wrap}
+.hero__trust{display:flex;align-items:center;gap:20px;margin-top:40px;flex-wrap:wrap}
+.hero__trust-item{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--muted);font-weight:500}
+.hero__trust-item .ic{color:var(--teal-strong)}
+
+.demobox{
+  background:var(--surface);border:1px solid var(--border);border-radius:22px;
+  box-shadow:var(--shadow-3);
+  overflow:hidden;position:relative;
+}
+.demobox__head{display:flex;align-items:center;gap:10px;padding:16px 22px;border-bottom:1px solid var(--border)}
+.demobox__dots{display:flex;gap:6px}
+.demobox__dots i{width:10px;height:10px;border-radius:50%;background:var(--border)}
+.demobox__title{font-size:13px;font-weight:600;color:var(--muted);margin-left:8px;letter-spacing:.02em}
+.live-chip{margin-left:auto;display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--teal-strong);background:var(--teal-soft);padding:5px 11px;border-radius:999px}
+.live-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);position:relative}
+.live-chip .dot::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--teal);opacity:0;animation:ping 2.2s ease-out infinite}
+@keyframes ping{0%{transform:scale(.5);opacity:.7}80%,100%{transform:scale(1.5);opacity:0}}
+.demobox__body{padding:24px 22px 6px;min-height:332px}
+.demobox__label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:6px}
+.demobox__q{font-family:var(--font-display);font-size:24px;line-height:1.1;margin-bottom:18px}
+.demobox__list{display:flex;flex-direction:column;gap:6px}
+.demobox__item{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  padding:13px 15px;border:1px solid var(--border);border-radius:12px;
+  background:var(--surface);font-size:14.5px;font-weight:500;
+  transition:border-color .15s,background .15s,transform .12s;
+}
+.demobox__item:hover{border-color:var(--accent-border);background:var(--accent-soft)}
+.demobox__item.is-sel{border-color:var(--accent);background:var(--accent-soft)}
+.demobox__item .item-ic{width:34px;height:34px;border-radius:9px;background:var(--bg);display:grid;place-items:center;color:var(--accent);flex:none}
+.demobox__item .item-main{flex:1}
+.demobox__item .item-t{font-weight:600;font-size:14.5px}
+.demobox__item .item-s{font-size:12.5px;color:var(--muted)}
+.demobox__item .check{margin-left:auto;color:var(--accent);opacity:0;transition:opacity .15s}
+.demobox__item.is-sel .check{opacity:1}
+.demobox__foot{padding:14px 22px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.steps{display:flex;gap:6px}
+.steps i{width:26px;height:4px;border-radius:2px;background:var(--border);transition:background .2s}
+.steps i.is-on{background:var(--accent)}
+.demobox__next{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--accent);padding:10px 6px}
+.demobox__next:hover{text-decoration:underline}
+.demobox__next.is-hidden{visibility:hidden}
+
+.tokencard{text-align:center;padding:6px 0 2px}
+.tokencard__kick{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.tokencard__num{
+  font-family:var(--font-display);font-style:italic;
+  font-size:74px;line-height:1;letter-spacing:-0.01em;color:var(--accent);
+  opacity:0;transform:translateY(12px);animation:tokIn .55s cubic-bezier(.2,.7,.2,1) forwards;
+}
+@keyframes tokIn{to{opacity:1;transform:none}}
+.tokencard__dept{font-size:15px;font-weight:600;margin-top:6px;opacity:0;animation:tokIn .5s .12s forwards}
+.tokencard__rows{margin:20px auto 0;max-width:300px;display:flex;flex-direction:column;gap:10px}
+.tokenline{opacity:0;transform:translateY(8px);animation:tokIn .45s forwards}
+.tokrow{display:flex;justify-content:space-between;align-items:center;padding:11px 15px;background:var(--bg);border-radius:11px;font-size:13.5px}
+.tokrow .k{color:var(--muted)}
+.tokrow .v{font-weight:600;font-variant-numeric:tabular-nums}
+.tokrow .v.is-accent{color:var(--accent)}
+.tokrow .v.is-mint{color:var(--mint-strong)}
+
+.problem{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.problem__grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.problem__copy .h-display{font-size:clamp(30px,3.4vw,44px)}
+.problem__copy p{margin-top:20px;color:var(--muted);font-size:17px;max-width:48ch}
+.waitcard{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:28px;box-shadow:var(--shadow-2);position:relative;overflow:hidden}
+.waitcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--danger)}
+.waitcard__label{font-size:12px;font-weight:600;color:var(--danger-strong);letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.waitcard__big{font-family:var(--font-display);font-size:56px;line-height:1;margin-top:14px;color:var(--fg)}
+.waitcard__sub{color:var(--muted);font-size:14px;margin-top:8px}
+.waitcard__now{display:flex;align-items:center;gap:8px;margin-top:18px;font-size:13px;font-weight:600;color:var(--teal-strong);background:var(--teal-soft);padding:8px 12px;border-radius:999px;width:max-content}
+
+.stepsgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:56px}
+.step{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px 24px;position:relative;transition:transform .18s,box-shadow .18s}
+.step:hover{transform:translateY(-4px);box-shadow:var(--shadow-2)}
+.step__num{font-family:var(--font-display);font-style:italic;font-size:34px;color:var(--accent);opacity:.85}
+.step__t{font-size:17px;font-weight:600;margin-top:14px;letter-spacing:-0.01em}
+.step__d{font-size:14px;color:var(--muted);margin-top:8px}
+
+.intel{background:var(--fg);color:#f5f3ec;position:relative;overflow:hidden}
+.intel__grid{display:grid;grid-template-columns:1.05fr .95fr;gap:72px;align-items:center}
+.intel .kicker{color:#aab4f0}
+.intel .kicker::before{background:#aab4f0}
+.intel .h-display{font-size:clamp(32px,3.6vw,48px);color:#fff}
+.intel__copy p{margin-top:20px;color:#b9b5a8;font-size:17px;max-width:46ch}
+.intel__copy .link-arrow{color:#aab4f0;margin-top:28px}
+.intelcard{
+  background:#24252d;border:1px solid rgba(255,255,255,.09);
+  border-radius:22px;padding:30px;position:relative;
+}
+.intelcard__top{display:flex;justify-content:space-between;align-items:center}
+.intelcard__token{font-family:var(--font-display);font-style:italic;font-size:52px;color:#aab4f0}
+.intelcard__ahead{font-size:14px;color:#b9b5a8}
+.intelcard__ahead b{color:#fff}
+.intelcard__main{display:flex;align-items:flex-end;gap:14px;margin-top:26px;flex-wrap:wrap}
+.intelcard__wait{font-size:64px;font-family:var(--font-display);line-height:1;color:#fff}
+.intelcard__wait span{font-size:20px;color:#b9b5a8;font-family:var(--font-body);font-weight:500}
+.intelcard__range{background:rgba(255,255,255,.06);border-radius:9px;padding:8px 12px;font-size:13px;color:#c9c5b9;font-variant-numeric:tabular-nums}
+.intelcard__arrive{margin-top:24px;border-top:1px solid rgba(255,255,255,.09);padding-top:18px;display:flex;justify-content:space-between;align-items:center}
+.intelcard__arrive .l{font-size:12px;color:#9a9589;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.intelcard__arrive .v{font-size:22px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
+.barlive{margin-top:22px}
+.barlive__track{height:8px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden;position:relative}
+.barlive__fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#33409c,#0e9d8c);width:64%}
+.barlive__meta{display:flex;justify-content:space-between;margin-top:10px;font-size:12.5px;color:#9a9589}
+.barlive__meta b{color:#d9d5c9}
+
+.discovery__head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:44px}
+.discovery__head .h-display{font-size:clamp(30px,3.4vw,46px);max-width:18ch}
+.discovery__search{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 8px 6px 20px;max-width:560px;box-shadow:var(--shadow-1);margin-bottom:20px}
+.discovery__search input{flex:1;border:0;outline:none;background:none;font:inherit;font-size:15px;color:var(--fg)}
+.discovery__search .loc{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:9px 15px;border-radius:999px;white-space:nowrap}
+.discovery__chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{height:38px;padding:0 16px;border-radius:999px;border:1px solid var(--border);background:var(--surface);font-size:13.5px;font-weight:500;color:var(--muted);transition:all .15s}
+.chip:hover{border-color:var(--accent-border);color:var(--fg)}
+.chip.is-on{background:var(--fg);border-color:var(--fg);color:#fff}
+.hoscards{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:28px}
+.hoscard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px;transition:transform .18s,box-shadow .18s}
+.hoscard:hover{transform:translateY(-4px);box-shadow:var(--shadow-2)}
+.hoscard__top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.hoscard__name{font-size:19px;font-weight:700;letter-spacing:-0.01em}
+.hoscard__city{font-size:13.5px;color:var(--muted);margin-top:3px}
+.hoscard__rating{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:14px;background:var(--mint-soft);color:var(--mint-strong);padding:5px 10px;border-radius:999px}
+.hoscard__type{font-size:12px;font-weight:600;color:var(--muted);margin-top:16px;text-transform:uppercase;letter-spacing:.07em}
+.hoscard__opds{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.tag{font-size:12.5px;font-weight:600;color:var(--fg);background:var(--bg);border:1px solid var(--border);padding:5px 11px;border-radius:999px}
+.hoscard__foot{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:18px;border-top:1px solid var(--border)}
+.hoscard__avail{font-size:13px;color:var(--teal-strong);font-weight:600}
+
+.patientexp{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.patientexp__grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:72px;align-items:center}
+.patientexp .h-display{font-size:clamp(30px,3.4vw,46px)}
+.patientexp__copy p{margin-top:20px;color:var(--muted);font-size:17px;max-width:44ch}
+.phonemock{
+  width:280px;margin:0 auto;background:#101116;border-radius:34px;
+  padding:12px;box-shadow:var(--shadow-3);border:1px solid #2a2b33;
+}
+.phonemock__inner{background:var(--bg);border-radius:24px;overflow:hidden}
+.phonemock__bar{height:34px;display:flex;justify-content:center;align-items:center}
+.phonemock__notch{width:84px;height:16px;border-radius:8px;background:#101116}
+.phonemock__screen{padding:18px 16px 22px}
+.pm-hello{font-family:var(--font-display);font-size:24px}
+.pm-sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+.pm-token{margin-top:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px}
+.pm-token__top{display:flex;justify-content:space-between;align-items:center}
+.pm-token__dept{font-size:12.5px;font-weight:600}
+.pm-token__live{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;color:var(--teal-strong);background:var(--teal-soft);padding:4px 9px;border-radius:999px}
+.pm-token__live .dot{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.pm-token__num{font-family:var(--font-display);font-style:italic;font-size:44px;color:var(--accent);margin-top:8px}
+.pm-token__ahead{font-size:12.5px;color:var(--muted)}
+.pm-token__ahead b{color:var(--fg)}
+.pm-token__rows{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.pm-token__cell{background:var(--bg);border-radius:10px;padding:9px 11px}
+.pm-token__cell .l{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+.pm-token__cell .v{font-size:14px;font-weight:700;margin-top:2px}
+.pm-cta{margin-top:14px;background:var(--accent);color:#fff;text-align:center;font-size:13px;font-weight:600;padding:11px;border-radius:11px}
+.pm-nav{display:flex;justify-content:space-around;padding:10px 0 6px;border-top:1px solid var(--border);background:var(--surface)}
+.pm-nav span{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--muted)}
+.pm-nav span.is-on{color:var(--accent)}
+
+.benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:56px}
+.benefit{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px 22px;transition:transform .18s,box-shadow .18s}
+.benefit:hover{transform:translateY(-4px);box-shadow:var(--shadow-2)}
+.benefit__ic{width:42px;height:42px;border-radius:11px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+.benefit__t{font-size:16.5px;font-weight:700;margin-top:16px;letter-spacing:-0.01em}
+.benefit__d{font-size:13.5px;color:var(--muted);margin-top:7px}
+.dashmock{margin-top:56px;background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow-2);overflow:hidden}
+.dashmock__bar{display:flex;align-items:center;gap:10px;padding:16px 22px;border-bottom:1px solid var(--border)}
+.dashmock__bar .brand-l{font-size:14px;font-weight:700}
+.dashmock__bar .live-chip{margin-left:auto}
+.dashmock__body{padding:22px}
+.dashmock__kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.dm-kpi{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.dm-kpi .l{font-size:11.5px;color:var(--muted);font-weight:600}
+.dm-kpi .v{font-size:24px;font-weight:700;margin-top:3px;letter-spacing:-0.01em}
+.dm-kpi .v small{font-size:12px;color:var(--muted);font-weight:500}
+.dashmock__split{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:18px}
+.dm-queues .l,.dm-beds .l{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.dmq-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.dmq-row:last-child{border-bottom:0}
+.dmq-row .n{flex:1;font-weight:500}
+.dmq-row .w{color:var(--muted)}
+.dmq-row .badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+.dmq-row .badge.hot{background:var(--danger-soft);color:var(--danger-strong)}
+.dmq-row .badge.mid{background:var(--amber-soft);color:var(--amber-strong)}
+.dmq-row .badge.ok{background:var(--mint-soft);color:var(--mint-strong)}
+.dmb-row{display:flex;align-items:center;gap:12px;padding:7px 0;font-size:13px}
+.dmb-row .n{width:110px;font-weight:500}
+.dmb-track{flex:1;height:7px;border-radius:4px;background:var(--border);overflow:hidden}
+.dmb-fill{height:100%;border-radius:4px;background:var(--accent)}
+.dmb-fill.t1{background:var(--teal)}
+.dmb-val{width:52px;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.trust{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.trust__grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.trust .h-display{font-size:clamp(30px,3.4vw,46px)}
+.trust__copy p{margin-top:20px;color:var(--muted);font-size:17px;max-width:44ch}
+.trust__list{margin-top:28px;display:flex;flex-direction:column;gap:16px}
+.trust__item{display:flex;gap:14px;align-items:flex-start}
+.trust__item .tic{width:38px;height:38px;border-radius:10px;background:var(--teal-soft);color:var(--teal-strong);display:grid;place-items:center;flex:none}
+.trust__item b{display:block;font-size:15px}
+.trust__item span{font-size:13.5px;color:var(--muted)}
+.sample-note{font-size:12px;color:var(--muted);font-style:italic;margin-top:20px;display:inline-flex;align-items:center;gap:8px}
+
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:44px}
+.metric{text-align:center;padding:20px 12px}
+.metric__v{font-family:var(--font-display);font-size:52px;line-height:1;letter-spacing:-0.02em;color:var(--accent)}
+.metric__l{font-size:13.5px;color:var(--muted);margin-top:8px;font-weight:500}
+.testi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:16px}
+.testi__q{font-size:16.5px;line-height:1.55;letter-spacing:-0.01em;font-weight:500}
+.testi__q .mark{font-family:var(--font-display);font-style:italic;font-size:34px;color:var(--accent);line-height:0}
+.testi__who{display:flex;align-items:center;gap:12px;margin-top:auto}
+.testi__ava{width:38px;height:38px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:13px}
+.testi__name{font-size:14px;font-weight:600}
+.testi__role{font-size:12.5px;color:var(--muted)}
+
+.faq{max-width:760px;margin:48px auto 0}
+.faq__item{border-bottom:1px solid var(--border)}
+.faq__q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;text-align:left;padding:22px 4px;font-size:16.5px;font-weight:600;letter-spacing:-0.01em}
+.faq__q .ic{transition:transform .2s;color:var(--accent)}
+.faq__item.is-open .faq__q .ic{transform:rotate(45deg)}
+.faq__a{overflow:hidden;max-height:0;transition:max-height .25s ease}
+.faq__a-in{padding:0 4px 22px;color:var(--muted);font-size:15px;max-width:62ch}
+
+.cta-final{background:var(--fg);color:#f5f3ec;position:relative;overflow:hidden;text-align:center}
+.cta-final .h-display{font-size:clamp(36px,5vw,58px);color:#fff}
+.cta-final__sub{color:#b9b5a8;font-size:17px;max-width:52ch;margin:20px auto 0}
+.cta-final__actions{display:flex;gap:14px;justify-content:center;margin-top:36px;flex-wrap:wrap}
+.cta-final .btn--primary{background:#fff;color:var(--fg);box-shadow:none}
+.cta-final .btn--primary:hover{background:#e9e6dd}
+.cta-final .btn--ghost{background:transparent;border-color:rgba(255,255,255,.22);color:#f5f3ec}
+.cta-final .btn--ghost:hover{background:rgba(255,255,255,.08)}
+.cta-final__note{margin-top:20px;font-size:12.5px;color:#9a9589}
+
+.footer{background:var(--surface);border-top:1px solid var(--border);padding:72px 0 40px}
+.footer__grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px}
+.footer__tag{color:var(--muted);font-size:14px;margin-top:14px;max-width:30ch}
+.footer__col h4{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.footer__col a{display:block;padding:6px 0;font-size:14.5px;color:var(--fg);transition:color .15s}
+.footer__col a:hover{color:var(--accent)}
+.footer__bottom{border-top:1px solid var(--border);margin-top:52px;padding-top:24px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.langsel{display:inline-flex;gap:0;border:1px solid var(--border);border-radius:999px;overflow:hidden}
+.langsel button{padding:7px 14px;font-size:12.5px;font-weight:600;color:var(--muted);background:var(--surface)}
+.langsel button.is-on{background:var(--accent);color:#fff}
+
+.sticky-cta{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:45;
+  background:var(--surface);border-top:1px solid var(--border);
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+}
+.sticky-cta .btn{width:100%}
+
+#app{position:fixed;inset:0;z-index:90;display:none}
+#app.is-open{display:block}
+.app-back{position:absolute;inset:0;background:rgba(18,19,24,.5);backdrop-filter:blur(3px)}
+.phone{position:relative;z-index:1;background:var(--bg);display:flex;flex-direction:column;width:100%;height:100%}
+@media(min-width:721px){
+  .phone{width:420px;height:min(860px,calc(100% - 72px));margin:36px auto;border-radius:28px;border:1px solid var(--border);box-shadow:var(--shadow-3);overflow:hidden}
+}
+.phone__head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);background:var(--surface)}
+.phone__head .back{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:var(--muted);transition:background .15s}
+.phone__head .back:hover{background:var(--bg);color:var(--fg)}
+.phone__head .t{font-size:15px;font-weight:700;letter-spacing:-0.01em;flex:1}
+.phone__head .x{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:var(--muted)}
+.phone__head .x:hover{background:var(--bg);color:var(--fg)}
+.phone__body{flex:1;overflow-y:auto;padding:26px 22px}
+.phone__nav{display:flex;border-top:1px solid var(--border);background:var(--surface);padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+.pn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;font-size:10px;font-weight:600;color:var(--muted);border-radius:10px;transition:color .15s,background .15s}
+.pn-item:hover{background:var(--bg)}
+.pn-item.is-on{color:var(--accent)}
+.auth-logo{display:flex;align-items:center;gap:10px;justify-content:center;font-weight:700;font-size:16px;margin-bottom:6px}
+.auth-logo .logo__mark{width:34px;height:34px}
+.auth-title{font-family:var(--font-display);font-size:30px;line-height:1.1;text-align:center;margin-top:18px}
+.auth-sub{text-align:center;color:var(--muted);font-size:14px;margin-top:8px}
+.field{margin-top:22px}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:8px}
+.input{
+  width:100%;border:1px solid var(--border);border-radius:12px;
+  background:var(--surface);padding:14px 16px;font-size:16px;color:var(--fg);
+  transition:border-color .15s,box-shadow .15s;
+}
+.input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.input--tel{display:flex;align-items:center;gap:10px}
+.input--tel .cc{display:flex;align-items:center;gap:7px;font-weight:600;font-size:15px;border-right:1px solid var(--border);padding-right:12px;white-space:nowrap}
+.input--tel .flag{font-size:16px}
+.input--tel input{flex:1;border:0;outline:none;font:inherit;font-size:16px;background:none;color:var(--fg)}
+.otp{display:flex;gap:10px;justify-content:center;margin-top:26px}
+.otp input{
+  width:50px;height:58px;text-align:center;font-size:24px;font-weight:700;
+  border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--fg);
+  transition:border-color .15s,box-shadow .15s;
+}
+.otp input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.phone__cta{margin-top:26px;width:100%}
+.auth-terms{text-align:center;font-size:12px;color:var(--muted);margin-top:16px}
+.auth-terms a{color:var(--accent);font-weight:600}
+.resend{text-align:center;font-size:13.5px;color:var(--muted);margin-top:18px}
+.resend b{color:var(--accent);font-weight:600}
+.toggle{display:flex;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:5px;margin-top:22px}
+.toggle button{flex:1;height:38px;border-radius:999px;font-size:14px;font-weight:600;color:var(--muted)}
+.toggle button.is-on{background:var(--accent);color:#fff}
+.app-hello{font-family:var(--font-display);font-size:28px;line-height:1.1}
+.app-hello-sub{color:var(--muted);font-size:14px;margin-top:4px}
+.app-actions{display:flex;gap:10px;margin-top:20px}
+.app-actions .btn{flex:1;height:48px}
+.atok{margin-top:22px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow-2);position:relative;overflow:hidden}
+.atok::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent)}
+.atok__label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px}
+.atok__dept{font-size:15px;font-weight:700;margin-top:10px}
+.atok__hosp{font-size:13px;color:var(--muted);margin-top:2px}
+.atok__num{font-family:var(--font-display);font-style:italic;font-size:58px;color:var(--accent);margin-top:10px;line-height:1}
+.atok__ahead{font-size:14px;color:var(--muted);margin-top:6px}
+.atok__ahead b{color:var(--fg)}
+.atok__rows{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.atok__cell{background:var(--bg);border-radius:11px;padding:10px 12px}
+.atok__cell .l{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+.atok__cell .v{font-size:15px;font-weight:700;margin-top:2px}
+.atok__live{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--teal-strong);background:var(--teal-soft);padding:6px 12px;border-radius:999px;margin-top:16px}
+.atok__live .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);position:relative}
+.atok__live .dot::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--teal);opacity:0;animation:ping 2.2s infinite}
+.atok__btns{display:flex;flex-direction:column;gap:9px;margin-top:18px}
+.sec-t{font-size:15px;font-weight:700;margin:28px 0 12px;letter-spacing:-0.01em}
+.timeline{display:flex;flex-direction:column}
+.tl-item{display:flex;gap:14px;padding:12px 0;position:relative}
+.tl-item::before{content:"";position:absolute;left:9px;top:30px;bottom:-6px;width:1px;background:var(--border)}
+.tl-item:last-child::before{display:none}
+.tl-dot{width:18px;height:18px;border-radius:50%;background:var(--surface);border:4px solid var(--accent);flex:none;position:relative;z-index:1}
+.tl-dot.is-done{border-color:var(--teal);background:var(--teal-soft)}
+.tl-dot.is-warn{border-color:var(--amber)}
+.tl-t{font-size:14px;font-weight:600}
+.tl-m{font-size:12.5px;color:var(--muted);margin-top:2px}
+.tl-time{font-size:12px;color:var(--muted);margin-top:4px}
+.toklist{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.tokitem{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px}
+.tokitem__top{display:flex;justify-content:space-between;align-items:center}
+.tokitem__num{font-family:var(--font-display);font-style:italic;font-size:26px;color:var(--accent)}
+.tokitem__dept{font-size:14px;font-weight:600;margin-top:6px}
+.tokitem__hosp{font-size:12.5px;color:var(--muted);margin-top:1px}
+.tokitem__meta{display:flex;gap:14px;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.tokitem__meta b{color:var(--fg)}
+.hoslist{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.hositem{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;align-items:center;gap:13px}
+.hositem__name{font-size:14.5px;font-weight:700}
+.hositem__city{font-size:12.5px;color:var(--muted)}
+.hositem .arrow{margin-left:auto;color:var(--accent)}
+.famrow{display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 16px;margin-bottom:10px}
+.famrow__ava{width:40px;height:40px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:13px}
+.famrow__name{font-size:14.5px;font-weight:600}
+.famrow__rel{font-size:12.5px;color:var(--muted)}
+.famrow .tag{margin-left:auto}
+.menulist{margin-top:8px}
+.menuro{margin:0;width:100%;display:flex;align-items:center;gap:12px;padding:15px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;font-size:14.5px;font-weight:500;transition:border-color .15s}
+.menuro:hover{border-color:var(--accent-border)}
+.menuro .ic{color:var(--muted)}
+.menuro .arr{margin-left:auto;color:var(--muted)}
+.trackcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;margin-top:18px}
+.trackcard__top{display:flex;justify-content:space-between;align-items:center}
+.trackcard__q{font-size:14px;font-weight:600}
+.trackcard__now{font-family:var(--font-display);font-style:italic;font-size:32px;color:var(--accent)}
+.trackbar{height:10px;border-radius:5px;background:var(--bg);border:1px solid var(--border);overflow:hidden;margin-top:16px;position:relative}
+.trackbar__fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--teal));border-radius:5px}
+.trackbar__marker{position:absolute;top:-4px;width:2px;height:18px;background:var(--danger);border-radius:1px}
+.tracklabels{display:flex;justify-content:space-between;margin-top:9px;font-size:12px;color:var(--muted)}
+.track-status{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--teal-strong);margin-top:16px}
+.track-status .dot{width:8px;height:8px;border-radius:50%;background:var(--teal)}
+.toasts{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);z-index:99;display:flex;flex-direction:column;gap:8px;align-items:center}
+.toast{background:var(--fg);color:#fff;font-size:13.5px;font-weight:500;padding:11px 18px;border-radius:999px;box-shadow:var(--shadow-2);animation:toastIn .2s ease-out;white-space:nowrap}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+@media (max-width:1024px){
+  .hero__inner{grid-template-columns:1fr;gap:48px;padding:64px 24px 80px}
+  .demobox{max-width:480px;margin:0 auto;width:100%}
+  .stepsgrid{grid-template-columns:repeat(2,1fr)}
+  .benefits{grid-template-columns:repeat(2,1fr)}
+  .intel__grid,.problem__grid,.patientexp__grid,.trust__grid{grid-template-columns:1fr;gap:48px}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:860px){
+  .nav__links,.nav__right .login{display:none}
+  .menu-btn{display:grid}
+  .hoscards{grid-template-columns:1fr}
+  .dashmock__kpis{grid-template-columns:repeat(2,1fr)}
+  .dashmock__split{grid-template-columns:1fr}
+  .footer__grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:720px){
+  .sticky-cta{display:block}
+  .section{padding:72px 0}
+  .hero__inner{padding:56px 20px 72px}
+  .hero__sub{font-size:16.5px}
+  .hero__cta .btn--primary{display:none}
+  .stepsgrid{grid-template-columns:1fr}
+  .benefits{grid-template-columns:1fr}
+  .container{padding:0 20px}
+}
+@media (max-width:520px){
+  .metrics{grid-template-columns:1fr 1fr}
+  .hoscards{gap:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav" data-od-id="site-nav">
+  <div class="nav__inner">
+    <a class="logo" href="#top" data-od-id="brand-logo">
+      <span class="logo__mark"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 8v8M8 12h8"/></svg></span>
+      Urban<em>Med</em>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="#discovery" data-nav-scroll>Find Care</a>
+      <a class="nav__link" href="#how" data-nav-scroll>How It Works</a>
+      <a class="nav__link" href="#hospitals" data-nav-scroll>For Hospitals</a>
+    </nav>
+    <div class="nav__right">
+      <button class="link-arrow login" data-open-app>Log in</button>
+      <button class="btn btn--primary btn--sm" data-open-app>Get a Token</button>
+      <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-controls="mobile-menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobile-menu" data-od-id="mobile-menu">
+  <a href="#discovery" data-nav-scroll>Find Care</a>
+  <a href="#how" data-nav-scroll>How It Works</a>
+  <a href="#hospitals" data-nav-scroll>For Hospitals</a>
+  <a href="#" data-open-app>Log in</a>
+</div>
+
+<section class="hero" id="top">
+  <div class="hero__bg">
+    <div class="hero__blob hero__blob--a"></div>
+    <div class="hero__blob hero__blob--b"></div>
+  </div>
+  <div class="hero__inner">
+    <div class="hero__copy">
+      <span class="kicker">Digital OPD tokens · Made for India</span>
+      <h1 class="h-display hero__title" data-od-id="hero-headline">Your hospital visit, <em>without the waiting.</em></h1>
+      <p class="hero__sub">Find your hospital, choose your OPD, get your digital token — and <b>know when it's actually your turn</b>. No more sitting in a crowded waiting room for hours.</p>
+      <div class="hero__cta">
+        <button class="btn btn--primary" data-open-app data-od-id="cta-get-token">Get a Token</button>
+        <a class="link-arrow" href="#hospitals" data-nav-scroll data-od-id="cta-for-hospitals">For Hospitals <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="hero__trust">
+        <span class="hero__trust-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Phone number login — no password</span>
+        <span class="hero__trust-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Works on any phone</span>
+      </div>
+    </div>
+
+    <div class="demobox" id="demo" data-od-id="hero-demo">
+      <div class="demobox__head">
+        <span class="demobox__dots"><i></i><i></i><i></i></span>
+        <span class="demobox__title">UrbanMed · token preview</span>
+        <span class="live-chip"><span class="dot"></span>Live queue</span>
+      </div>
+      <div class="demobox__body" id="demo-body"></div>
+      <div class="demobox__foot">
+        <div class="steps" id="demo-steps"><i class="is-on"></i><i></i><i></i><i></i></div>
+        <button class="demobox__next" id="demo-next">Next <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="problem section" id="problem" data-od-id="problem">
+  <div class="container">
+    <div class="problem__grid">
+      <div class="problem__copy">
+        <span class="kicker">The problem</span>
+        <h2 class="h-display">Waiting shouldn't be part of healthcare.</h2>
+        <p>In Indian OPDs, patients take a token, then wait — unsure how long, unable to leave, anxious the whole time. UrbanMed turns that blind wait into a live, predictable number.</p>
+      </div>
+      <div class="waitcard">
+        <div class="waitcard__label"><svg class="ic ic--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>A typical patient today</div>
+        <div class="waitcard__big">2 hrs 40 min</div>
+        <div class="waitcard__sub">spent at the hospital for a 15-minute consultation</div>
+        <span class="waitcard__now"><svg class="ic ic--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Mostly waiting. Not care.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how" data-od-id="how-it-works">
+  <div class="container">
+    <div class="discovery__head">
+      <div >
+        <span class="kicker">How it works</span>
+        <h2 class="h-display">From arrival to token,<br>in four simple steps.</h2>
+      </div>
+    </div>
+    <div class="stepsgrid">
+      <div class="step" data-od-id="step-hospital"><div class="step__num">01</div><div class="step__t">Choose your hospital</div><div class="step__d">Find a hospital and speciality near you, with live availability.</div></div>
+      <div class="step" data-od-id="step-opd"><div class="step__num">02</div><div class="step__t">Pick your OPD &amp; doctor</div><div class="step__d">See available doctors and the current queue before you go.</div></div>
+      <div class="step" data-od-id="step-token"><div class="step__num">03</div><div class="step__t">Get your token</div><div class="step__d">Receive your digital token instantly on your phone. No app download.</div></div>
+      <div class="step" data-od-id="step-arrive"><div class="step__num">04</div><div class="step__t">Arrive when it matters</div><div class="step__d">Track your queue live and know exactly when to reach.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="intel section" id="intel" data-od-id="token-intelligence">
+  <div class="container">
+    <div class="intel__grid">
+      <div class="intel__copy">
+        <span class="kicker">Token intelligence</span>
+        <h2 class="h-display">Your token is more than a number.</h2>
+        <p>UrbanMed reads live queue activity to estimate when you'll actually be seen — so you spend less time in a waiting room and more time getting care.</p>
+        <a class="link-arrow" href="#how" data-nav-scroll>See how the estimate works <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="intelcard" data-od-id="intel-card">
+        <div class="intelcard__top">
+          <div class="intelcard__token">A-42</div>
+          <div class="intelcard__ahead"><b>18 people</b><br>ahead of you</div>
+        </div>
+        <div class="intelcard__main">
+          <div class="intelcard__wait">42<span> min</span></div>
+          <div class="intelcard__range">Likely range 35–50 min</div>
+        </div>
+        <div class="barlive">
+          <div class="barlive__track"><div class="barlive__fill"></div></div>
+          <div class="barlive__meta"><span>Queue progress</span><span><b>● Live estimate</b> · updated 2 min ago</span></div>
+        </div>
+        <div class="intelcard__arrive">
+          <div><div class="l">Recommended arrival</div></div>
+          <div class="v">11:25 AM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="discovery" data-od-id="hospital-discovery">
+  <div class="container">
+    <div class="discovery__head">
+      <div >
+        <span class="kicker">Find care</span>
+        <h2 class="h-display">Find the right hospital.<br>Start with the right OPD.</h2>
+      </div>
+      <div >
+        <div class="discovery__search">
+          <svg class="ic" style="color:var(--muted)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input placeholder="Search hospital, doctor or speciality" aria-label="Search hospitals">
+          <button class="loc"><svg class="ic ic--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Use my location</button>
+        </div>
+        <div class="discovery__chips">
+          <button class="chip is-on">All</button>
+          <button class="chip">Cardiology</button>
+          <button class="chip">Orthopedics</button>
+          <button class="chip">Dermatology</button>
+          <button class="chip">Kanpur</button>
+        </div>
+      </div>
+    </div>
+    <div class="hoscards">
+      <article class="hoscard" data-od-id="hospital-regency">
+        <div class="hoscard__top"><div><div class="hoscard__name">Regency Hospital</div><div class="hoscard__city">Kanpur, Uttar Pradesh</div></div><span class="hoscard__rating">★ 4.6</span></div>
+        <div class="hoscard__type">Multi-Speciality</div>
+        <div class="hoscard__opds"><span class="tag">Cardiology</span><span class="tag">Orthopedics</span><span class="tag">General Medicine</span></div>
+        <div class="hoscard__foot"><span class="hoscard__avail">24 tokens available today</span><button class="link-arrow" data-hos-view="Regency Hospital">View hospital <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+      </article>
+      <article class="hoscard" data-od-id="hospital-apollo">
+        <div class="hoscard__top"><div><div class="hoscard__name">Apollo Hospital</div><div class="hoscard__city">Kanpur, Uttar Pradesh</div></div><span class="hoscard__rating">★ 4.7</span></div>
+        <div class="hoscard__type">Multi-Speciality</div>
+        <div class="hoscard__opds"><span class="tag">Cardiology</span><span class="tag">Neurology</span><span class="tag">General Medicine</span></div>
+        <div class="hoscard__foot"><span class="hoscard__avail">18 tokens available today</span><button class="link-arrow" data-hos-view="Apollo Hospital">View hospital <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+      </article>
+      <article class="hoscard" data-od-id="hospital-fortis">
+        <div class="hoscard__top"><div><div class="hoscard__name">Fortis Hospital</div><div class="hoscard__city">Kanpur, Uttar Pradesh</div></div><span class="hoscard__rating">★ 4.5</span></div>
+        <div class="hoscard__type">Multi-Speciality</div>
+        <div class="hoscard__opds"><span class="tag">Dermatology</span><span class="tag">Orthopedics</span></div>
+        <div class="hoscard__foot"><span class="hoscard__avail">31 tokens available today</span><button class="link-arrow" data-hos-view="Fortis Hospital">View hospital <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+      </article>
+      <article class="hoscard" data-od-id="hospital-city">
+        <div class="hoscard__top"><div><div class="hoscard__name">City Hospital</div><div class="hoscard__city">Kanpur, Uttar Pradesh</div></div><span class="hoscard__rating">★ 4.3</span></div>
+        <div class="hoscard__type">Multi-Speciality</div>
+        <div class="hoscard__opds"><span class="tag">General Medicine</span><span class="tag">Pediatrics</span></div>
+        <div class="hoscard__foot"><span class="hoscard__avail">9 tokens available today</span><button class="link-arrow" data-hos-view="City Hospital">View hospital <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="patientexp section" id="patientexp" data-od-id="patient-experience">
+  <div class="container">
+    <div class="patientexp__grid">
+      <div class="patientexp__copy">
+        <span class="kicker">The patient experience</span>
+        <h2 class="h-display">One tap away from knowing your turn.</h2>
+        <p>Your active token sits right on top of your dashboard. Watch your queue move, get told when to leave, and arrive just in time — for yourself, your parents, or your kids.</p>
+        <div style="margin-top:28px"><button class="btn btn--primary" data-open-app>See it live <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+      </div>
+      <div >
+        <div class="phonemock">
+          <div class="phonemock__inner">
+            <div class="phonemock__bar"><div class="phonemock__notch"></div></div>
+            <div class="phonemock__screen">
+              <div class="pm-hello">Good morning, Aman</div>
+              <div class="pm-sub">Your active token · Cardiology</div>
+              <div class="pm-token">
+                <div class="pm-token__top"><span class="pm-token__dept">Regency Hospital</span><span class="pm-token__live"><span class="dot"></span>LIVE</span></div>
+                <div class="pm-token__num">A-42</div>
+                <div class="pm-token__ahead"><b>18 people</b> ahead of you</div>
+                <div class="pm-token__rows">
+                  <div class="pm-token__cell"><div class="l">Estimated wait</div><div class="v">42 min</div></div>
+                  <div class="pm-token__cell"><div class="l">Arrive by</div><div class="v">11:25 AM</div></div>
+                </div>
+              </div>
+              <div class="pm-cta">Track my token</div>
+            </div>
+            <div class="pm-nav"><span class="is-on">Home</span><span>Tokens</span><span>Hospitals</span><span>Family</span><span>Profile</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="hospitals" data-od-id="hospital-platform">
+  <div class="container">
+    <div class="discovery__head">
+      <div >
+        <span class="kicker">For hospitals</span>
+        <h2 class="h-display">Turn hospital queues into a better patient experience.</h2>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn btn--primary" data-partner>Partner with UrbanMed</button>
+        <button class="btn btn--ghost" data-open-app>Explore Hospital Platform</button>
+      </div>
+    </div>
+    <div class="benefits">
+      <div class="benefit" data-od-id="benefit-waiting"><div class="benefit__ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div class="benefit__t">Reduce waiting</div><div class="benefit__d">Give patients visibility into their expected wait before they reach the hospital.</div></div>
+      <div class="benefit" data-od-id="benefit-opds"><div class="benefit__ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div><div class="benefit__t">Manage OPDs</div><div class="benefit__d">Manage doctors, departments and queues from one control room.</div></div>
+      <div class="benefit" data-od-id="benefit-flow"><div class="benefit__ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg></div><div class="benefit__t">Improve patient flow</div><div class="benefit__d">Reduce unnecessary crowding in waiting areas with staggered arrivals.</div></div>
+      <div class="benefit" data-od-id="benefit-realtime"><div class="benefit__ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div class="benefit__t">Real-time operations</div><div class="benefit__d">See queue and bed activity as it happens, with live dashboards.</div></div>
+    </div>
+
+    <div class="dashmock" data-od-id="hospital-dashboard-preview">
+      <div class="dashmock__bar">
+        <span class="brand-l">UrbanMed Hospital</span>
+        <span class="live-chip"><span class="dot"></span>Live</span>
+      </div>
+      <div class="dashmock__body">
+        <div class="dashmock__kpis">
+          <div class="dm-kpi"><div class="l">Patients today</div><div class="v">1,284</div></div>
+          <div class="dm-kpi"><div class="l">Waiting</div><div class="v">87</div></div>
+          <div class="dm-kpi"><div class="l">Beds available</div><div class="v">42</div></div>
+          <div class="dm-kpi"><div class="l">Occupancy</div><div class="v">76%</div></div>
+        </div>
+        <div class="dashmock__split">
+          <div class="dm-queues">
+            <div class="l"><svg class="ic ic--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>OPD Queues</div>
+            <div class="dmq-row"><span class="n">Emergency</span><span class="w">18 waiting</span><span class="badge hot">3 critical</span></div>
+            <div class="dmq-row"><span class="n">Cardiology</span><span class="w">12 waiting</span><span class="badge mid">avg 24m</span></div>
+            <div class="dmq-row"><span class="n">Orthopedics</span><span class="w">7 waiting</span><span class="badge ok">moving</span></div>
+            <div class="dmq-row"><span class="n">Neurology</span><span class="w">9 waiting</span><span class="badge mid">avg 28m</span></div>
+          </div>
+          <div class="dm-beds">
+            <div class="l"><svg class="ic ic--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20v-9"/><path d="M3 17h18"/><path d="M9 17V9a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v8"/></svg>Bed occupancy</div>
+            <div class="dmb-row"><span class="n">ICU</span><div class="dmb-track"><div class="dmb-fill" style="width:90%"></div></div><span class="dmb-val">90%</span></div>
+            <div class="dmb-row"><span class="n">General</span><div class="dmb-track"><div class="dmb-fill t1" style="width:76%"></div></div><span class="dmb-val">76%</span></div>
+            <div class="dmb-row"><span class="n">Pediatrics</span><div class="dmb-track"><div class="dmb-fill" style="width:62%"></div></div><span class="dmb-val">62%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="trust section" id="trust" data-od-id="trust">
+  <div class="container">
+    <div class="trust__grid">
+      <div class="trust__copy">
+        <span class="kicker">Trust</span>
+        <h2 class="h-display">Your information stays yours.</h2>
+        <p>UrbanMed is designed with privacy and secure access in mind. Phone-number login keeps things simple, and you control exactly what a hospital can see.</p>
+        <div class="trust__list">
+          <div class="trust__item"><span class="tic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></span><div><b>Phone-first login</b><span>No passwords to forget. OTP verification on every sign-in.</span></div></div>
+          <div class="trust__item"><span class="tic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg></span><div><b>You control sharing</b><span>Decide what each hospital can see about you, on every booking.</span></div></div>
+          <div class="trust__item"><span class="tic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><div><b>Clear, honest estimates</b><span>Times are live estimates, never promised appointments.</span></div></div>
+        </div>
+      </div>
+      <div >
+        <div class="section--tight" style="padding-top:0">
+          <div class="metrics" style="margin-top:0">
+            <div class="metric"><div class="metric__v">24</div><div class="metric__l">Hospitals on board</div></div>
+            <div class="metric"><div class="metric__v">640</div><div class="metric__l">OPDs digitised</div></div>
+            <div class="metric"><div class="metric__v">18,400</div><div class="metric__l">Tokens issued</div></div>
+            <div class="metric"><div class="metric__v">41</div><div class="metric__l">Avg. minutes saved</div></div>
+          </div>
+          <div class="sample-note"><svg class="ic ic--sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>Illustrative sample figures — replace with launch metrics.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" id="proof" data-od-id="testimonials">
+  <div class="container">
+    <div class="discovery__head">
+      <div >
+        <span class="kicker">In their words</span>
+        <h2 class="h-display">Built around real families.</h2>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+      <div class="testi"><p class="testi__q"><span class="mark">“</span>I booked a token for my father's cardiology visit from home. We reached exactly when it was our turn.</p><div class="testi__who"><span class="testi__ava">RV</span><div><div class="testi__name">Rohan Verma</div><div class="testi__role">Son · Kanpur</div></div></div></div>
+      <div class="testi"><p class="testi__q"><span class="mark">“</span>No more sitting in the waiting room for two hours with a crying toddler. It tells me when to leave.</p><div class="testi__who"><span class="testi__ava">PN</span><div><div class="testi__name">Priya Nair</div><div class="testi__role">Mother · Kanpur</div></div></div></div>
+      <div class="testi"><p class="testi__q"><span class="mark">“</span>Our OPD crowds dropped noticeably once patients could track their queue on the phone.</p><div class="testi__who"><span class="testi__ava">DS</span><div><div class="testi__name">Dr. Sandeep Rao</div><div class="testi__role">Medical Director · Regency</div></div></div></div>
+    </div>
+    <div style="margin-top:14px;text-align:center"><span class="sample-note">Sample narratives — replace with verified quotes at launch.</span></div>
+  </div>
+</section>
+
+<section class="section section--tight" id="faq" data-od-id="faq">
+  <div class="container">
+    <div class="discovery__head" style="justify-content:center;text-align:center">
+      <div >
+        <span class="kicker">Questions</span>
+        <h2 class="h-display">Frequently asked questions</h2>
+      </div>
+    </div>
+    <div class="faq">
+      <div class="faq__item"><button class="faq__q" data-faq aria-expanded="false" aria-controls="faq-a-1">What is UrbanMed?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq__a" id="faq-a-1"><div class="faq__a-in">UrbanMed helps patients discover hospitals and OPDs, receive digital tokens and track their expected waiting time — so a hospital visit stops being a day-long guessing game.</div></div></div>
+      <div class="faq__item"><button class="faq__q" data-faq aria-expanded="false" aria-controls="faq-a-2">Do I need to download an app?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq__a" id="faq-a-2"><div class="faq__a-in">No. The core token experience works directly from the web, on any phone. No installation, no account setup beyond your mobile number.</div></div></div>
+      <div class="faq__item"><button class="faq__q" data-faq aria-expanded="false" aria-controls="faq-a-3">How do I get a token?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq__a" id="faq-a-3"><div class="faq__a-in">Choose a hospital, an OPD and a doctor, then verify your mobile number with OTP. Your token appears instantly with your queue position and estimated wait.</div></div></div>
+      <div class="faq__item"><button class="faq__q" data-faq aria-expanded="false" aria-controls="faq-a-4">Can I book for my parents?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq__a" id="faq-a-4"><div class="faq__a-in">Yes. UrbanMed supports family members — save your parents or children once and book tokens for them in a couple of taps.</div></div></div>
+      <div class="faq__item"><button class="faq__q" data-faq aria-expanded="false" aria-controls="faq-a-5">Is the waiting time guaranteed?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq__a" id="faq-a-5"><div class="faq__a-in">No. It is a live estimate based on current queue conditions and may change. We show a likely range so you can plan, not guess.</div></div></div>
+      <div class="faq__item"><button class="faq__q" data-faq aria-expanded="false" aria-controls="faq-a-6">Can hospitals use UrbanMed?<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq__a" id="faq-a-6"><div class="faq__a-in">Yes. Hospitals use the platform to manage OPDs, doctors, queues and patient flow — and to give their patients visibility in return.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final section" data-od-id="final-cta">
+  <div class="container">
+    <div>
+      <h2 class="h-display">Your time matters.</h2>
+      <p class="cta-final__sub">Get your hospital token before you arrive. Know your queue. Arrive when it's your turn.</p>
+      <div class="cta-final__actions">
+        <button class="btn btn--primary" data-open-app>Get a Token</button>
+        <button class="btn btn--ghost" data-partner>For Hospitals</button>
+      </div>
+      <p class="cta-final__note">Free for patients · Phone number login · No app download</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" data-od-id="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <a class="logo" href="#top"><span class="logo__mark"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 8v8M8 12h8"/></svg></span>Urban<em>Med</em></a>
+        <p class="footer__tag">Healthcare, without the waiting. Get your token. Know your time.</p>
+        <div style="margin-top:18px"><div class="langsel"><button class="is-on">English</button><button data-lang="hi">हिन्दी</button></div></div>
+      </div>
+      <div class="footer__col">
+        <h4>For Patients</h4>
+        <a href="#discovery">Find Hospitals</a>
+        <a href="#" data-open-app>Get a Token</a>
+        <a href="#" data-open-app>My Tokens</a>
+      </div>
+      <div class="footer__col">
+        <h4>For Hospitals</h4>
+        <a href="#hospitals">Hospital Platform</a>
+        <a href="#" data-partner>Partner With Us</a>
+        <a href="#" data-open-app>Hospital Login</a>
+      </div>
+      <div class="footer__col">
+        <h4>Company</h4>
+        <a href="#trust">About</a>
+        <a href="#faq">Help</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 UrbanMed · Made for better healthcare in India.</span>
+      <span>Find care in Kanpur · Lucknow · Delhi NCR</span>
+    </div>
+  </div>
+</footer>
+
+<div class="sticky-cta" data-od-id="sticky-cta"><button class="btn btn--primary" data-open-app>Get a Token →</button></div>
+
+<div id="app" data-od-id="patient-app">
+  <button class="app-back" data-app-close aria-label="Close"></button>
+  <div class="phone">
+    <div class="phone__head">
+      <button class="back" id="app-back" aria-label="Back"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+      <div class="t" id="app-title">UrbanMed</div>
+      <button class="x" data-app-close aria-label="Close"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="phone__body" id="app-body"></div>
+    <div class="phone__nav" id="app-nav">
+      <button class="pn-item is-on" data-tab="dashboard"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22v-6h6v6"/></svg>Home</button>
+      <button class="pn-item" data-tab="tokens"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>Tokens</button>
+      <button class="pn-item" data-tab="hospitals"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 21v-4h6v4M9 7h.01M12 7h.01M15 7h.01M9 11h.01M12 11h.01M15 11h.01"/></svg>Hospitals</button>
+      <button class="pn-item" data-tab="family"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Family</button>
+      <button class="pn-item" data-tab="profile"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+const I={
+arrow:'<path d="M5 12h14M12 5l7 7-7 7"/>',
+clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+pin:'<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+check:'<path d="M20 6 9 17l-5-5"/>',
+bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>',
+family:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+history:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+lang:'<path d="M5 8h14M8 3v2M16 3v2"/><path d="M12 3c-4 4-4 9 0 13M12 3c4 4 4 9 0 13M3 12h18"/>',
+lock:'<rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/>',
+help:'<circle cx="12" cy="12" r="9"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+card:'<path d="M3 5h18v14H3z"/><path d="M3 10h18"/>',
+bed:'<path d="M3 20v-9"/><path d="M3 17h18"/><path d="M9 17V9a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v8"/>'
+};
+const ic=(n,c='')=>'<svg class="ic '+(c||'')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(I[n]||'')+'</svg>';
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+const esc=s=>s.replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+
+const HOSPITALS=[
+ {n:'Regency Hospital',c:'Kanpur',r:'4.6',o:['Cardiology','Orthopedics','General Medicine']},
+ {n:'Apollo Hospital',c:'Kanpur',r:'4.7',o:['Cardiology','Neurology','General Medicine']},
+ {n:'Fortis Hospital',c:'Kanpur',r:'4.5',o:['Dermatology','Orthopedics']},
+ {n:'City Hospital',c:'Kanpur',r:'4.3',o:['General Medicine','Pediatrics']}];
+const OPDS=[
+ {n:'Cardiology',d:'Heart & cardiovascular care'},
+ {n:'Orthopedics',d:'Bones & joints'},
+ {n:'General Medicine',d:'General health'},
+ {n:'Dermatology',d:'Skin & hair'},
+ {n:'Neurology',d:'Brain & nerves'}];
+const DOCTORS={Cardiology:['Dr. Rahul Sharma','Dr. Priya Iyer'],Orthopedics:['Dr. Vikram Kulkarni'],'General Medicine':['Dr. Anita Fernandes'],Dermatology:['Dr. Meera Joshi'],Neurology:['Dr. Sanjay Rao']};
+const TOKEN={num:'A-42',ahead:18,wait:42,range:'35–50 min',arrival:'11:25 AM'};
+
+let toastTimer;
+function toast(msg){
+ const t=document.createElement('div');
+ t.className='toast';t.textContent=msg;
+ $('#toasts').appendChild(t);
+ setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .25s';setTimeout(()=>t.remove(),260)},2600);
+}
+function openApp(){const a=$('#app');a.classList.add('is-open');document.body.style.overflow='hidden';appGo(state.authed?state.appScreen:'auth')}
+function closeApp(){$('#app').classList.remove('is-open');document.body.style.overflow='';}
+document.addEventListener('click',e=>{
+ if(e.target.closest('[data-open-app]')){e.preventDefault();openApp();return}
+ if(e.target.closest('[data-app-close]')){closeApp();return}
+ if(e.target.closest('[data-nav-scroll]')){const id=e.target.closest('[data-nav-scroll]').getAttribute('href');if(id&&id.startsWith('#')){closeMenu();const el=document.querySelector(id);if(el){const top=el.getBoundingClientRect().top+window.scrollY-76;window.scrollTo({top,behavior:'smooth'})}}return}
+ if(e.target.closest('[data-partner]')){e.preventDefault();toast('Hospital partner inquiry — contact sales@urbanmed.in');return}
+ if(e.target.closest('[data-hos-view]')){e.preventDefault();const btn=e.target.closest('[data-hos-view]');const n=btn.textContent.trim().replace('View hospital','').trim();const idx=Math.max(0,HOSPITALS.findIndex(h=>h.n===n));state.hosp=idx;openApp();appGo('hosview',n);return}
+ if(e.target.closest('[data-faq]')){const it=e.target.closest('.faq__item');const btn=it.querySelector('.faq__q');const a=it.querySelector('.faq__a');const open=it.classList.contains('is-open');$$('.faq__item').forEach(x=>{x.classList.remove('is-open');const q=x.querySelector('.faq__q');if(q)q.setAttribute('aria-expanded','false');const p=x.querySelector('.faq__a');if(p)p.style.maxHeight='0'});if(!open){it.classList.add('is-open');if(btn)btn.setAttribute('aria-expanded','true');a.style.maxHeight=a.scrollHeight+'px'}return}
+ if(e.target.closest('[data-lang]')){toast('हिन्दी interface coming soon');return}
+});
+function closeMenu(){const mb=$('#menu-btn');if(mb)mb.setAttribute('aria-expanded','false');$('#mobile-menu').classList.remove('is-open')}
+$('#menu-btn').addEventListener('click',()=>{const m=$('#mobile-menu');const open=m.classList.toggle('is-open');$('#menu-btn').setAttribute('aria-expanded',open?'true':'false')});
+
+const demo={step:0,hos:0,opd:0,doc:0};
+const DEMO_TITLE=['Select Hospital','Select OPD','Select Doctor','Your Token'];
+function renderDemo(){
+ const body=$('#demo-body');
+ const s=demo.step;
+ const steps=$('#demo-steps').children;
+ for(let i=0;i<steps.length;i++)steps[i].classList.toggle('is-on',i<=s);
+ const next=$('#demo-next');
+ next.classList.toggle('is-hidden',s===3);
+ if(s===3){renderDemoToken(body);return}
+ let html='<div class="demobox__label">Step '+(s+1)+' of 4</div><div class="demobox__q">'+DEMO_TITLE[s]+'</div><div class="demobox__list">';
+ if(s===0){html+=HOSPITALS.map((h,i)=>'<button class="demobox__item'+(i===demo.hos?' is-sel':'')+'" data-dstep="0" data-didx="'+i+'"><span class="item-ic">'+ic('pin')+'</span><span class="item-main"><div class="item-t">'+h.n+'</div><div class="item-s">'+h.c+' · ★ '+h.r+'</div></span><span class="check">'+ic('check')+'</span></button>').join('')}
+ else if(s===1){html+=OPDS.map((o,i)=>'<button class="demobox__item'+(i===demo.opd?' is-sel':'')+'" data-dstep="1" data-didx="'+i+'"><span class="item-ic">'+ic('card')+'</span><span class="item-main"><div class="item-t">'+o.n+'</div><div class="item-s">'+o.d+'</div></span><span class="check">'+ic('check')+'</span></button>').join('')}
+ else if(s===2){const docs=DOCTORS[OPDS[demo.opd].n];html+=docs.map((d,i)=>{const av=11+40*i;return '<button class="demobox__item'+(i===demo.doc?' is-sel':'')+'" data-dstep="2" data-didx="'+i+'"><span class="item-ic">'+ic('family')+'</span><span class="item-main"><div class="item-t">'+d+'</div><div class="item-s">Next available: '+av+':40 AM</div></span><span class="check">'+ic('check')+'</span></button>'}).join('')}
+ html+='</div>';
+ body.innerHTML=html;
+}
+function renderDemoToken(body){
+ const h=HOSPITALS[demo.hos].n,o=OPDS[demo.opd].n;
+ body.innerHTML='<div class="tokencard"><div class="tokencard__kick">Your token</div>'
+  +'<div class="tokencard__num">'+TOKEN.num+'</div>'
+  +'<div class="tokencard__dept">'+o+' · '+h+'</div>'
+  +'<div class="tokencard__rows">'
+  +'<div class="tokenline" style="animation-delay:.18s"><div class="tokrow"><span class="k">People ahead</span><span class="v">'+TOKEN.ahead+'</span></div></div>'
+  +'<div class="tokenline" style="animation-delay:.34s"><div class="tokrow"><span class="k">Estimated wait</span><span class="v is-accent">'+TOKEN.wait+' min</span></div></div>'
+  +'<div class="tokenline" style="animation-delay:.5s"><div class="tokrow"><span class="k">Recommended arrival</span><span class="v is-mint">'+TOKEN.arrival+'</span></div></div>'
+  +'</div>'
+  +'<div style="margin-top:22px"><button class="btn btn--primary btn--sm" data-open-app>Get your own token →</button></div></div>';
+}
+$('#demo-body').addEventListener('click',e=>{
+ const it=e.target.closest('[data-dstep]');
+ if(!it)return;
+ const s=+it.dataset.dstep,idx=+it.dataset.didx;
+ if(s===0)demo.hos=idx;else if(s===1){demo.opd=idx;demo.doc=0}else if(s===2)demo.doc=idx;
+ demo.step=s+1;
+ renderDemo();
+});
+$('#demo-next').addEventListener('click',()=>{if(demo.step<3){demo.step++;renderDemo()}});
+renderDemo();
+
+const state={appScreen:'dashboard',authed:false,name:'Aman Ali',phone:'',step:'phone',resend:24};
+const app=()=>$('#app-body');
+function appHead(t){$('#app-title').textContent=t}
+function appShowNav(show){$('#app-nav').style.display=show?'flex':'none'}
+function appGo(screen,param){
+ state.appScreen=screen;
+ renderApp(screen,param);
+}
+function renderApp(screen,param){
+ const renderers={auth:renderAuth,dashboard:renderDash,tokens:renderTokens,hospitals:renderAppHosp,family:renderFamily,profile:renderProfile,track:renderTrack,hosview:renderHosView,book:renderBook,doctors:renderDoctors,confirm:confirmToken};
+ (renderers[screen]||renderDash)(param);
+}
+function setNav(on){$$('#app-nav .pn-item').forEach(b=>b.classList.toggle('is-on',b.dataset.tab===state.appScreen))}
+$('#app-back').addEventListener('click',()=>{
+ if(state.appScreen==='dashboard'&&!state.authed)return;
+ const backMap={track:'dashboard',hosview:'dashboard',book:'dashboard',doctors:'book',confirm:'doctors'};
+ if(backMap[state.appScreen]){appGo(backMap[state.appScreen]);return}
+});
+$('#app-nav').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b){state.authed=true;appGo(b.dataset.tab)}});
+$('#app-body').addEventListener('click',e=>{
+ if(e.target.closest('[data-verify]')){verifyOtp();return}
+ if(e.target.closest('[data-send-otp]')){sendOtp();return}
+ if(e.target.closest('[data-otp]')){return}
+ if(e.target.closest('[data-skip-name]')){state.authed=true;appGo('dashboard');return}
+ if(e.target.closest('[data-book]')){bookToken();return}
+ if(e.target.closest('[data-track]')){appGo('track');return}
+ if(e.target.closest('[data-profile-logout]')){toast('Signed out (demo)');closeApp();return}
+ if(e.target.closest('[data-opd]')){const i=+e.target.closest('[data-opd]').dataset.opd;state.opd=i;state.doc=0;appGo('doctors');return}
+ if(e.target.closest('[data-doc]')){const i=+e.target.closest('[data-doc]').dataset.doc;state.doc=i;appGo('confirm');return}
+ if(e.target.closest('[data-confirm]')){confirmToken();return}
+ if(e.target.closest('[data-hosp-app]')){state.hosp=+e.target.closest('[data-hosp-app]').dataset.hosp;appGo('book');return}
+});
+
+function renderAuth(){
+ state.step=state.step||'phone';
+ appShowNav(false);
+ appHead('UrbanMed');
+ if(state.step==='phone'){
+  app().innerHTML='<div class="auth-logo"><span class="logo__mark">'+ic('card')+'</span>Urban<em style="font-style:normal;color:var(--accent)">Med</em></div>'
+   +'<h2 class="auth-title">Let\'s get you a token.</h2>'
+   +'<p class="auth-sub">Enter your mobile number to continue.</p>'
+   +'<div class="field"><label for="phone-in">Mobile number</label><div class="input input--tel"><span class="cc"><span class="flag">🇮🇳</span>+91</span><input id="phone-in" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="98765 43210" value=""></div></div>'
+   +'<button class="btn btn--primary phone__cta" data-send-otp>Continue</button>'
+   +'<p class="auth-terms">By continuing you agree to UrbanMed\'s <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>';
+  const inp=$('#phone-in');if(inp)setTimeout(()=>inp.focus(),60);
+ }
+ else if(state.step==='otp'){
+  app().innerHTML='<h2 class="auth-title">Verify your number</h2>'
+   +'<p class="auth-sub">We sent a 6-digit OTP to<br><b style="color:var(--fg)">+91 '+state.phone+'</b></p>'
+   +'<div class="otp">'+Array.from({length:6},(_,i)=>'<input inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Digit '+(i+1)+'">').join('')+'</div>'
+   +'<button class="btn btn--primary phone__cta" data-verify>Verify & Continue</button>'
+   +'<p class="resend">Resend OTP in <b id="rs">24s</b> · <a href="#" id="chn" style="color:var(--accent);font-weight:600">Change number</a></p>';
+  startOtp();
+ }
+}
+function startOtp(){
+ state.resend=24;
+ const ots=$$('#app-body .otp input');
+ const t=setInterval(()=>{
+  state.resend--;
+  const el=$('#rs');if(el)el.textContent=state.resend+'s';
+  if(state.resend<=0){clearInterval(t);if($('#rs'))$('#rs').textContent='0s'}
+ },1000);
+ $('#chn').addEventListener('click',e=>{e.preventDefault();clearInterval(t);state.step='phone';renderAuth()});
+ $$('.otp input').forEach((inp,i)=>{
+  inp.addEventListener('input',()=>{if(inp.value)ots[i+1]&&ots[i+1].focus()});
+  inp.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!inp.value&&ots[i-1])ots[i-1].focus()});
+ });
+}
+function sendOtp(){
+ const v=($('#phone-in')||{}).value||'';
+ const digits=v.replace(/\D/g,'');
+ if(digits.length!==10){toast('Enter a valid 10-digit mobile number');return}
+ state.phone=digits;state.step='otp';renderAuth();
+ toast('OTP sent to +91 '+digits);
+}
+function verifyOtp(){
+ const filled=$$('#app-body .otp input').every(i=>i.value);
+ if(!filled){toast('Enter the 6-digit OTP');return}
+ state.authed=true;state.name=state.phone==='9876543210'?'Aman Ali':'Aman';
+ appShowNav(true);appGo('dashboard');
+ toast('Welcome back, '+state.name);
+}
+
+function renderDash(){
+ setNav(true);
+ appHead('Home');
+ const atok=TOKEN;
+ app().innerHTML='<div class="app-hello">Good morning, '+state.name+'</div>'
+  +'<div class="app-hello-sub">What are you looking for today?</div>'
+  +'<div class="app-actions"><button class="btn btn--primary" data-book>'+ic('card')+'Get a Token</button><button class="btn btn--ghost" data-tab-hosp>'+ic('pin')+'Find Hospital</button></div>'
+  +'<div class="atok" data-od-id="active-token">'
+  +'<div class="atok__label">'+ic('card','ic--sm')+'Your active token</div>'
+  +'<div class="atok__dept">Cardiology</div><div class="atok__hosp">Regency Hospital · '+esc(DOCTORS.Cardiology[0])+'</div>'
+  +'<div class="atok__num">'+atok.num+'</div>'
+  +'<div class="atok__ahead"><b>'+atok.ahead+' people</b> ahead of you</div>'
+  +'<div class="atok__rows"><div class="atok__cell"><div class="l">Estimated wait</div><div class="v">'+atok.wait+' min</div></div><div class="atok__cell"><div class="l">Arrive by</div><div class="v">'+atok.arrival+'</div></div></div>'
+  +'<span class="atok__live"><span class="dot"></span>Live queue · updated 2 min ago</span>'
+  +'<div class="atok__btns"><button class="btn btn--primary" data-track>Track my token</button></div></div>'
+  +'<div class="sec-t">Your UrbanMed activity</div>'
+  +'<div class="timeline">'
+  +'<div class="tl-item"><span class="tl-dot is-warn"></span><div><div class="tl-t">Cardiology token '+atok.num+'</div><div class="tl-m">Regency Hospital</div><div class="tl-time">Today · '+atok.arrival+'</div></div></div>'
+  +'<div class="tl-item"><span class="tl-dot is-done"></span><div><div class="tl-t">Orthopedics visit</div><div class="tl-m">City Hospital · Dr. Vikram Kulkarni</div><div class="tl-time">Aug 02 · Completed</div></div></div>'
+  +'<div class="tl-item"><span class="tl-dot is-done"></span><div><div class="tl-t">General Medicine check-up</div><div class="tl-m">Fortis Hospital</div><div class="tl-time">Jul 18 · Completed</div></div></div></div>';
+ $$('#app-body [data-tab-hosp]').forEach(b=>b.addEventListener('click',()=>appGo('hospitals')));
+}
+function renderTokens(){
+ setNav(true);appHead('My Tokens');
+ const rows=[['Active',TOKEN.num,'Cardiology','Regency Hospital','18 ahead','42 min','danger'],['Upcoming',null,null,null,null,null,'neutral'],['Completed','O-17','Orthopedics','City Hospital','Aug 02','Completed','neutral'],['Completed','G-09','General Medicine','Fortis Hospital','Jul 18','Completed','neutral']];
+ let html='';
+ rows.forEach(r=>{
+  if(!r[1]){html+='<div class="empty-mini" style="color:var(--muted);font-size:13.5px;background:var(--surface);border:1px dashed var(--border);border-radius:14px;padding:18px;margin-bottom:12px">No upcoming tokens yet.</div>';return}
+  html+='<div class="tokitem"><div class="tokitem__top"><span class="tokitem__num">'+r[1]+'</span><span class="tag" style="background:var(--'+(r[0]==='Active'?'accent-soft':'surface')+');color:var(--'+(r[0]==='Active'?'accent':'muted')+')">'+r[0]+'</span></div>'
+   +'<div class="tokitem__dept">'+r[2]+'</div><div class="tokitem__hosp">'+r[3]+'</div>'
+   +(r[0]==='Active'?'<div class="tokitem__meta"><span><b>'+r[4]+'</b></span><span><b>'+r[5]+'</b></span></div>':'<div class="tokitem__meta"><span>'+r[4]+' · '+r[5]+'</span></div>')
+   +(r[0]==='Active'?'<div style="margin-top:12px"><button class="btn btn--ghost btn--sm" data-track>Track token</button></div>':'')+'</div>';
+ });
+ app().innerHTML=html;
+}
+function renderAppHosp(){
+ setNav(true);appHead('Hospitals');
+ app().innerHTML='<div class="app-hello" style="font-size:22px">Find a hospital</div>'
+  +'<div class="field"><input class="input" placeholder="Search hospital or speciality" style="margin-top:0"></div>'
+  +'<div class="hoslist">'+HOSPITALS.map((h,i)=>'<button class="hositem" data-hosp-app="'+i+'"><span class="famrow__ava">'+h.n[0]+'</span><span><div class="hositem__name">'+h.n+'</div><div class="hositem__city">'+h.c+' · ★ '+h.r+' · OPD today</div></span><span class="arrow">'+ic('arrow')+'</span></button>').join('')+'</div>';
+}
+function renderFamily(){
+ setNav(true);appHead('Family');
+ const fam=[['AA','Aman Ali','Self','accent'],['MA','Mrs. Ali','Mother',''],['FA','Mr. Ali','Father','']];
+ app().innerHTML='<div class="app-hello" style="font-size:22px">Family</div>'
+  +'<div class="app-hello-sub" style="margin-bottom:18px">Book tokens for anyone in your family.</div>'
+  +fam.map(f=>'<div class="famrow"><span class="famrow__ava" style="background:var(--'+(f[3]||'accent')+'-soft);color:var(--'+(f[3]||'accent')+')">'+f[0]+'</span><span><div class="famrow__name">'+f[1]+'</div><div class="famrow__rel">'+f[2]+'</div></span></div>').join('')
+  +'<button class="btn btn--ghost phone__cta" data-fam-add>'+ic('card')+'Add Family Member</button>';
+ $$('#app-body [data-fam-add]').forEach(b=>b.addEventListener('click',()=>toast('Add family member — coming soon')));
+}
+function renderProfile(){
+ setNav(true);appHead('Profile');
+ app().innerHTML='<div style="text-align:center;padding:6px 0 18px"><span class="famrow__ava" style="width:64px;height:64px;font-size:20px;margin:0 auto">AA</span><div class="famrow__name" style="margin-top:10px;font-size:17px">'+state.name+'</div><div class="famrow__rel">+91 '+state.phone+'</div></div>'
+  +'<div class="menulist">'
+  +'<button class="menuro">'+ic('family')+'Personal Information<span class="arr">'+ic('arrow')+'</span></button>'
+  +'<button class="menuro">'+ic('family')+'Family Members<span class="arr">'+ic('arrow')+'</span></button>'
+  +'<button class="menuro">'+ic('bell')+'Notifications<span class="arr">'+ic('arrow')+'</span></button>'
+  +'<button class="menuro">'+ic('lang')+'Language<span class="arr">'+ic('arrow')+'</span></button>'
+  +'<button class="menuro">'+ic('shield')+'Privacy<span class="arr">'+ic('arrow')+'</span></button>'
+  +'<button class="menuro">'+ic('help')+'Help<span class="arr">'+ic('arrow')+'</span></button>'
+  +'<button class="menuro" data-profile-logout>'+ic('logout')+'Log out<span class="arr">'+ic('arrow')+'</span></button></div>';
+}
+function renderTrack(){
+ appShowNav(true);setNav(true);appHead('Track Token');
+ app().innerHTML='<div class="app-hello" style="font-size:22px">Track your token</div>'
+  +'<div class="trackcard"><div class="trackcard__top"><div><div class="trackcard__q">Cardiology</div><div class="trackcard__q" style="font-weight:500;color:var(--muted);font-size:13px">Regency Hospital</div></div><div style="text-align:right"><div class="trackcard__q">Your token</div><div class="trackcard__now">'+TOKEN.num+'</div></div></div>'
+  +'<div class="trackbar"><div class="trackbar__fill" style="width:57%"></div><div class="trackbar__marker" style="left:57%"></div></div>'
+  +'<div class="tracklabels"><span>Current: A-24</span><span>You: A-42</span></div>'
+  +'<div class="track-status"><span class="dot"></span>Queue is moving normally</div></div>'
+  +'<div class="atok__rows" style="margin-top:14px"><div class="atok__cell"><div class="l">People ahead</div><div class="v">'+TOKEN.ahead+'</div></div><div class="atok__cell"><div class="l">Estimated wait</div><div class="v">'+TOKEN.wait+' min</div></div></div>'
+  +'<div class="atok__rows"><div class="atok__cell"><div class="l">Likely range</div><div class="v">'+TOKEN.range+'</div></div><div class="atok__cell"><div class="l">Arrive by</div><div class="v">'+TOKEN.arrival+'</div></div></div>'
+  +'<div style="margin-top:18px;background:var(--mint-soft);border-radius:12px;padding:14px 16px;font-size:13.5px;color:var(--mint-strong);font-weight:600">'+ic('check','ic--sm')+'You don\'t need to wait at the hospital yet. Reach by '+TOKEN.arrival+'.</div>';
+}
+function renderHosView(name){
+ appShowNav(true);appHead(name||'Hospital');
+ app().innerHTML='<div class="app-hello" style="font-size:24px">'+esc(name||'Regency Hospital')+'</div>'
+  +'<div class="app-hello-sub">Kanpur, Uttar Pradesh · ★ 4.6 · Multi-Speciality</div>'
+  +'<div class="sec-t">Today\'s OPDs</div>'
+  +'<div class="hoslist">'+OPDS.map((o,i)=>'<button class="hositem" data-opd="'+i+'"><span class="famrow__ava">'+o.n[0]+'</span><span><div class="hositem__name">'+o.n+'</div><div class="hositem__city">Next available: '+(11+40*(i%2))+':40 AM · '+DOCTORS[o.n][0]+'</div></span><span class="arrow">'+ic('arrow')+'</span></button>').join('')+'</div>';
+}
+function renderBook(){
+ appShowNav(true);appHead('Get a Token');
+ const opd=OPDS[state.opd];
+ app().innerHTML='<div class="app-hello" style="font-size:22px">'+esc(HOSPITALS[state.hosp||0].n)+'</div>'
+  +'<div class="sec-t" style="margin-top:14px">Choose your OPD</div>'
+  +'<div class="hoslist">'+OPDS.map((o,i)=>'<button class="hositem'+(i===state.opd?' is-on':'')+'" data-opd="'+i+'"><span class="famrow__ava">'+o.n[0]+'</span><span><div class="hositem__name">'+o.n+'</div><div class="hositem__city">'+o.d+'</div></span><span class="arrow">'+ic('arrow')+'</span></button>').join('')+'</div>';
+ }
+function renderDoctors(){
+ appShowNav(true);appHead('Choose Doctor');
+ const o=OPDS[state.opd]||OPDS[0];
+ const initials=d=>d.replace('Dr. ','').split(' ').map(w=>w[0]).join('');
+ app().innerHTML='<div class="app-hello" style="font-size:22px">'+esc(o.n)+'</div>'
+  +'<div class="app-hello-sub" style="margin-bottom:18px">'+esc(HOSPITALS[state.hosp||0].n)+'</div>'
+  +'<div class="hoslist">'+DOCTORS[o.n].map((d,i)=>'<button class="hositem'+(i===state.doc?' is-on':'')+'" data-doc="'+i+'"><span class="famrow__ava">'+initials(d)+'</span><span><div class="hositem__name">'+d+'</div><div class="hositem__city">Next available: '+(11+40*i)+':40 AM · '+(12+8*i)+' ahead</div></span><span class="arrow">'+ic('arrow')+'</span></button>').join('')+'</div>';
+}
+function bookToken(){
+ state.opd=0;state.hosp=state.hosp||0;
+ appGo('book');
+}
+function confirmToken(){
+ appShowNav(true);appHead('Confirm token');
+ const h=HOSPITALS[state.hosp||0],o=OPDS[state.opd||0],d=DOCTORS[o.n][state.doc||0];
+ app().innerHTML='<div class="app-hello" style="font-size:22px">Confirm your token</div>'
+  +'<div class="atok__rows" style="margin-top:16px">'
+  +'<div class="atok__cell"><div class="l">Patient</div><div class="v">'+state.name+'</div></div><div class="atok__cell"><div class="l">Hospital</div><div class="v" style="font-size:13px">'+h.n+'</div></div>'
+  +'<div class="atok__cell"><div class="l">OPD</div><div class="v">'+o.n+'</div></div><div class="atok__cell"><div class="l">Doctor</div><div class="v" style="font-size:13px">'+d+'</div></div>'
+  +'<div class="atok__cell"><div class="l">Current queue</div><div class="v">24</div></div><div class="atok__cell"><div class="l">Your token</div><div class="v" style="color:var(--accent)">'+TOKEN.num+'</div></div>'
+  +'<div class="atok__cell"><div class="l">Estimated wait</div><div class="v">'+TOKEN.wait+' min</div></div><div class="atok__cell"><div class="l">Arrive by</div><div class="v">'+TOKEN.arrival+'</div></div></div>'
+  +'<button class="btn btn--primary phone__cta" data-confirm>Confirm & Get Token</button>';
+}
+function confirmToken2(){
+ appShowNav(true);appHead('Token confirmed');
+ app().innerHTML='<div class="tokencard" style="padding-top:12px"><div class="tokencard__kick" style="animation:none;opacity:1">✓ Token confirmed</div>'
+  +'<div class="tokencard__num">'+TOKEN.num+'</div>'
+  +'<div class="tokencard__dept">Cardiology · '+esc(DOCTORS.Cardiology[0])+'<div style="font-weight:500;color:var(--muted);font-size:13px;margin-top:2px">Regency Hospital</div></div>'
+  +'<div class="tokencard__rows">'
+  +'<div class="tokenline" style="animation-delay:.18s"><div class="tokrow"><span class="k">People ahead</span><span class="v">'+TOKEN.ahead+'</span></div></div>'
+  +'<div class="tokenline" style="animation-delay:.34s"><div class="tokrow"><span class="k">Estimated wait</span><span class="v is-accent">'+TOKEN.wait+' min</span></div></div>'
+  +'<div class="tokenline" style="animation-delay:.5s"><div class="tokrow"><span class="k">Recommended arrival</span><span class="v is-mint">'+TOKEN.arrival+'</span></div></div></div>'
+  +'<div style="margin-top:22px;display:flex;flex-direction:column;gap:10px"><button class="btn btn--primary" data-track>Track token</button><button class="btn btn--ghost" data-addcal>Add to Calendar</button></div></div>';
+ $$('#app-body [data-addcal]').forEach(b=>b.addEventListener('click',()=>toast('Added to calendar')));
+}
+app().addEventListener('click',e=>{
+ const c=e.target.closest('[data-confirm]');
+ if(c){confirmToken2();return}
+});
+
+const navEl=$('#nav');
+function onScroll(){navEl.classList.toggle('is-scrolled',window.scrollY>8)}
+window.addEventListener('scroll',onScroll,{passive:true});
+onScroll();
+
+renderApp('dashboard');
+</script>
+</body>
+</html>

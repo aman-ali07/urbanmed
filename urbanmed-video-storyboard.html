@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UrbanMed — 30s launch film · Hyperframes storyboard</title>
+<!--
+  Sora / fal.ai ready prompt:
+  Cinematic 30-second brand film for UrbanMed, an Indian digital OPD-token healthcare startup.
+  Near-black indigo-tinted grade, warm off-white serif type (Instrument Serif), single luminous
+  lavender accent (#aab4f0). Shots: a patient waits endlessly in a packed hospital corridor;
+  the number "2 hrs 40 min" looms over the scene; a phone screen shows a digital token A-42 with
+  live queue intelligence (18 ahead, 42 min, arrive 11:25 AM); four-step flow titles; a hospital
+  control room dashboard; a family booking tokens for parents; end card "Your time matters."
+  Calm, confident, human. Slow push-ins, gentle crossfades.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0d13;
+    --panel:#14161f;
+    --text:#f5f3ec;
+    --muted:#9a9589;
+    --faint:#7d7d86;
+    --neon:#aab4f0;
+    --line:rgba(245,243,236,.1);
+    --font-display:"Instrument Serif",Georgia,"Times New Roman",serif;
+    --font-body:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#08090d;font-family:var(--font-body);color:var(--text);-webkit-font-smoothing:antialiased;overflow:hidden}
+  .stage{
+    position:fixed;inset:0;overflow:hidden;
+    background:
+      radial-gradient(1300px 820px at 50% -12%, rgba(170,180,240,.10), transparent 62%),
+      radial-gradient(1100px 760px at 50% 118%, rgba(170,180,240,.06), transparent 60%),
+      var(--bg);
+  }
+  .frame{
+    position:absolute;left:50%;top:50%;width:1920px;height:1080px;
+    transform:translate(-50%,-50%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    padding:0 150px;opacity:0;pointer-events:none;transition:opacity .5s ease;
+  }
+  .frame.active{opacity:1;pointer-events:auto}
+  .num{position:absolute;top:56px;left:64px;font-size:14px;font-weight:600;letter-spacing:.22em;color:var(--faint);font-variant-numeric:tabular-nums}
+  .glow{position:absolute;border-radius:50%;filter:blur(150px);background:rgba(170,180,240,.14);pointer-events:none}
+  .label{font-size:15px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--neon);margin-bottom:44px;display:inline-flex;align-items:center;gap:16px}
+  .label::before,.label::after{content:"";width:26px;height:1px;background:var(--neon);opacity:.55}
+  h1{font-family:var(--font-display);font-weight:400;letter-spacing:-0.02em;line-height:.98}
+  h1 em{font-style:italic;color:var(--neon)}
+  .sub{margin-top:36px;font-size:30px;color:var(--muted);font-weight:500;letter-spacing:-0.01em;line-height:1.4}
+  .sub b{color:var(--text)}
+  .big-hook{font-size:300px;line-height:.88}
+  .big-hook .unit{font-size:150px;color:var(--muted)}
+  .big{font-size:168px}
+  .mid{font-size:112px;max-width:20ch}
+  .pill{display:inline-flex;align-items:center;margin-top:52px;padding:18px 44px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:26px;font-weight:600;color:var(--neon);letter-spacing:.02em}
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;width:100%;max-width:1500px;margin-top:78px;text-align:left}
+  .step{border-left:1px solid var(--line);padding-left:26px}
+  .step .n{font-family:var(--font-display);font-style:italic;font-size:46px;color:var(--neon);line-height:1}
+  .step .t{font-size:26px;font-weight:600;margin-top:10px;letter-spacing:-0.01em}
+  .step .d{font-size:17px;color:var(--muted);margin-top:7px;line-height:1.45}
+  /* token card */
+  .tokcard{display:flex;margin-top:64px;background:var(--panel);border:1px solid var(--line);border-radius:30px;overflow:hidden;box-shadow:0 44px 90px -44px rgba(0,0,0,.65)}
+  .tokcard__main{padding:54px 62px;text-align:left}
+  .tokcard__kick{font-size:13px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--neon)}
+  .tokcard__num{font-family:var(--font-display);font-style:italic;font-size:150px;line-height:1;color:var(--neon);margin-top:8px}
+  .tokcard__meta{display:flex;gap:56px;margin-top:38px}
+  .tokcard__meta .l{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  .tokcard__meta .v{font-size:34px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums}
+  .tokcard__side{display:flex;flex-direction:column;justify-content:space-between;padding:54px 50px;border-left:1px solid var(--line);text-align:left;min-width:400px;gap:22px}
+  .tokcard__row{display:flex;align-items:center;justify-content:space-between;gap:24px;font-size:16px;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:16px}
+  .tokcard__row b{color:var(--text);font-weight:600}
+  .bar{flex:1;max-width:150px;height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--neon),#6f7bd6);border-radius:3px}
+  .tokcard__arrive{display:flex;align-items:flex-end;justify-content:space-between;gap:20px}
+  .tokcard__arrive .l{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  .tokcard__arrive .v{font-size:40px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
+  /* metrics */
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;width:100%;max-width:1540px;margin-top:82px;text-align:left}
+  .metric{border-top:1px solid var(--line);padding-top:26px}
+  .metric .v{font-family:var(--font-display);font-size:78px;line-height:1;color:var(--neon);font-variant-numeric:tabular-nums}
+  .metric .l{font-size:17px;color:var(--muted);margin-top:12px;font-weight:500}
+  .progress{position:fixed;top:0;left:0;height:4px;background:var(--neon);width:0;z-index:60;box-shadow:0 0 18px rgba(170,180,240,.7)}
+  .controls{position:fixed;bottom:36px;left:50%;transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:14px;padding:10px 20px;border-radius:999px;background:rgba(20,22,31,.74);backdrop-filter:blur(14px);border:1px solid var(--line);font-size:13px;color:var(--muted)}
+  .controls button{background:none;border:none;color:var(--text);cursor:pointer;font-size:16px;opacity:.75;padding:2px 8px}
+  .controls button:hover{opacity:1}
+  #counter{letter-spacing:.16em;font-weight:600;color:var(--faint);font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress" style="width:0%"></div>
+
+<div class="stage" id="stage">
+
+  <!-- frame:1 duration:3500 transition:fade -->
+  <section class="frame active" data-duration="3500">
+    <div class="num">01 / 10 · HOOK</div>
+    <div class="glow" style="width:900px;height:900px;top:-260px;right:-160px"></div>
+    <span class="label">A typical patient today</span>
+    <h1 class="big-hook">2 hrs 40 min<span class="unit">.</span></h1>
+    <p class="sub">is what one hospital visit can cost you.</p>
+  </section>
+
+  <!-- frame:2 duration:3000 transition:fade -->
+  <section class="frame" data-duration="3000">
+    <div class="num">02 / 10</div>
+    <span class="label">The problem</span>
+    <h1 class="big">For a 15-minute <em>consultation.</em></h1>
+    <p class="sub">Mostly <b>waiting</b>. Not care.</p>
+  </section>
+
+  <!-- frame:3 duration:3200 transition:fade -->
+  <section class="frame" data-duration="3200">
+    <div class="num">03 / 10</div>
+    <div class="glow" style="width:760px;height:760px;bottom:-220px;left:-140px"></div>
+    <span class="label">The problem</span>
+    <h1 class="mid">Waiting shouldn't be part of healthcare.</h1>
+    <p class="sub">It should be <b>predictable</b>.</p>
+  </section>
+
+  <!-- frame:4 duration:3600 transition:fade -->
+  <section class="frame" data-duration="3600">
+    <div class="num">04 / 10</div>
+    <span class="label">The solution</span>
+    <h1 class="big">Digital OPD tokens.<br><em>Made for India.</em></h1>
+    <p class="sub">No app download. No password. Works on any phone.</p>
+  </section>
+
+  <!-- frame:5 duration:5000 transition:fade -->
+  <section class="frame" data-duration="5000">
+    <div class="num">05 / 10</div>
+    <span class="label">How it works</span>
+    <h1 class="mid">From arrival to token, in four simple steps.</h1>
+    <div class="steps">
+      <div class="step"><div class="n">01</div><div class="t">Choose your hospital</div><div class="d">With live availability near you.</div></div>
+      <div class="step"><div class="n">02</div><div class="t">Pick your OPD &amp; doctor</div><div class="d">See the queue before you go.</div></div>
+      <div class="step"><div class="n">03</div><div class="t">Get your token</div><div class="d">Instantly, right on your phone.</div></div>
+      <div class="step"><div class="n">04</div><div class="t">Arrive when it matters</div><div class="d">Track your queue, live.</div></div>
+    </div>
+  </section>
+
+  <!-- frame:6 duration:5200 transition:fade -->
+  <section class="frame" data-duration="5200">
+    <div class="num">06 / 10</div>
+    <span class="label">Token intelligence</span>
+    <h1 class="mid">Your token is more than a number.</h1>
+    <div class="tokcard">
+      <div class="tokcard__main">
+        <div class="tokcard__kick">Your token</div>
+        <div class="tokcard__num">A-42</div>
+        <div class="tokcard__meta">
+          <div><div class="l">People ahead</div><div class="v">18</div></div>
+          <div><div class="l">Estimated wait</div><div class="v">42 min</div></div>
+        </div>
+      </div>
+      <div class="tokcard__side">
+        <div class="tokcard__row"><span>Likely range</span><b>35–50 min</b></div>
+        <div class="tokcard__row"><span>Queue progress</span><div class="bar"><i style="width:64%"></i></div></div>
+        <div class="tokcard__arrive"><div class="l">Recommended arrival</div><div class="v">11:25 AM</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- frame:7 duration:4000 transition:fade -->
+  <section class="frame" data-duration="4000">
+    <div class="num">07 / 10</div>
+    <div class="glow" style="width:840px;height:840px;top:-240px;left:-120px"></div>
+    <span class="label">For hospitals</span>
+    <h1 class="mid">Turn hospital queues into a better patient experience.</h1>
+    <p class="sub">Fewer crowds. Smoother OPDs. <b>Real-time visibility.</b></p>
+  </section>
+
+  <!-- frame:8 duration:3400 transition:fade -->
+  <section class="frame" data-duration="3400">
+    <div class="num">08 / 10</div>
+    <span class="label">Trust</span>
+    <h1 class="big">Your information <em>stays yours.</em></h1>
+    <p class="sub">Phone-first login. You control sharing. Honest estimates.</p>
+  </section>
+
+  <!-- frame:9 duration:4200 transition:fade -->
+  <section class="frame" data-duration="4200">
+    <div class="num">09 / 10</div>
+    <span class="label">In their words</span>
+    <h1 class="mid">Built around real families.</h1>
+    <div class="metrics">
+      <div class="metric"><div class="v">24</div><div class="l">Hospitals on board</div></div>
+      <div class="metric"><div class="v">640</div><div class="l">OPDs digitised</div></div>
+      <div class="metric"><div class="v">18,400</div><div class="l">Tokens issued</div></div>
+      <div class="metric"><div class="v">41</div><div class="l">Avg. minutes saved</div></div>
+    </div>
+  </section>
+
+  <!-- frame:10 duration:4500 transition:fade -->
+  <section class="frame" data-duration="4500">
+    <div class="num">10 / 10 · CTA</div>
+    <div class="glow" style="width:860px;height:860px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.5"></div>
+    <span class="label">UrbanMed</span>
+    <h1 class="big">Your time <em>matters.</em></h1>
+    <p class="sub">Get your hospital token before you arrive. Know your queue. Arrive when it's your turn.</p>
+    <span class="pill">urbanmed.in →</span>
+  </section>
+
+</div>
+
+<div class="controls">
+  <button id="prev" title="Previous">‹</button>
+  <button id="play" title="Play / pause">⏸</button>
+  <button id="next" title="Next">›</button>
+  <span id="counter">01 / 10</span>
+</div>
+
+<!-- HYPERFRAMES_META: {"aspect":"1920x1080","fps":30,"frames":[
+  {"i":1,"duration":3500,"transition":"fade","scene":"Hook: 2 hrs 40 min is what one hospital visit can cost you"},
+  {"i":2,"duration":3000,"transition":"fade","scene":"Problem: mostly waiting, for a 15-minute consultation"},
+  {"i":3,"duration":3200,"transition":"fade","scene":"Problem: waiting shouldn't be part of healthcare"},
+  {"i":4,"duration":3600,"transition":"fade","scene":"Solution: Digital OPD tokens, made for India"},
+  {"i":5,"duration":5000,"transition":"fade","scene":"How it works: 4 steps from hospital to arrival"},
+  {"i":6,"duration":5200,"transition":"fade","scene":"Token intelligence: A-42, 18 ahead, 42 min, arrive 11:25 AM"},
+  {"i":7,"duration":4000,"transition":"fade","scene":"For hospitals: turn queues into a better patient experience"},
+  {"i":8,"duration":3400,"transition":"fade","scene":"Trust: your information stays yours"},
+  {"i":9,"duration":4200,"transition":"fade","scene":"Proof: 24 hospitals, 640 OPDs, 18,400 tokens, 41 min saved"},
+  {"i":10,"duration":4500,"transition":"fade","scene":"CTA: your time matters, urbanmed.in"}
+]} -->
+
+<script>
+const stage = document.getElementById('stage');
+function fit(){
+  const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  stage.style.transform = 'scale(' + s + ')';
+}
+window.addEventListener('resize', fit);
+fit();
+
+const frames = Array.from(document.querySelectorAll('.frame'));
+const total = frames.length;
+const counter = document.getElementById('counter');
+const playBtn = document.getElementById('play');
+const progress = document.getElementById('progress');
+let i = 0;
+let playing = true;
+let frameStart = Date.now();
+let timer;
+
+function show(n){
+  i = (n + total) % total;
+  frames.forEach((f,k)=>f.classList.toggle('active', k===i));
+  counter.textContent = String(i+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+  frameStart = Date.now();
+  if (playing) schedule();
+}
+function schedule(){
+  clearTimeout(timer);
+  const d = Number(frames[i].dataset.duration) || 3000;
+  timer = setTimeout(()=> show(i+1), d);
+}
+function tick(){
+  const d = Number(frames[i].dataset.duration) || 3000;
+  const pct = Math.min(1, (Date.now()-frameStart)/d) * 100;
+  progress.style.width = pct + '%';
+  requestAnimationFrame(tick);
+}
+document.getElementById('prev').onclick = ()=>show(i-1);
+document.getElementById('next').onclick = ()=>show(i+1);
+playBtn.onclick = ()=>{ playing=!playing; playBtn.textContent = playing?'⏸':'▶'; if(playing){schedule(); frameStart=Date.now();} else clearTimeout(timer); };
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight') show(i+1);
+  else if (e.key==='ArrowLeft') show(i-1);
+  else if (e.key===' ') { e.preventDefault(); playBtn.click(); }
+});
+show(0);
+tick();
+</script>
+</body>
+</html>

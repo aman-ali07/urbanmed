@@ -1,0 +1,30 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V1
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Antigravity / tool metadata
+.od-skills/
+.file-versions/
+*.artifact.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# Node (if added later)
+node_modules/
+dist/
+.env
+.env.local
